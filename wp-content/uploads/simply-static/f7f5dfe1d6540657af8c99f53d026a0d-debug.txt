@@ -66614,3 +66614,9 @@ on\editor-site-navigation.js.LICENSE.txt to queue as: C:/xampp/htdocs/skysweep/w
 [2025-09-14 09:46:18] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
 [2025-09-14 09:46:18] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
 [2025-09-14 09:46:18] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:46:51] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:46:52] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:48:52] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:48:53] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:50:53] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 09:50:54] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
