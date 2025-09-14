@@ -33434,3 +33434,1038 @@
 [2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
 [2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/ImgSpace.php
 [2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Input.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Input.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Lang.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Lang.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Length.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Length.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Name.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Name.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/NameSync.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/NameSync.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Nofollow.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Nofollow.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeEmbed.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeEmbed.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeObject.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeObject.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeParam.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/SafeParam.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 5600 of 10062 pages/files
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:241] We're not done with the fetch_urls task yet
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:194] Current task: fetch_urls
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:208] Performing task: fetch_urls
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:69] Total pages: 10062; Pages remaining: 4412
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/ScriptRequired.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:50; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/ScriptRequired.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetBlank.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:49; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetBlank.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetNoopener.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:48; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetNoopener.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetNoreferrer.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:47; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/TargetNoreferrer.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Textarea.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:46; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform/Textarea.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:45; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTransform.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTypes.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:44; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrTypes.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrValidator.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:43; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/AttrValidator.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Bootstrap.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:42; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Bootstrap.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Chameleon.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:41; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Chameleon.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Custom.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:40; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Custom.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Empty.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:39; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Empty.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/List.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:38; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/List.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Optional.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:37; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Optional.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Required.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:36; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Required.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/StrictBlockquote.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:35; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/StrictBlockquote.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Table.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:34; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef/Table.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:33; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ChildDef.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Config.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:32; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Config.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Builder/ConfigSchema.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:31; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Builder/ConfigSchema.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Builder/Xml.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:30; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Builder/Xml.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Exception.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:29; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Exception.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange/Directive.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:28; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange/Directive.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange/Id.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:27; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange/Id.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:26; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Interchange.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:25; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/InterchangeBuilder.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/schema.ser
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:24; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:84] URL is not being excluded
+[2025-09-14 09:54:32] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Validator.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:23; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/Validator.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/ValidatorAtom.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:22; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema/ValidatorAtom.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:21; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ConfigSchema.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ContentSets.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:20; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ContentSets.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Context.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:19; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Context.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/CSSDefinition.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:18; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/CSSDefinition.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Definition.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:17; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Definition.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator/Cleanup.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:16; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator/Cleanup.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator/Memory.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:15; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator/Memory.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:14; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Decorator.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Null.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:13; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Null.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:12; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache/Serializer.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:11; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCache.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCacheFactory.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DefinitionCacheFactory.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Doctype.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Doctype.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DoctypeRegistry.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/DoctypeRegistry.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ElementDef.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ElementDef.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Encoder.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Encoder.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/EntityLookup/entities.ser
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:84] URL is not being excluded
+[2025-09-14 09:54:32] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/EntityLookup.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/EntityLookup.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/EntityParser.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/EntityParser.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ErrorCollector.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ErrorCollector.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ErrorStruct.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/ErrorStruct.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 5650 of 10062 pages/files
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:241] We're not done with the fetch_urls task yet
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:194] Current task: fetch_urls
+[2025-09-14 09:54:32] [class-ss-archive-creation-job.php:208] Performing task: fetch_urls
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:69] Total pages: 10062; Pages remaining: 4362
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Exception.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:50; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Exception.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter/ExtractStyleBlocks.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:49; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter/ExtractStyleBlocks.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter/YouTube.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:48; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter/YouTube.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:47; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Filter.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Generator.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:46; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Generator.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLDefinition.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:45; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLDefinition.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Bdo.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:44; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Bdo.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/CommonAttributes.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:43; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/CommonAttributes.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Edit.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:42; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Edit.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Forms.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:41; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Forms.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Hypertext.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:40; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Hypertext.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Iframe.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:39; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Iframe.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Image.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:38; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Image.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Legacy.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:37; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Legacy.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/List.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:36; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/List.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Name.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:35; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Name.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Nofollow.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:34; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Nofollow.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:33; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/NonXMLCommonAttributes.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Object.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:32; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Object.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Presentation.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:31; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Presentation.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Proprietary.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:30; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Proprietary.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Ruby.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:29; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Ruby.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeEmbed.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:28; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeEmbed.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeObject.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:27; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeObject.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeScripting.php
+[2025-09-14 09:54:32] [class-ss-task.php:58] [PAGES STATUS] Remaining:26; Total: 10062
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/SafeScripting.php
+[2025-09-14 09:54:32] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Scripting.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:25; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Scripting.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/StyleAttribute.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:24; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/StyleAttribute.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tables.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:23; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tables.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Target.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:22; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Target.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetBlank.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:21; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetBlank.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetNoopener.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:20; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetNoopener.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetNoreferrer.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:19; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/TargetNoreferrer.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Text.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:18; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Text.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Name.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:17; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Name.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Proprietary.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:16; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Proprietary.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Strict.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:15; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Strict.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Transitional.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:14; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/Transitional.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/XHTML.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:13; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/XHTML.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:12; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy/XHTMLAndHTML4.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:11; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/Tidy.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/XMLCommonAttributes.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule/XMLCommonAttributes.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModule.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModuleManager.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/HTMLModuleManager.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/IDAccumulator.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/IDAccumulator.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/AutoParagraph.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/AutoParagraph.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/DisplayLinkURI.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/DisplayLinkURI.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/Linkify.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/Linkify.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/PurifierLinkify.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/PurifierLinkify.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/RemoveEmpty.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/RemoveEmpty.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/RemoveSpansWithoutAttributes.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 5700 of 10062 pages/files
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:241] We're not done with the fetch_urls task yet
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:194] Current task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:208] Performing task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:69] Total pages: 10062; Pages remaining: 4312
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/SafeObject.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:50; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector/SafeObject.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:49; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Injector.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Language/messages/en.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:48; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Language/messages/en.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Language.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:47; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Language.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/LanguageFactory.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:46; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/LanguageFactory.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Length.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:45; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Length.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/DirectLex.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:44; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/DirectLex.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/DOMLex.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:43; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/DOMLex.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/PH5P.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:42; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer/PH5P.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:41; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Lexer.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Comment.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:40; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Comment.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Element.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:39; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Element.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Text.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:38; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node/Text.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:37; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Node.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PercentEncoder.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:36; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PercentEncoder.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/ConfigForm.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:35; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/ConfigForm.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/CSSDefinition.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:34; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/CSSDefinition.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/HTMLDefinition.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:33; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer/HTMLDefinition.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:32; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Printer.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PropertyList.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:31; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PropertyList.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PropertyListIterator.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:30; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/PropertyListIterator.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Queue.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:29; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Queue.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/Composite.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:28; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/Composite.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/Core.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:27; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/Core.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/FixNesting.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:26; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/FixNesting.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/MakeWellFormed.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:25; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/MakeWellFormed.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/RemoveForeignElements.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:24; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/RemoveForeignElements.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/ValidateAttributes.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:23; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy/ValidateAttributes.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:22; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Strategy.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/StringHash.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:21; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/StringHash.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/StringHashParser.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:20; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/StringHashParser.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform/Font.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:19; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform/Font.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform/Simple.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:18; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform/Simple.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:17; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TagTransform.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Comment.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:16; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Comment.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Empty.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:15; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Empty.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/End.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:14; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/End.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Start.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:13; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Start.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Tag.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:12; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Tag.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Text.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:11; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token/Text.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Token.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TokenFactory.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/TokenFactory.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/UnitConverter.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/UnitConverter.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URI.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URI.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIDefinition.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIDefinition.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableExternal.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableExternal.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableExternalResources.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableExternalResources.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableResources.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/DisableResources.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/HostBlacklist.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/HostBlacklist.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/MakeAbsolute.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/MakeAbsolute.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 5750 of 10062 pages/files
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:241] We're not done with the fetch_urls task yet
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:194] Current task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:208] Performing task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:69] Total pages: 10062; Pages remaining: 4262
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/Munge.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:50; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/Munge.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/SafeIframe.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:49; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter/SafeIframe.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:48; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIFilter.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIParser.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:47; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIParser.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/data.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:46; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/data.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/file.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:45; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/file.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/ftp.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:44; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/ftp.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/http.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:43; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/http.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/https.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:42; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/https.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/mailto.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:41; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/mailto.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/news.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:40; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/news.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/nntp.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:39; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/nntp.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/tel.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:38; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme/tel.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:37; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URIScheme.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URISchemeRegistry.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:36; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/URISchemeRegistry.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser/Flexible.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:35; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser/Flexible.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser/Native.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:34; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser/Native.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:33; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParser.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParserException.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:32; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/VarParserException.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Zipper.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:31; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier/Zipper.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.auto.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:30; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.auto.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.autoload-legacy.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:29; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.autoload-legacy.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.autoload.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:28; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.autoload.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.composer.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:27; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.composer.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.func.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:26; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.func.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.includes.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:25; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.includes.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.kses.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:24; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.kses.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.path.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:23; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.path.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:22; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.safe-includes.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:21; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/library/HTMLPurifier.safe-includes.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/ezyang/htmlpurifier/LICENSE
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:20; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:84] URL is not being excluded
+[2025-09-14 09:54:33] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/InvalidJsonException.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:19; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/InvalidJsonException.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/InvalidPointerException.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:18; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/InvalidPointerException.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/NonexistentValueReferencedException.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:17; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/NonexistentValueReferencedException.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/NonWalkableJsonException.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:16; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer/NonWalkableJsonException.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:15; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/php-jsonpointer/php-jsonpointer/src/Rs/Json/Pointer.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/example-autoload.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:14; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/example-autoload.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/LICENSE
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:13; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:84] URL is not being excluded
+[2025-09-14 09:54:33] [class-ss-url-fetcher.php:83] Not fetching URL because it is not a local URL
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ApiHelper.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:12; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ApiHelper.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/ApplePayApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:11; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/ApplePayApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BankAccountsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BankAccountsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BaseApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BaseApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BookingCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BookingCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BookingsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/BookingsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CardsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:6; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CardsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CashDrawersApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:5; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CashDrawersApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CatalogApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:4; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CatalogApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CheckoutApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:3; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CheckoutApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:2; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerGroupsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:1; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerGroupsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-task.php:44] Status message: [fetch_urls] Fetched 5800 of 10062 pages/files
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:241] We're not done with the fetch_urls task yet
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:194] Current task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-archive-creation-job.php:208] Performing task: fetch_urls
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:69] Total pages: 10062; Pages remaining: 4212
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomersApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:50; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomersApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerSegmentsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:49; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/CustomerSegmentsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/DevicesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:48; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/DevicesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/DisputesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:47; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/DisputesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/EmployeesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:46; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/EmployeesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/EventsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:45; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/EventsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/GiftCardActivitiesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:44; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/GiftCardActivitiesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/GiftCardsApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:43; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/GiftCardsApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/InventoryApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:42; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/InventoryApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/InvoicesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:41; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/InvoicesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LaborApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:40; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LaborApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LocationCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-task.php:58] [PAGES STATUS] Remaining:39; Total: 10062
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LocationCustomAttributesApi.php
+[2025-09-14 09:54:33] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LocationsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:38; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LocationsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LoyaltyApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:37; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/LoyaltyApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MerchantCustomAttributesApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:36; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MerchantCustomAttributesApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MerchantsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:35; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MerchantsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MobileAuthorizationApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:34; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/MobileAuthorizationApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OAuthApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:33; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OAuthApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OrderCustomAttributesApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:32; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OrderCustomAttributesApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OrdersApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:31; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/OrdersApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/PaymentsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:30; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/PaymentsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/PayoutsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:29; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/PayoutsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/RefundsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:28; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/RefundsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SitesApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:27; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SitesApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SnippetsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:26; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SnippetsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SubscriptionsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:25; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/SubscriptionsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TeamApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:24; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TeamApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TerminalApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:23; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TerminalApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TransactionsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:22; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/TransactionsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/V1TransactionsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:21; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/V1TransactionsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/VendorsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:20; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/VendorsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/WebhookSubscriptionsApi.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:19; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Apis/WebhookSubscriptionsApi.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Authentication/BearerAuthCredentialsBuilder.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:18; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Authentication/BearerAuthCredentialsBuilder.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Authentication/BearerAuthManager.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:17; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Authentication/BearerAuthManager.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/BearerAuthCredentials.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:16; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/BearerAuthCredentials.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ConfigurationDefaults.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:15; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ConfigurationDefaults.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ConfigurationInterface.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:14; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/ConfigurationInterface.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Environment.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:13; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Environment.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Exceptions/ApiException.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:12; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Exceptions/ApiException.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/ApiResponse.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:11; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/ApiResponse.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpCallBack.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:10; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpCallBack.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpContext.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:9; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpContext.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpMethod.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:8; Total: 10062
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:80] Excludable found: URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpMethod.php
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:90] Skipping URL because it is no-save and no-follow
+[2025-09-14 09:54:34] [class-ss-fetch-urls-task.php:73] URL: C:/xampp/htdocs/skysweep/wp-content/plugins/wpforms-lite/vendor_prefixed/square/square/src/Http/HttpRequest.php
+[2025-09-14 09:54:34] [class-ss-task.php:58] [PAGES STATUS] Remaining:7; Total: 10062
