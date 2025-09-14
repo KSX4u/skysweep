@@ -8,6 +8,9 @@ import Heading from './heading';
 import NavigationButtons from './navigation-buttons';
 import LanguageSelection from '../components/language-selection';
 import BusinessTypes from '../components/business-types';
+import toast from 'react-hot-toast';
+import { toastBody } from '../helpers';
+import { __ } from '@wordpress/i18n';
 
 const Type = ( { onClickContinue } ) => {
 	const { setSiteLanguageListAIStep } = useDispatch( STORE_KEY );
@@ -37,9 +40,10 @@ const Type = ( { onClickContinue } ) => {
 				setSiteLanguageListAIStep( response?.data?.data );
 			} else {
 				//  Handle error.
+				throw new Error( response?.data?.data );
 			}
 		} catch ( error ) {
-			// Handle error.
+			toast.error( toastBody( error ) );
 		}
 	};
 
@@ -54,8 +58,11 @@ const Type = ( { onClickContinue } ) => {
 		<div className="w-full max-w-container flex flex-col gap-8">
 			{ /* Heading */ }
 			<Heading
-				heading="This website is for:"
-				subHeading="Let's get started by choosing the type of website you'd like to create."
+				heading={ __( 'This website is for:', 'ai-builder' ) }
+				subHeading={ __(
+					"Let's get started by choosing the type of website you'd like to create.",
+					'ai-builder'
+				) }
 			/>
 			{ /* Types */ }
 			<div className="min-h-[48px]">

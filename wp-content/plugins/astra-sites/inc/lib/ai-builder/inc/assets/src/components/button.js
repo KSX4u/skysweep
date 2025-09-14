@@ -21,7 +21,7 @@ const Button = (
 	const buttonSize = isSmall ? 'small' : 'base';
 	const variantClassNames = {
 		primary:
-			'text-white bg-accent-st focus-visible:ring-accent-st border border-solid border-accent-st',
+			'text-white bg-accent-st hover:bg-accent-hover-st focus-visible:ring-accent-st border border-solid border-accent-st',
 		white: 'text-accent-st bg-white border border-solid border-accent-st focus-visible:ring-accent-st',
 		dark: 'text-white border border-white bg-transparent border-solid',
 		link: 'underline border-0 bg-transparent',
@@ -81,7 +81,7 @@ const Button = (
 				hasSuffixIcon && sizeClassNames[ buttonSize ].hasSuffixIcon,
 				typographyClassNames[ buttonSize ],
 				borderRadiusClassNames[ buttonSize ],
-				disabled && 'cursor-not-allowed opacity-70',
+				disabled && 'cursor-not-allowed opacity-50',
 				className
 			) }
 			onClick={ handleOnClick }

@@ -8,27 +8,24 @@
 
 namespace AiBuilder\Inc\Traits;
 
-use AiBuilder\Inc\Traits\Instance;
-use STImporter\Resetter\ST_Resetter;
-use STImporter\Importer\ST_Importer;
-use AiBuilder\Inc\Classes\Importer\Ai_Builder_Error_Handler;
-use STImporter\Importer\ST_Importer_File_System;
-use AiBuilder\Inc\Classes\Importer\Ai_Builder_Site_Options_Import;
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
+use AiBuilder\Inc\Classes\Importer\Ai_Builder_Error_Handler;
+use STImporter\Importer\ST_Importer;
+use STImporter\Importer\ST_Importer_File_System;
+use STImporter\Resetter\ST_Resetter;
 
 /**
  * Trait Instance.
  */
 class Helper {
-
 	use Instance;
 
 	/**
 	 * Get an option from the database.
 	 *
-	 * @param string  $key              The option key.
-	 * @param mixed   $default          The option default value if option is not available.
-	 * @param boolean $network_override Whether to allow the network admin setting to be overridden on subsites.
+	 * @param string $key              The option key.
+	 * @param mixed  $default          The option default value if option is not available.
+	 * @param bool   $network_override Whether to allow the network admin setting to be overridden on subsites.
 	 * @since 1.0.0
 	 * @return mixed  The option value.
 	 */
@@ -40,8 +37,8 @@ class Helper {
 	/**
 	 * Delete an option from the database for.
 	 *
-	 * @param string  $key              The option key.
-	 * @param boolean $network_override Whether to allow the network admin setting to be overridden on subsites.
+	 * @param string $key              The option key.
+	 * @param bool   $network_override Whether to allow the network admin setting to be overridden on subsites.
 	 * @since 1.0.0
 	 * @return void
 	 */
@@ -58,24 +55,30 @@ class Helper {
 	 * Get image placeholder array.
 	 *
 	 * @since 4.0.9
-	 * @return array<string, array<string, string>>
+	 * @return array<int, array<string, string>>
 	 */
 	public static function get_image_placeholders() {
 
 		return array(
 			array(
 				'auther_name'   => 'Placeholder',
+				'auther_url'    => '#',
 				'id'            => 'placeholder-landscape',
 				'orientation'   => 'landscape',
 				'optimized_url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-landscape.png',
 				'url'           => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-landscape.png',
+				'engine'        => 'placeholder',
+				'engine_url'    => '#',
 			),
 			array(
 				'auther_name'   => 'Placeholder',
+				'auther_url'    => '#',
 				'id'            => 'placeholder-portrait',
 				'orientation'   => 'portrait',
 				'optimized_url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-portrait.png',
 				'url'           => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-portrait.png',
+				'engine'        => 'placeholder',
+				'engine_url'    => '#',
 			),
 		);
 	}
@@ -95,16 +98,16 @@ class Helper {
 				'email'      => '',
 			)
 		);
-		return isset( $token_details['zip_token'] ) ? self::decrypt( $token_details['zip_token'] ) : '';
+		return is_array( $token_details ) && isset( $token_details['zip_token'] ) ? self::decrypt( $token_details['zip_token'] ) : '';
 	}
 
-		/**
-		 * Decrypt data using base64.
-		 *
-		 * @param string $input The input string which needs to be decrypted.
-		 * @since 4.0.0
-		 * @return string The decrypted string.
-		 */
+	/**
+	 * Decrypt data using base64.
+	 *
+	 * @param string $input The input string which needs to be decrypted.
+	 * @since 4.0.0
+	 * @return string The decrypted string.
+	 */
 	public static function decrypt( $input ) {
 		// If the input is empty or not a string, then abandon ship.
 		if ( empty( $input ) || ! is_string( $input ) ) {
@@ -113,14 +116,13 @@ class Helper {
 
 		// Decrypt the input and return it.
 		$base_64 = $input . str_repeat( '=', strlen( $input ) % 4 );
-		$decode  = base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-		return $decode;
+		return base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 	}
 
 	/**
 	 * Get installed PHP version.
 	 *
-	 * @return float PHP version.
+	 * @return string PHP version.
 	 * @since 3.0.16
 	 */
 	public static function get_php_version() {
@@ -129,6 +131,38 @@ class Helper {
 		}
 
 		return phpversion();
+	}
+
+	/**
+	 * Check whether WooCommerce plugin is installed and active.
+	 *
+	 * @since 1.2.43
+	 *
+	 * @return bool True if WooCommerce is active, false otherwise.
+	 */
+	public static function is_woocommerce_active() {
+		return class_exists( 'WooCommerce' ) || is_plugin_active( 'woocommerce/woocommerce.php' );
+	}
+
+	/**
+	 * Determine if a plugin requires WooCommerce to function.
+	 *
+	 * @since 1.2.43
+	 *
+	 * @param string $plugin Plugin slug or init file.
+	 * @return bool True if plugin depends on WooCommerce.
+	 */
+	public static function plugin_requires_woocommerce( $plugin ) {
+		$wc_plugins = array(
+			'woocommerce-payments',
+			'woocommerce-payments/woocommerce-payments.php',
+			'cartflows',
+			'cartflows/cartflows.php',
+			'woo-cart-abandonment-recovery',
+			'woo-cart-abandonment-recovery/woo-cart-abandonment-recovery.php',
+		);
+
+		return in_array( $plugin, $wc_plugins, true );
 	}
 
 	/**
@@ -194,7 +228,7 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You do not have permission to perform this action.', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You do not have permission to perform this action.', 'astra-sites' ) );
 			}
 		}
 		$wp_upload_path = wp_upload_dir();
@@ -214,7 +248,7 @@ class Helper {
 
 		if ( defined( 'WP_CLI' ) ) {
 			if ( ! $permissions['is_readable'] || ! $permissions['is_writable'] || ! $permissions['is_wp_filesystem'] ) {
-				\WP_CLI::error( esc_html__( 'Please contact the hosting service provider to help you update the permissions so that you can successfully import a complete template.', 'ai-builder', 'astra-sites' ) );
+				\WP_CLI::error( esc_html__( 'Please contact the hosting service provider to help you update the permissions so that you can successfully import a complete template.', 'astra-sites' ) );
 			}
 		} else {
 			wp_send_json_success(
@@ -231,9 +265,9 @@ class Helper {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param  array $required_plugins Required Plugins.
-	 * @param  array $options            Site Options.
-	 * @param  array $enabled_extensions Enabled Extensions.
+	 * @param  array<int, array<string, string>> $required_plugins Required Plugins.
+	 * @param  array<string, mixed>              $options            Site Options.
+	 * @param  array<string, mixed>              $enabled_extensions Enabled Extensions.
 	 * @return mixed
 	 */
 	public static function required_plugins( $required_plugins = array(), $options = array(), $enabled_extensions = array() ) {
@@ -244,7 +278,7 @@ class Helper {
 			if ( ! current_user_can( 'edit_posts' ) ) {
 				wp_send_json_error(
 					array(
-						'error' => __( 'Permission Denied!', 'ai-builder', 'astra-sites' ),
+						'error' => __( 'Permission Denied!', 'astra-sites' ),
 					)
 				);
 			}
@@ -256,9 +290,40 @@ class Helper {
 			'notinstalled' => array(),
 		);
 
-		$required_plugins = astra_get_site_data( 'required-plugins' );
+		$id     = isset( $_POST['id'] ) ? absint( $_POST['id'] ) : '';
+		$screen = isset( $_POST['screen'] ) ? sanitize_text_field( $_POST['screen'] ) : '';
 
-		$data = self::get_required_plugins_data( $response, $required_plugins );
+		if ( 'elementor' === $screen ) {
+			$imported_demo_data = get_option( 'astra_sites_import_elementor_data_' . $id, array() );
+			if ( isset( $imported_demo_data['type'] ) && 'astra-blocks' === $imported_demo_data['type'] ) { // @phpstan-ignore-line
+					// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+					$plugins          = unserialize( $imported_demo_data['post-meta']['astra-blocks-required-plugins'] ); // @phpstan-ignore-line
+					$required_plugins = false !== $plugins ? $plugins : array();
+			} else {
+					$required_plugins = isset( $imported_demo_data['site-pages-required-plugins'] ) ? $imported_demo_data['site-pages-required-plugins'] : array(); // @phpstan-ignore-line
+			}
+		} else {
+			$required_plugins = astra_get_site_data( 'required-plugins' );
+		}
+
+		if ( ! empty( $_POST['feature_plugins'] ) ) {
+			$feature_plugins = is_string( $_POST['feature_plugins'] ) ? json_decode( wp_unslash( $_POST['feature_plugins'] ), true ) : array();
+
+			if ( is_array( $feature_plugins ) && is_array( $required_plugins ) ) {
+				// Create a set of existing plugin slugs.
+				$existing_slugs = array_column( $required_plugins, 'slug' );
+
+				// Merge only the new feature plugins that aren't already in the required plugins.
+				foreach ( $feature_plugins as $feature_plugin ) {
+					if ( isset( $feature_plugin['slug'] ) && ! in_array( $feature_plugin['slug'], $existing_slugs, true ) ) {
+						$required_plugins[] = $feature_plugin;
+						$existing_slugs[]   = $feature_plugin['slug']; // Keep the slug list updated.
+					}
+				}
+			}
+		}
+
+		$data = self::get_required_plugins_data( $response, $required_plugins ); // @phpstan-ignore-line
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_success( $data );
@@ -267,14 +332,14 @@ class Helper {
 		}
 	}
 
-		/**
-		 * Retrieves the required plugins data based on the response and required plugin list.
-		 *
-		 * @param array $response            The response containing the plugin data.
-		 * @param array $required_plugins    The list of required plugins.
-		 * @since 3.2.5
-		 * @return array                     The array of required plugins data.
-		 */
+	/**
+	 * Retrieves the required plugins data based on the response and required plugin list.
+	 *
+	 * @param array<string, array<string, mixed>> $response            The response containing the plugin data.
+	 * @param array<int, array<string, string>>   $required_plugins    The list of required plugins.
+	 * @since 3.2.5
+	 * @return array<string, mixed>                     The array of required plugins data.
+	 */
 	public static function get_required_plugins_data( $response, $required_plugins ) {
 
 		$learndash_course_grid = 'https://www.learndash.com/add-on/course-grid/';
@@ -330,17 +395,20 @@ class Helper {
 				 * Is Pro Version Installed?
 				 */
 				$plugin_pro = Helper::pro_plugin_exist( $plugin['init'] );
-				if ( $plugin_pro ) {
+				if ( is_array( $plugin_pro ) ) {
 
 					if ( array_key_exists( $plugin_pro['init'], $plugin_updates ) ) {
 						$update_avilable_plugins[] = $plugin_pro;
 					}
 
+					if ( ! is_array( $response ) ) {
+						$response = array();
+					}
 					// Pro - Active.
 					if ( is_plugin_active( $plugin_pro['init'] ) ) {
 						$response['active'][] = $plugin_pro;
 
-						self::after_plugin_activate( $plugin['init'] );
+						self::after_plugin_activate( $plugin['init'], array(), array(), $plugin['slug'], true );
 
 						// Pro - Inactive.
 					} else {
@@ -393,7 +461,7 @@ class Helper {
 					} else {
 						$response['active'][] = $plugin;
 
-						self::after_plugin_activate( $plugin['init'] );
+						self::after_plugin_activate( $plugin['init'], array(), array(), $plugin['slug'], true );
 					}
 				}
 			}
@@ -404,7 +472,7 @@ class Helper {
 		if (
 			( ! defined( 'WP_CLI' ) && wp_doing_ajax() ) &&
 			( ( ! current_user_can( 'install_plugins' ) && ! empty( $response['notinstalled'] ) ) || ( ! current_user_can( 'activate_plugins' ) && ! empty( $response['inactive'] ) ) ) ) {
-			$message               = __( 'Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions.', 'ai-builder', 'astra-sites' );
+			$message               = __( 'Insufficient Permission. Please contact your Super Admin to allow the install required plugin permissions.', 'astra-sites' );
 			$required_plugins_list = array_merge( $response['notinstalled'], $response['inactive'] );
 			$markup                = $message;
 			$markup               .= '<ul>';
@@ -416,30 +484,32 @@ class Helper {
 			wp_send_json_error( $markup );
 		}
 
-		$data = array(
+		return array(
 			'required_plugins'             => $response,
 			'third_party_required_plugins' => $third_party_required_plugins,
 			'update_avilable_plugins'      => $update_avilable_plugins,
 			'incompatible_plugins'         => $incompatible_plugins,
 		);
-
-		return $data;
 	}
 
-		/**
-		 * After Plugin Activate
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param  string $plugin_init        Plugin Init File.
-		 * @param  array  $options            Site Options.
-		 * @param  array  $enabled_extensions Enabled Extensions.
-		 * @return void
-		 */
-	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array() ) {
+	/**
+	 * After Plugin Activate
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param  string               $plugin_init        Plugin Init File.
+	 * @param  array<string, mixed> $options            Site Options.
+	 * @param  array<string, mixed> $enabled_extensions Enabled Extensions.
+	 * @param  string               $plugin_slug        Plugin slug.
+	 * @param  bool                 $was_plugin_active  Flag indicating if the plugin was already active.
+	 * @return void
+	 */
+	public static function after_plugin_activate( $plugin_init = '', $options = array(), $enabled_extensions = array(), $plugin_slug = '', $was_plugin_active = false ) {
 		$data = array(
 			'astra_site_options' => $options,
 			'enabled_extensions' => $enabled_extensions,
+			'plugin_slug'        => $plugin_slug,
+			'was_plugin_active'  => $was_plugin_active,
 		);
 
 		do_action( 'astra_sites_after_plugin_activation', $plugin_init, $data );
@@ -450,9 +520,9 @@ class Helper {
 	 *
 	 * @since 2.0.0 Added parameters $init, $options & $enabled_extensions to add the WP CLI support.
 	 * @since 1.0.0
-	 * @param  string $init               Plugin init file.
-	 * @param  array  $options            Site options.
-	 * @param  array  $enabled_extensions Enabled extensions.
+	 * @param  string               $init               Plugin init file.
+	 * @param  array<string, mixed> $options            Site options.
+	 * @param  array<string, mixed> $enabled_extensions Enabled extensions.
 	 * @return void
 	 */
 	public static function required_plugin_activate( $init = '', $options = array(), $enabled_extensions = array() ) {
@@ -464,7 +534,7 @@ class Helper {
 				wp_send_json_error(
 					array(
 						'success' => false,
-						'message' => __( 'Error: You don\'t have the required permissions to install plugins.', 'ai-builder', 'astra-sites' ),
+						'message' => __( 'Error: You don\'t have the required permissions to install plugins.', 'astra-sites' ),
 					)
 				);
 			}
@@ -472,14 +542,44 @@ class Helper {
 
 		Ai_Builder_Error_Handler::Instance()->start_error_handler();
 
-		$plugin_init = ( isset( $_POST['init'] ) ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
+		$plugin_init = isset( $_POST['init'] ) ? esc_attr( sanitize_text_field( $_POST['init'] ) ) : $init;
+		$plugin_slug = isset( $_POST['slug'] ) ? esc_attr( sanitize_text_field( $_POST['slug'] ) ) : '';
+
+		// Check if plugin requires WooCommerce but WooCommerce is not active.
+		if ( self::plugin_requires_woocommerce( $plugin_slug ) || self::plugin_requires_woocommerce( $plugin_init ) ) {
+			if ( ! self::is_woocommerce_active() ) {
+				$message = __( 'This plugin requires WooCommerce to be installed and activated first.', 'astra-sites' );
+
+				if ( defined( 'WP_CLI' ) ) {
+					\WP_CLI::error( $message );
+				} elseif ( wp_doing_ajax() ) {
+					// Send deprioritize response instead of error.
+					wp_send_json_success(
+						array(
+							'success'     => false,
+							'status'      => 'deprioritize',
+							'action'      => 'defer',
+							'message'     => $message,
+							'reason'      => 'missing_woocommerce',
+							'dependency'  => 'woocommerce',
+							'plugin_slug' => $plugin_slug,
+							'plugin_init' => $plugin_init,
+							'retry_after' => 'woocommerce_activation',
+						)
+					);
+				}
+				return;
+			}
+		}
 
 		/**
 		 * Disabled redirection to plugin page after activation.
 		 * Silecing the callback for WP Live Chat plugin.
 		 */
 		add_filter( 'wp_redirect', '__return_false' );
-		$silent = ( 'wp-live-chat-support/wp-live-chat-support.php' === $plugin_init ) ? true : false;
+		$silent = 'wp-live-chat-support/wp-live-chat-support.php' === $plugin_init ? true : false;
+
+		$was_plugin_active = is_plugin_active( $plugin_init );
 
 		$activate = activate_plugin( $plugin_init, '', false, $silent );
 
@@ -498,10 +598,10 @@ class Helper {
 			}
 		}
 
-		$options            = astra_get_site_data( 'astra-site-options-data' );
-		$enabled_extensions = astra_get_site_data( 'astra-enabled-extensions' );
+		$options            = (array) astra_get_site_data( 'astra-site-options-data' );
+		$enabled_extensions = (array) astra_get_site_data( 'astra-enabled-extensions' );
 
-		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions );
+		self::after_plugin_activate( $plugin_init, $options, $enabled_extensions, $plugin_slug, $was_plugin_active );
 
 		if ( defined( 'WP_CLI' ) ) {
 			\WP_CLI::line( 'Plugin Activated!' );
@@ -509,7 +609,8 @@ class Helper {
 			wp_send_json_success(
 				array(
 					'success' => true,
-					'message' => __( 'Plugin Activated', 'ai-builder', 'astra-sites' ),
+					'status'  => 'activated',
+					'message' => __( 'Plugin Activated', 'astra-sites' ),
 				)
 			);
 		}
@@ -517,6 +618,8 @@ class Helper {
 
 	/**
 	 * Backup our existing settings.
+	 *
+	 * @return void
 	 */
 	public static function backup_settings() {
 
@@ -524,8 +627,12 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'manage_options' ) ) {
-				wp_send_json_error( __( 'User does not have permission!', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'User does not have permission!', 'astra-sites' ) );
 			}
+		}
+
+		if ( ! class_exists( 'STImporter\Resetter\ST_Resetter' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
 		}
 
 		$log_file_path = ST_Resetter::backup_settings();
@@ -543,7 +650,7 @@ class Helper {
 	 * @since 1.0.14
 	 * @since 1.4.0 The `$options_data` was added.
 	 *
-	 * @param  array $options_data Site Options.
+	 * @param  array<string, mixed> $options_data Site Options.
 	 * @return void
 	 */
 	public static function import_options( $options_data = array() ) {
@@ -553,14 +660,18 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 		if ( empty( $options_data ) ) {
 			$options_data = astra_get_site_data( 'astra-site-options-data' );
 		}
 
-		$result = ST_Importer::import_options( $options_data, Ai_Builder_Site_Options_Import::site_options() );
+		if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) || ! class_exists( 'STImporter\Importer\ST_Option_Importer' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+		}
+
+		$result = ST_Importer::import_options( $options_data );
 
 		if ( false === $result['status'] ) {
 			if ( defined( 'WP_CLI' ) ) {
@@ -573,7 +684,7 @@ class Helper {
 		if ( defined( 'WP_CLI' ) ) {
 			\WP_CLI::line( 'Site options Imported!' );
 		} elseif ( wp_doing_ajax() ) {
-			wp_send_json_success( __( 'Site options Imported!', 'ai-builder', 'astra-sites' ) );
+			wp_send_json_success( __( 'Site options Imported!', 'astra-sites' ) );
 		}
 	}
 
@@ -593,11 +704,15 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 
 		$data = astra_get_site_data( 'astra-site-widgets-data' );
+
+		if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+		}
 
 		$result = ST_Importer::import_widgets( $widgets_data, $data );
 
@@ -629,13 +744,18 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
+		}
+
+		if ( ! class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
 		}
 
 		$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
 		// Set permalink structure to use post name.
 		update_option( 'permalink_structure', '/%postname%/' );
+		update_option( 'astra-site-permalink-update-status', 'no' );
 
 		do_action( 'astra_sites_import_complete', $demo_data );
 
@@ -657,11 +777,15 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 
 		Ai_Builder_Importer_Log::add( 'Deleted customizer Settings ' . wp_json_encode( get_option( 'astra-settings', array() ) ) );
+
+		if ( ! class_exists( 'STImporter\Resetter\ST_Resetter' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+		}
 
 		ST_Resetter::reset_customizer_data();
 
@@ -685,13 +809,17 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 
 		$options = get_option( '_astra_sites_old_site_options', array() );
 
 		Ai_Builder_Importer_Log::add( 'Deleted - Site Options ' . wp_json_encode( $options ) );
+
+		if ( ! class_exists( 'STImporter\Resetter\ST_Resetter' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+		}
 
 		ST_Resetter::reset_site_options( $options );
 
@@ -715,19 +843,23 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 
 		// Get all old widget ids.
 		$old_widgets_data = (array) get_option( '_astra_sites_old_widgets_data', array() );
 
+		if ( ! class_exists( 'STImporter\Resetter\ST_Resetter' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
+		}
+
 		ST_Resetter::reset_widgets_data( $old_widgets_data );
 
 		if ( defined( 'WP_CLI' ) ) {
 			\WP_CLI::line( 'Deleted Widgets!' );
 		} elseif ( wp_doing_ajax() ) {
-			wp_send_json_success( __( 'Deleted Widgets!', 'ai-builder', 'astra-sites' ) );
+			wp_send_json_success( __( 'Deleted Widgets!', 'astra-sites' ) );
 		}
 	}
 
@@ -737,7 +869,7 @@ class Helper {
 	 * @since 1.0.14
 	 * @since 1.4.0  The `$customizer_data` was added.
 	 *
-	 * @param  array $customizer_data Customizer Data.
+	 * @param  array<string, mixed> $customizer_data Customizer Data.
 	 * @return void
 	 */
 	public static function import_customizer_settings( $customizer_data = array() ) {
@@ -747,7 +879,7 @@ class Helper {
 			check_ajax_referer( 'astra-sites', '_ajax_nonce' );
 
 			if ( ! current_user_can( 'customize' ) ) {
-				wp_send_json_error( __( 'You are not allowed to perform this action', 'ai-builder', 'astra-sites' ) );
+				wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 			}
 		}
 
@@ -758,7 +890,11 @@ class Helper {
 		if ( defined( 'WP_CLI' ) && empty( $customizer_data ) ) {
 			\WP_CLI::line( 'Customizer data is empty!' );
 		} elseif ( wp_doing_ajax() && empty( $customizer_data ) ) {
-			wp_send_json_error( __( 'Customizer data is empty!', 'ai-builder', 'astra-sites' ) );
+			wp_send_json_error( __( 'Customizer data is empty!', 'astra-sites' ) );
+		}
+
+		if ( ! class_exists( 'STImporter\Importer\ST_Importer' ) ) {
+			wp_send_json_error( __( 'Required class not found.', 'astra-sites' ) );
 		}
 
 		$result = ST_Importer::import_customizer_settings( $customizer_data );
@@ -770,4 +906,3 @@ class Helper {
 		wp_send_json_success();
 	}
 }
-

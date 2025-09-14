@@ -1,30 +1,19 @@
-import React, { useState } from 'react';
-import Tooltip from '../onboarding-ai/components/tooltip';
+import React from 'react';
+import Tooltip from '../../components/tooltip/tooltip';
 import { __ } from '@wordpress/i18n';
-import { decodeEntities } from '@wordpress/html-entities';
+// import { decodeEntities } from '@wordpress/html-entities';
 import { useStateValue } from '../../store/store';
 import ICONS from '../../../icons';
 import { whiteLabelEnabled } from '../../utils/functions';
 const { themeStatus, firstImportStatus, analytics } = starterTemplates;
-
+import ToggleSwitch from '../../components/toggle-switch';
+import FilesAndFolderImg from '../../../images/files-folder.png';
+import { Checkbox, Field, Label } from '@headlessui/react';
 const AdvancedSettings = () => {
-	const [ showSection, setShowSection ] = useState( true );
 	const [
-		{
-			reset,
-			customizerImportFlag,
-			themeActivateFlag,
-			widgetImportFlag,
-			contentImportFlag,
-			requiredPlugins,
-			analyticsFlag,
-			templateResponse,
-		},
+		{ reset, themeActivateFlag, analyticsFlag, allowResetSite },
 		dispatch,
 	] = useStateValue();
-	const toggleSection = () => {
-		setShowSection( ! showSection );
-	};
 
 	const updateAnalyticsFlag = () => {
 		dispatch( {
@@ -32,33 +21,11 @@ const AdvancedSettings = () => {
 			analyticsFlag: ! analyticsFlag,
 		} );
 	};
-
-	const updateCustomizerImportFlag = () => {
-		dispatch( {
-			type: 'set',
-			customizerImportFlag: ! customizerImportFlag,
-		} );
-	};
-
 	const updateThemeFlag = () => {
 		dispatch( {
 			type: 'set',
 			themeActivateFlag: ! themeActivateFlag,
 			customizerImportFlag: ! themeActivateFlag,
-		} );
-	};
-
-	const updateWidgetImportFlag = () => {
-		dispatch( {
-			type: 'set',
-			widgetImportFlag: ! widgetImportFlag,
-		} );
-	};
-
-	const updateContentImportFlag = () => {
-		dispatch( {
-			type: 'set',
-			contentImportFlag: ! contentImportFlag,
 		} );
 	};
 
@@ -69,280 +36,200 @@ const AdvancedSettings = () => {
 		} );
 	};
 
-	const notActivePlugins =
-		requiredPlugins !== null
-			? requiredPlugins.required_plugins?.inactive
-			: [];
+	const updateAllowResetSite = () => {
+		dispatch( {
+			type: 'set',
+			allowResetSite: ! allowResetSite,
+		} );
+	};
 
-	const notInstalled =
-		requiredPlugins !== null
-			? requiredPlugins.required_plugins?.notinstalled
-			: [];
-
-	const themeStatusClass =
-		'installed-and-active' !== themeStatus ? 'theme-check' : '';
-
-	const isSurecartTemplate = templateResponse?.[
-		'astra-site-surecart-settings'
-	]
-		? true
-		: false;
+	const showAdvancedOption =
+		( ! whiteLabelEnabled() && analytics !== 'yes' ) ||
+		'installed-and-active' !== themeStatus;
 
 	return (
-		<div
-			className={ `survey-form-advanced-wrapper ${
-				showSection ? 'show-section' : 'hidden-section'
-			}` }
-		>
-			<p
-				className="label-text row-label"
-				onClick={ toggleSection }
-				role="presentation"
-			>
+		<div className="survey-form-advanced-wrapper show-section">
+			<p className="label-text row-label !mb-2" role="presentation">
 				{ __( 'Advanced Options', 'astra-sites' ) }
-				<span className="advanced-options-icons">
-					{ showSection ? ICONS.angleUP : ICONS.angleDown }
-				</span>
 			</p>
-			<div className="survey-advanced-section">
-				<ul>
-					{ 'yes' === firstImportStatus && (
-						<li>
-							<input
-								type="checkbox"
-								id="reset-site"
-								name="reset-site"
-								defaultChecked={ reset }
-								onChange={ updateResetValue }
-							/>
-							<label htmlFor="reset-site">
-								{ ' ' }
-								{ __(
-									'Delete Previously imported sites',
-									'astra-sites'
-								) }
-							</label>
-							<Tooltip
-								content={
-									<span>
+			{ showAdvancedOption && (
+				<div className="survey-advanced-section mb-6">
+					<div className="rounded-md grid grid-cols-1">
+						{ 'installed-and-active' !== themeStatus && (
+							<div className="items-center p-1 grid grid-cols-[1fr_min-content] !gap-2">
+								<div className="flex-1 flex items-center space-x-2">
+									<p className="text-sm !leading-6">
 										{ __(
-											'WARNING: Selecting this option will delete all data from the previous import. Choose this option only if this is intended.',
+											'Install & Activate Astra Theme',
 											'astra-sites'
 										) }
-										<br />
-										{ __(
-											'Choose this option only if this is intended.You can find the backup to the current customizer settings at /wp-content/uploads astra-sites',
+									</p>
+									<Tooltip
+										content={ __(
+											'To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different.',
 											'astra-sites'
 										) }
-									</span>
-								}
-							>
-								{ ICONS.questionMark }
-							</Tooltip>
-						</li>
-					) }
-					{ 'installed-and-active' !== themeStatus && (
-						<li>
-							<input
-								type="checkbox"
-								id="import-theme"
-								name="import-theme"
-								defaultChecked={ themeActivateFlag }
-								onChange={ updateThemeFlag }
-							/>
-							<label htmlFor="import-theme">
-								{ ' ' }
-								{ __(
-									'Install & Activate Astra Theme',
-									'astra-sites'
-								) }
-							</label>
-							<Tooltip
-								content={ __(
-									'To import the site in the original format, you would need the Astra theme activated. You can import it with any other theme, but the site might lose some of the design settings and look a bit different.',
-									'astra-sites'
-								) }
-							>
-								{ ICONS.questionMark }
-							</Tooltip>
-						</li>
-					) }
-					{ themeActivateFlag && (
-						<li className={ themeStatusClass }>
-							<input
-								type="checkbox"
-								id="import-customizer"
-								name="import-customizer"
-								defaultChecked={ customizerImportFlag }
-								onChange={ updateCustomizerImportFlag }
-							/>
-							<label htmlFor="import-customizer">
-								{ ' ' }
-								{ __(
-									'Import Customizer Settings',
-									'astra-sites'
-								) }
-							</label>
-							<Tooltip
-								content={ __(
-									'Starter Templates customizer serves global settings that give uniform design to the website. Choosing this option will override your current customizer settings.',
-									'astra-sites'
-								) }
-							>
-								{ ICONS.questionMark }
-							</Tooltip>
-						</li>
-					) }
-					<li>
-						<input
-							type="checkbox"
-							id="import-widgets"
-							name="import-widgets"
-							defaultChecked={ widgetImportFlag }
-							onChange={ updateWidgetImportFlag }
-						/>
-						<label htmlFor="import-widgets">
-							{ ' ' }
-							{ __( 'Import Widgets', 'astra-sites' ) }
-						</label>
-					</li>
-					{ ( notActivePlugins.length > 0 ||
-						notInstalled.length > 0 ) && (
-						<li>
-							<input
-								type="checkbox"
-								id="import-plugins"
-								name="import-plugins"
-								defaultChecked={ true }
-								disabled
-							/>
-							<label htmlFor="import-plugins">
-								{ ' ' }
-								{ __(
-									'Install Required Plugins',
-									'astra-sites'
-								) }
-							</label>
-							<Tooltip
-								content={
-									<div>
-										<span>
-											{ __(
-												'Plugins needed to import this template are missing. Required plugins will be installed and activated automatically.',
-												'astra-sites'
-											) }
-										</span>
-										<ul>
-											{ notActivePlugins.map(
-												( plugin, index ) => {
-													return (
-														<li key={ index }>
-															{ decodeEntities(
-																`&bull; ${ plugin.name }`
-															) }
-														</li>
-													);
-												}
-											) }
-										</ul>
-									</div>
-								}
-							>
-								{ ICONS.questionMark }
-							</Tooltip>
-						</li>
-					) }
-					<li>
-						<input
-							type="checkbox"
-							id="import-content"
-							name="import-content"
-							defaultChecked={ contentImportFlag }
-							onChange={ updateContentImportFlag }
-						/>
-						<label htmlFor="import-content">
-							{ ' ' }
-							{ __( 'Import Content', 'astra-sites' ) }
-						</label>
-						<Tooltip
-							content={ __(
-								'Selecting this option will import dummy pages, posts, images, and menus. If you do not want to import dummy content, please uncheck this option.',
+									>
+										{ ICONS.questionMarkNoFill }
+									</Tooltip>
+								</div>
+								<div>
+									<ToggleSwitch
+										onChange={ updateThemeFlag }
+										value={ themeActivateFlag }
+										requiredClass={
+											themeActivateFlag
+												? 'bg-accent-st-secondary'
+												: 'bg-border-tertiary'
+										}
+									/>
+								</div>
+							</div>
+						) }
+						{ ! whiteLabelEnabled() && analytics !== 'yes' && (
+							<div className="items-center p-1 grid grid-cols-[1fr_min-content] gap-4">
+								<div className="flex-1 flex items-center space-x-2">
+									<p className="text-sm !leading-6">
+										{ __(
+											'Help Us Improve Your Experience',
+											'astra-sites'
+										) }
+									</p>
+									<Tooltip
+										interactive={ true }
+										content={
+											<div>
+												{ __(
+													'Collect non-sensitive information from your website, such as the PHP version and features used, to help us fix bugs faster, make smarter decisions, and build features that actually matter to you.',
+													'astra-sites'
+												) }{ ' ' }
+												<a
+													href="https://store.brainstormforce.com/usage-tracking/?utm_source=wp_dashboard&utm_medium=general_settings&utm_campaign=usage_tracking"
+													target="_blank"
+													rel="noreferrer noopener"
+													className="!text-[color-mix(in_srgb,var(--st-color-accent),white_50%)]"
+												>
+													{ __(
+														'Learn More',
+														'astra-sites'
+													) }
+												</a>
+											</div>
+										}
+									>
+										{ ICONS.questionMarkNoFill }
+									</Tooltip>
+								</div>
+								<div>
+									<ToggleSwitch
+										onChange={ updateAnalyticsFlag }
+										value={ analyticsFlag }
+										requiredClass={
+											analyticsFlag
+												? 'bg-accent-st-secondary'
+												: 'bg-border-tertiary'
+										}
+									/>
+								</div>
+							</div>
+						) }
+					</div>
+				</div>
+			) }
+			{ 'yes' === firstImportStatus ? (
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
+					<div className="mb-1">
+						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
+							{ __(
+								'It looks like you already have a website created with Starter Templates. Check this box to keep your existing content and images.',
 								'astra-sites'
 							) }
-						>
-							{ ICONS.questionMark }
-						</Tooltip>
-					</li>
-					{ ! whiteLabelEnabled() && analytics !== 'yes' && (
-						<li>
-							<input
-								type="checkbox"
-								id="analytics-content"
-								name="analytics-content"
-								defaultChecked={ analyticsFlag }
-								onChange={ updateAnalyticsFlag }
-							/>
-							<label htmlFor="analytics-content">
-								{ ' ' }
+						</p>
+						<Field className="flex mt-2 gap-2">
+							<Checkbox
+								className="group flex justify-center items-center border-2 size-4 border-solid border-border-secondary rounded data-[checked]:bg-accent-st-secondary data-[checked]:border-accent-st-secondary"
+								checked={ ! reset }
+								onChange={ updateResetValue }
+							>
+								<svg
+									width="10"
+									height="8"
+									viewBox="0 0 10 8"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+									className="opacity-0 group-data-[checked]:opacity-100"
+								>
+									<path
+										d="M9 1L3.5 6.5L1 4"
+										stroke="white"
+										strokeWidth="1.4"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
+							</Checkbox>
+							<Label className="text-sm leading-4 text-nav-active font-medium cursor-pointer">
+								{ __( 'Keep existing data!', 'astra-sites' ) }
+							</Label>
+						</Field>
+					</div>
+					<div className="max-w-[104px] w-full">
+						<img
+							className="w-full"
+							src={ FilesAndFolderImg }
+							alt=""
+						/>
+					</div>
+				</div>
+			) : (
+				<div className="flex items-center rounded-md p-4 border-solid border gap-6 border-[#FB7E0A1F] bg-[#FB7E0A0F] max-sm:flex-col">
+					<div className="mb-1">
+						<p className="text-sm text-body-text !leading-6 max-sm:text-center">
+							{ __(
+								'This will overwrite your site settings and add new content. You might want to backup your site before proceeding.',
+								'astra-sites'
+							) }
+						</p>
+						<Field className="flex mt-2 gap-2">
+							<Checkbox
+								className="group flex justify-center items-center border-2 size-4 border-solid border-border-secondary rounded data-[checked]:bg-accent-st-secondary data-[checked]:border-accent-st-secondary"
+								checked={ allowResetSite }
+								onChange={ updateAllowResetSite }
+							>
+								<svg
+									width="10"
+									height="8"
+									viewBox="0 0 10 8"
+									fill="none"
+									xmlns="http://www.w3.org/2000/svg"
+									className="opacity-0 group-data-[checked]:opacity-100"
+								>
+									<path
+										d="M9 1L3.5 6.5L1 4"
+										stroke="white"
+										strokeWidth="1.4"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+									/>
+								</svg>
+							</Checkbox>
+							<Label className="text-sm leading-4 text-nav-active font-medium cursor-pointer">
 								{ __(
-									'Share Non-Sensitive Data',
+									"I understand, let's go!",
 									'astra-sites'
 								) }
-							</label>
-							<Tooltip
-								interactive={ true }
-								content={
-									<div>
-										{ __(
-											'Help our developers build better templates and products for you by sharing anonymous and non-sensitive data about your website.',
-											'astra-sites'
-										) }{ ' ' }
-										<a
-											href="https://store.brainstormforce.com/usage-tracking/?utm_source=wp_dashboard&utm_medium=general_settings&utm_campaign=usage_tracking"
-											target="_blank"
-											rel="noreferrer noopener"
-										>
-											{ __(
-												'Learn More',
-												'astra-sites'
-											) }
-										</a>
-									</div>
-								}
-							>
-								{ ICONS.questionMark }
-							</Tooltip>
-						</li>
-					) }
-					{ isSurecartTemplate &&
-						astraSitesVars.surecart_store_exists && (
-							<li>
-								<input
-									type="checkbox"
-									id="surecart-store"
-									name="surecart-store"
-									defaultChecked={ true }
-									disabled
-								/>
-								<label htmlFor="surecart-store">
-									{ ' ' }
-									{ __(
-										'Replace Existing Surecart Store',
-										'astra-sites'
-									) }
-								</label>
-								<Tooltip
-									content={ __(
-										"Replace the current Surecart store with the imported store's data and settings.",
-										'astra-sites'
-									) }
-								>
-									{ ICONS.questionMark }
-								</Tooltip>
-							</li>
-						) }
-				</ul>
-			</div>
+							</Label>
+						</Field>
+					</div>
+					<div className="max-w-[104px] w-full">
+						<img
+							className="w-full"
+							src={ FilesAndFolderImg }
+							alt=""
+						/>
+					</div>
+				</div>
+			) }
 		</div>
 	);
 };

@@ -5,11 +5,9 @@ namespace WPForms\Integrations\Gutenberg;
 use WPForms\Frontend\CSSVars;
 use WPForms\Integrations\IntegrationInterface;
 use WPForms\Admin\Education\StringsTrait;
-use WP_Error; // phpcs:ignore WPForms.PHP.UseStatement.UnusedUseStatement
-use WP_REST_Response; // phpcs:ignore WPForms.PHP.UseStatement.UnusedUseStatement
 
 /**
- * Form Selector Gutenberg block with live preview.
+ * Form Selector Gutenberg block with a live preview.
  *
  * @since 1.4.8
  */
@@ -24,11 +22,11 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @var array
 	 */
-	const DEFAULT_ATTRIBUTES = [
+	private const DEFAULT_ATTRIBUTES = [
 		'formId'                => '',
 		'displayTitle'          => false,
 		'displayDesc'           => false,
-		'theme'                 => 'default',
+		'theme'                 => '',
 		'themeName'             => '',
 		'fieldSize'             => 'medium',
 		'backgroundImage'       => CSSVars::ROOT_VARS['background-image'],
@@ -124,7 +122,7 @@ abstract class FormSelector implements IntegrationInterface {
 	private $callbacks = [];
 
 	/**
-	 * Currently displayed form Id.
+	 * Currently displayed form ID.
 	 *
 	 * @since 1.8.8
 	 *
@@ -133,7 +131,7 @@ abstract class FormSelector implements IntegrationInterface {
 	private $current_form_id = 0;
 
 	/**
-	 * Indicate if current integration is allowed to load.
+	 * Indicate if the current integration is allowed to load.
 	 *
 	 * @since 1.4.8
 	 *
@@ -153,7 +151,9 @@ abstract class FormSelector implements IntegrationInterface {
 
 		$this->render_engine       = wpforms_get_render_engine();
 		$this->disable_css_setting = (int) wpforms_setting( 'disable-css', '1' );
-		$this->css_vars_obj        = wpforms()->get( 'css_vars' );
+		$this->css_vars_obj        = wpforms()->obj( 'css_vars' );
+
+		wpforms()->register_instance( 'formselector_themes_data', $this->themes_data_obj );
 
 		$this->hooks();
 	}
@@ -169,6 +169,26 @@ abstract class FormSelector implements IntegrationInterface {
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_editor_assets' ] );
 		add_action( 'wpforms_frontend_output_container_after', [ $this, 'replace_wpforms_frontend_container_class_filter' ] );
 		add_filter( 'wpforms_frontend_form_action', [ $this, 'form_action_filter' ], 10, 2 );
+		add_filter( 'wpforms_forms_anti_spam_v3_is_honeypot_enabled', [ $this, 'filter_is_honeypot_enabled' ] );
+		add_filter( 'wpforms_field_richtext_display_editor_is_media_enabled', [ $this, 'disable_richtext_media' ], 10, 2 );
+	}
+
+	/**
+	 * Disable honeypot in Gutenberg/Block editor.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param bool|mixed $is_enabled True if the honeypot is enabled, false otherwise.
+	 *
+	 * @return bool Whether to disable the honeypot.
+	 */
+	public function filter_is_honeypot_enabled( $is_enabled ): bool {
+
+		if ( wpforms_is_wpforms_rest() ) {
+			return false;
+		}
+
+		return (bool) $is_enabled;
 	}
 
 	/**
@@ -180,7 +200,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @return void
 	 */
-	public function replace_wpforms_frontend_container_class_filter( $form_data ) { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
+	public function replace_wpforms_frontend_container_class_filter( array $form_data ): void { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
 
 		if ( empty( $this->callbacks[ $form_data['id'] ] ) ) {
 			return;
@@ -200,156 +220,74 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @since 1.4.8
 	 */
-	public function register_block() {
+	public function register_block(): void {
+
+		$type_string  = [ 'type' => 'string' ];
+		$type_boolean = [ 'type' => 'boolean' ];
 
 		$attributes = [
-			'clientId'              => [
-				'type' => 'string',
-			],
-			'formId'                => [
-				'type' => 'string',
-			],
-			'displayTitle'          => [
-				'type' => 'boolean',
-			],
-			'displayDesc'           => [
-				'type' => 'boolean',
-			],
-			'className'             => [
-				'type' => 'string',
-			],
-			'theme'                 => [
-				'type' => 'string',
-			],
-			'themeName'             => [
-				'type' => 'string',
-			],
-			'fieldSize'             => [
-				'type' => 'string',
-			],
-			'fieldBorderRadius'     => [
-				'type' => 'string',
-			],
-			'fieldBorderStyle'      => [
-				'type' => 'string',
-			],
-			'fieldBorderSize'       => [
-				'type' => 'string',
-			],
-			'fieldBackgroundColor'  => [
-				'type' => 'string',
-			],
-			'fieldBorderColor'      => [
-				'type' => 'string',
-			],
-			'fieldTextColor'        => [
-				'type' => 'string',
-			],
-			'fieldMenuColor'        => [
-				'type' => 'string',
-			],
-			'labelSize'             => [
-				'type' => 'string',
-			],
-			'labelColor'            => [
-				'type' => 'string',
-			],
-			'labelSublabelColor'    => [
-				'type' => 'string',
-			],
-			'labelErrorColor'       => [
-				'type' => 'string',
-			],
-			'buttonSize'            => [
-				'type' => 'string',
-			],
-			'buttonBorderStyle'     => [
-				'type' => 'string',
-			],
-			'buttonBorderSize'      => [
-				'type' => 'string',
-			],
-			'buttonBorderRadius'    => [
-				'type' => 'string',
-			],
-			'buttonBackgroundColor' => [
-				'type' => 'string',
-			],
-			'buttonBorderColor'     => [
-				'type' => 'string',
-			],
-			'buttonTextColor'       => [
-				'type' => 'string',
-			],
-			'pageBreakColor'        => [
-				'type' => 'string',
-			],
-			'backgroundImage'       => [
-				'type' => 'string',
-			],
-			'backgroundPosition'    => [
-				'type' => 'string',
-			],
-			'backgroundRepeat'      => [
-				'type' => 'string',
-			],
-			'backgroundSizeMode'    => [
-				'type' => 'string',
-			],
-			'backgroundSize'        => [
-				'type' => 'string',
-			],
-			'backgroundWidth'       => [
-				'type' => 'string',
-			],
-			'backgroundHeight'      => [
-				'type' => 'string',
-			],
-			'backgroundUrl'         => [
-				'type' => 'string',
-			],
-			'backgroundColor'       => [
-				'type' => 'string',
-			],
-			'containerPadding'      => [
-				'type' => 'string',
-			],
-			'containerBorderStyle'  => [
-				'type' => 'string',
-			],
-			'containerBorderWidth'  => [
-				'type' => 'string',
-			],
-			'containerBorderColor'  => [
-				'type' => 'string',
-			],
-			'containerBorderRadius' => [
-				'type' => 'string',
-			],
-			'containerShadowSize'   => [
-				'type' => 'string',
-			],
-			'customCss'             => [
-				'type' => 'string',
-			],
-			'copyPasteJsonValue'    => [
-				'type' => 'string',
-			],
+			'clientId'              => $type_string,
+			'formId'                => $type_string,
+			'displayTitle'          => $type_boolean,
+			'displayDesc'           => $type_boolean,
+			'className'             => $type_string,
+			'theme'                 => $type_string,
+			'themeName'             => $type_string,
+			'fieldSize'             => $type_string,
+			'fieldBorderRadius'     => $type_string,
+			'fieldBorderStyle'      => $type_string,
+			'fieldBorderSize'       => $type_string,
+			'fieldBackgroundColor'  => $type_string,
+			'fieldBorderColor'      => $type_string,
+			'fieldTextColor'        => $type_string,
+			'fieldMenuColor'        => $type_string,
+			'labelSize'             => $type_string,
+			'labelColor'            => $type_string,
+			'labelSublabelColor'    => $type_string,
+			'labelErrorColor'       => $type_string,
+			'buttonSize'            => $type_string,
+			'buttonBorderStyle'     => $type_string,
+			'buttonBorderSize'      => $type_string,
+			'buttonBorderRadius'    => $type_string,
+			'buttonBackgroundColor' => $type_string,
+			'buttonBorderColor'     => $type_string,
+			'buttonTextColor'       => $type_string,
+			'pageBreakColor'        => $type_string,
+			'backgroundImage'       => $type_string,
+			'backgroundPosition'    => $type_string,
+			'backgroundRepeat'      => $type_string,
+			'backgroundSizeMode'    => $type_string,
+			'backgroundSize'        => $type_string,
+			'backgroundWidth'       => $type_string,
+			'backgroundHeight'      => $type_string,
+			'backgroundUrl'         => $type_string,
+			'backgroundColor'       => $type_string,
+			'containerPadding'      => $type_string,
+			'containerBorderStyle'  => $type_string,
+			'containerBorderWidth'  => $type_string,
+			'containerBorderColor'  => $type_string,
+			'containerBorderRadius' => $type_string,
+			'containerShadowSize'   => $type_string,
+			'customCss'             => $type_string,
+			'copyPasteJsonValue'    => $type_string,
 		];
 
 		$this->register_styles();
 
+		/**
+		 * Modify WPForms block attributes.
+		 *
+		 * @since 1.5.8.2
+		 *
+		 * @param array $attributes Attributes.
+		 */
+		$attributes = apply_filters( 'wpforms_gutenberg_form_selector_attributes', $attributes ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+
 		register_block_type(
 			'wpforms/form-selector',
 			[
-				/**
-				 * Modify WPForms block attributes.
-				 *
-				 * @since 1.5.8.2
-				 *
-				 * @param array $attributes Attributes.
-				 */
-				'attributes'      => apply_filters( 'wpforms_gutenberg_form_selector_attributes', $attributes ), // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+				'api_version'     => $this->get_block_api_version(),
+				'attributes'      => $attributes,
 				'style'           => 'wpforms-gutenberg-form-selector',
 				'editor_style'    => 'wpforms-integrations',
 				'render_callback' => [ $this, 'get_form_html' ],
@@ -373,7 +311,7 @@ abstract class FormSelector implements IntegrationInterface {
 		wp_register_style(
 			'wpforms-integrations',
 			WPFORMS_PLUGIN_URL . "assets/css/admin-integrations{$min}.css",
-			[],
+			[ 'dashicons' ],
 			WPFORMS_VERSION
 		);
 
@@ -382,13 +320,21 @@ abstract class FormSelector implements IntegrationInterface {
 		}
 
 		$css_file = $this->disable_css_setting === 2 ? 'base' : 'full';
+		$handle   = 'wpforms-gutenberg-form-selector';
 
 		wp_register_style(
-			'wpforms-gutenberg-form-selector',
+			$handle,
 			WPFORMS_PLUGIN_URL . "assets/css/frontend/{$this->render_engine}/wpforms-{$css_file}{$min}.css",
 			[ 'wp-edit-blocks', 'wpforms-integrations' ],
 			WPFORMS_VERSION
 		);
+
+		// Add root CSS variables for the Modern Markup mode for full styles.
+		if ( empty( $this->css_vars_obj ) || $this->render_engine !== 'modern' || $css_file !== 'full' ) {
+			return;
+		}
+
+		wp_add_inline_style( $handle, $this->css_vars_obj->get_root_vars_css() );
 	}
 
 	/**
@@ -416,7 +362,8 @@ abstract class FormSelector implements IntegrationInterface {
 			'jquery-confirm',
 			WPFORMS_PLUGIN_URL . 'assets/lib/jquery.confirm/jquery-confirm.min.js',
 			[ 'jquery' ],
-			'1.0.0'
+			'1.0.0',
+			false
 		);
 
 		// Support for the legacy form selector.
@@ -466,53 +413,6 @@ abstract class FormSelector implements IntegrationInterface {
 	protected function is_legacy_block() {
 
 		return version_compare( $GLOBALS['wp_version'], '6.0', '<' );
-	}
-
-	/**
-	 * Register API route for Gutenberg block.
-	 *
-	 * @since 1.8.4
-	 * @deprecated 1.8.8
-	 */
-	public function register_api_route() {
-
-		_deprecated_function( __METHOD__, '1.8.8 of the WPForms plugin', '\WPForms\Integrations\Gutenberg\RestApi::register_api_routes()' );
-
-		$this->rest_api_obj->register_api_routes();
-	}
-
-	/**
-	 * Wrap localized data in a protected WP_REST_Response object.
-	 *
-	 * @since 1.8.4
-	 * @deprecated 1.8.8
-	 *
-	 * @see https://developer.wordpress.org/reference/functions/rest_ensure_response/
-	 *
-	 * @return WP_Error|WP_REST_Response
-	 */
-	public function protected_data_callback() {
-
-		_deprecated_function( __METHOD__, '1.8.8 of the WPForms plugin', '\WPForms\Integrations\Gutenberg\RestApi::get_forms()' );
-
-		return $this->rest_api_obj->get_forms();
-	}
-
-	/**
-	 * Check if a user has permission to access private data.
-	 *
-	 * @since 1.8.4
-	 * @deprecated 1.8.8
-	 *
-	 * @see https://developer.wordpress.org/rest-api/extending-the-rest-api/routes-and-endpoints/#permissions-callback
-	 *
-	 * @return true|WP_Error True if a user has permission.
-	 */
-	public function protected_permissions_callback() {
-
-		_deprecated_function( __METHOD__, '1.8.8 of the WPForms plugin', '\WPForms\Integrations\Gutenberg\RestApi::permissions_check()' );
-
-		return $this->rest_api_obj->permissions_check();
 	}
 
 	/**
@@ -633,12 +533,13 @@ abstract class FormSelector implements IntegrationInterface {
 			'custom_css_notice'            => esc_html__( 'Further customize the look of this form without having to edit theme files.', 'wpforms-lite' ),
 			// Translators: %1$s: Opening strong tag, %2$s: Closing strong tag.
 			'wpforms_empty_info'           => sprintf( esc_html__( 'You can use %1$sWPForms%2$s to build contact forms, surveys, payment forms, and more with just a few clicks.', 'wpforms-lite' ), '<strong>','</strong>' ),
-			// Translators: %1$s: Opening anchor tag, %2$s: Closing achor tag.
+			// Translators: %1$s: Opening anchor tag, %2$s: Closing anchor tag.
 			'wpforms_empty_help'           => sprintf( esc_html__( 'Need some help? Check out our %1$scomprehensive guide.%2$s', 'wpforms-lite' ), '<a target="_blank" href="' . esc_url( wpforms_utm_link( 'https://wpforms.com/docs/creating-first-form/', 'gutenberg', 'Create Your First Form Documentation' ) ) . '">','</a>' ),
 			'other_styles'                 => esc_html__( 'Other Styles', 'wpforms-lite' ),
 			'page_break'                   => esc_html__( 'Page Break', 'wpforms-lite' ),
 			'rating'                       => esc_html__( 'Rating', 'wpforms-lite' ),
 			'heads_up'                     => esc_html__( 'Heads Up!', 'wpforms-lite' ),
+			'form_not_available_message'   => esc_html__( 'It looks like the form you had selected is in the Trash or has been permanently deleted.', 'wpforms-lite' ),
 		];
 
 		return [
@@ -653,6 +554,7 @@ abstract class FormSelector implements IntegrationInterface {
 			],
 			'forms'             => $this->get_form_list(),
 			'strings'           => $strings,
+			'isAdmin'           => current_user_can( 'manage_options' ),
 			'isPro'             => wpforms()->is_pro(),
 			'defaults'          => self::DEFAULT_ATTRIBUTES,
 			'is_modern_markup'  => $this->render_engine === 'modern',
@@ -678,7 +580,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 */
 	public function get_form_list(): array {
 
-		$forms = wpforms()->get( 'form' )->get( '', [ 'order' => 'DESC' ] );
+		$forms = wpforms()->obj( 'form' )->get( '', [ 'order' => 'DESC' ] );
 
 		if ( empty( $forms ) ) {
 			return [];
@@ -698,17 +600,6 @@ abstract class FormSelector implements IntegrationInterface {
 	}
 
 	/**
-	 * Let's WP know that we have translation strings on our block script.
-	 *
-	 * @since 1.8.3
-	 * @deprecated 1.8.5
-	 */
-	public function enable_block_translations() {
-
-		_deprecated_function( __METHOD__, '1.8.5' );
-	}
-
-	/**
 	 * Filter form action.
 	 *
 	 * @since 1.8.8
@@ -717,6 +608,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 * @param array|mixed  $form_data Form data.
 	 *
 	 * @return string
+	 * @noinspection PhpUnusedParameterInspection
 	 */
 	public function form_action_filter( $action, $form_data ): string {
 
@@ -801,6 +693,10 @@ abstract class FormSelector implements IntegrationInterface {
 			return $attr;
 		}
 
+		if ( $theme_slug === '' ) {
+			$theme_slug = $this->get_theme_slug( $attr );
+		}
+
 		$theme_data = $this->themes_data_obj->get_theme( $theme_slug );
 
 		// Theme doesn't exist, let's return.
@@ -813,6 +709,33 @@ abstract class FormSelector implements IntegrationInterface {
 	}
 
 	/**
+	 * Get the theme slug.
+	 *
+	 * @since 1.9.7
+	 *
+	 * @param array $attr Attributes passed by WPForms Gutenberg block.
+	 *
+	 * @return string
+	 */
+	private function get_theme_slug( array $attr ): string {
+
+		$form_handler = wpforms()->obj( 'form' );
+
+		if ( ! $form_handler ) {
+			return 'default';
+		}
+
+		$form_id   = (int) $attr['formId'];
+		$form_data = $form_handler->get( $form_id, [ 'content_only' => true ] );
+
+		if ( empty( $form_data['settings']['themes']['wpformsTheme'] ) ) {
+			return 'default';
+		}
+
+		return $form_data['settings']['themes']['wpformsTheme'];
+	}
+
+	/**
 	 * Add class callback.
 	 *
 	 * @since 1.8.1
@@ -822,7 +745,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @return void
 	 */
-	private function add_class_callback( $id, $attr ) { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
+	private function add_class_callback( int $id, array $attr ): void { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
 
 		$class_callback = static function ( $classes, $form_data ) use ( $id, $attr ) {
 
@@ -865,8 +788,9 @@ abstract class FormSelector implements IntegrationInterface {
 	 * @param array $attr  Form attributes.
 	 *
 	 * @return string
+	 * @noinspection JSUnresolvedReference
 	 */
-	private function get_content( $id, $title, $desc, $attr ): string {
+	private function get_content( int $id, bool $title, bool $desc, array $attr ): string {
 
 		/**
 		 * Filter allow render block content flag.
@@ -962,8 +886,8 @@ abstract class FormSelector implements IntegrationInterface {
 				);
 			" class="wpforms-pix-trigger" alt="">',
 			absint( $id ),
-			var_export( (bool) $title, true ),
-			var_export( (bool) $desc, true )
+			var_export( $title, true ),
+			var_export( $desc, true )
 		);
 
 		// phpcs:enable WordPress.PHP.DevelopmentFunctions.error_log_var_export
@@ -992,7 +916,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @return void
 	 */
-	private function disable_fields_in_gb_editor() { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
+	private function disable_fields_in_gb_editor(): void { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
 
 		add_filter(
 			'wpforms_frontend_container_class',
@@ -1028,13 +952,11 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @param array $attr Attributes passed by WPForms Gutenberg block.
 	 */
-	private function output_css_vars( $attr ) {
+	private function output_css_vars( array $attr ): void {
 
 		if ( empty( $this->css_vars_obj ) || ! method_exists( $this->css_vars_obj, 'get_vars' ) ) {
 			return;
 		}
-
-		$this->css_vars_obj->output_root();
 
 		if ( $this->render_engine === 'classic' || $this->disable_css_setting !== 1 ) {
 			return;
@@ -1064,6 +986,9 @@ abstract class FormSelector implements IntegrationInterface {
 			$css_vars
 		);
 
+		$style_id      = rtrim( $style_id, '-' );
+		$vars_selector = rtrim( $vars_selector, '-' );
+
 		$this->css_vars_obj->output_selector_vars( $vars_selector, $css_vars, $style_id, $this->current_form_id );
 	}
 
@@ -1074,7 +999,7 @@ abstract class FormSelector implements IntegrationInterface {
 	 *
 	 * @param array $attr Attributes passed by WPForms Gutenberg block.
 	 */
-	private function output_custom_css( $attr ) {
+	private function output_custom_css( array $attr ): void {
 
 		if ( wpforms_get_render_engine() === 'classic' ) {
 			return;
@@ -1095,5 +1020,42 @@ abstract class FormSelector implements IntegrationInterface {
 			sanitize_key( $style_id ),
  			esc_html( $custom_css )
 		);
+	}
+
+	/**
+	 * Disable loading media for the richtext editor for edit action to prevent script conflicts.
+	 *
+	 * @since 1.9.1
+	 *
+	 * @param bool|mixed $media_enabled Whether to enable media.
+	 * @param array      $field         Field data.
+	 *
+	 * @return bool
+	 * @noinspection PhpUnusedParameterInspection
+	 */
+	public function disable_richtext_media( $media_enabled, array $field ): bool {
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] === 'edit' && is_admin() ) {
+			return false;
+		}
+
+		return (bool) $media_enabled;
+	}
+
+	/**
+	 * Get block API version based on WP core version.
+	 *
+	 * @since 1.9.3
+	 *
+	 * @return int Block API version.
+	 */
+	private function get_block_api_version(): int {
+
+		if ( $this->is_legacy_block() ) {
+			return 1;
+		}
+
+		return version_compare( $GLOBALS['wp_version'], '6.3', '<' ) ? 2 : 3;
 	}
 }

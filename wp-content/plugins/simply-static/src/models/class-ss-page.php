@@ -46,6 +46,7 @@ class Page extends Model {
 		'error_message'       => 'VARCHAR(255) NULL',
 		'status_message'      => 'VARCHAR(255) NULL',
 		'handler'             => 'VARCHAR(255) NULL',
+		'json'                => 'TEXT NULL',
 		'last_checked_at'     => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'last_modified_at'    => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
 		'last_transferred_at' => "DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00'",
@@ -72,13 +73,6 @@ class Page extends Model {
 	 * @var string
 	 */
 	protected static $primary_key = 'id';
-
-	/**
-	 * The content hash value for comparison.
-	 *
-	 * @var string|null
-	 */
-	public $content_hash;
 
 	/**
 	 * Get the number of pages for each group of status codes, e.g. 1xx, 2xx, 3xx
@@ -113,6 +107,15 @@ class Page extends Model {
 	}
 
 	/**
+	 * Delete this page.
+	 *
+	 * @return int|null
+	 */
+	public function delete() {
+		return self::query()->delete_by_id( $this->id );
+	}
+
+	/**
 	 * Check if the hash for the content matches the prior hash for the page
 	 *
 	 * @param string $sha1 The content of the page/file.
@@ -122,9 +125,9 @@ class Page extends Model {
 	public function is_content_identical( $sha1 ) {
 		$hash = $this->content_hash ?? '';
 
-		Util::debug_log( 'Checking Content Identical:' . $sha1 . '===' . $hash . '. Value: ' . ( strpos( $sha1, $hash ) === 0 ? 'TRUE' : 'FALSE' ) );
+		Util::debug_log( 'Checking Content Identical:' . $sha1 . '===' . $hash . '. Value: ' . ( $hash && strpos( $sha1, $hash ) === 0 ? 'TRUE' : 'FALSE' ) );
 
-		return strpos( $sha1, $hash ) === 0;
+		return $hash && strpos( $sha1, $hash ) === 0;
 	}
 
 	/**
@@ -178,11 +181,33 @@ class Page extends Model {
 	 * @param string $message The status message.
 	 */
 	public function set_status_message( $message ) {
+		// Already has the same message.
+		if ( $this->has_status_message( $message ) ) {
+			return;
+		}
+
 		if ( $this->status_message ) {
 			$this->status_message = $this->status_message . '; ' . $message;
 		} else {
 			$this->status_message = $message;
 		}
+	}
+
+	/**
+	 * Check if the page already has a specific status message
+	 *
+	 * @param string $message The status message to check for.
+	 * @return boolean Whether the page already has the status message.
+	 */
+	protected function has_status_message( $message ) {
+		if ( ! $this->status_message ) {
+			return false;
+		}
+
+		$statuses = explode( '; ', $this->status_message );
+		$index  = array_search( $message, $statuses, true );
+
+		return false !== $index && $index >= 0;
 	}
 
 	/**
@@ -193,7 +218,11 @@ class Page extends Model {
 	 * @return boolean
 	 */
 	public function is_type( $content_type ) {
-		return stripos( $this->content_type, $content_type ) !== false;
+		if ( ! is_null( $this->content_type ) ) {
+			return stripos( $this->content_type, $content_type ) !== false;
+		}
+
+		return false;
 	}
 
 	/**
@@ -202,7 +231,19 @@ class Page extends Model {
 	 * @return bool
 	 */
 	public function is_binary_file() {
-		return $this->is_type( 'application/octet-stream' ) || $this->is_type( 'image' );
+		if ( $this->is_type( 'application/octet-stream' ) ) {
+			return true;
+		}
+
+		if ( $this->is_type( 'image' ) ) {
+			return true;
+		}
+
+		if ( null === $this->content_type && $this->get_handler_class() === Additional_File_Handler::class ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public function get_handler_class() {
@@ -243,5 +284,65 @@ class Page extends Model {
 		}
 
 		return parent::attributes( $attributes );
+	}
+
+	/**
+	 * Get JSON
+	 * @return mixed
+	 */
+	public function get_json() {
+		return json_decode( $this->json ?? '', true );
+	}
+
+	/**
+	 * Set JSON
+	 *
+	 * @param array $data Data.
+	 *
+	 * @return void
+	 */
+	public function set_json( $data ) {
+		$this->json = json_encode( $data );
+	}
+
+	/**
+	 * Get the JSON data by a key.
+	 *
+	 * @param string $key Key in JSON.
+	 *
+	 * @return mixed|null
+	 */
+	public function get_json_data_by_key( $key ) {
+		$json = $this->get_json();
+
+		if ( ! $json ) {
+			return null;
+		}
+
+		if ( empty( $json[ $key ] ) ) {
+			return null;
+		}
+
+		return $json[ $key ];
+	}
+
+	/**
+	 * Set the JSON data for a key.
+	 *
+	 * @param string $key Key under which sets the data.
+	 * @param mixed $data Mixed data.
+	 *
+	 * @return void
+	 */
+	public function set_json_data_by_key( $key, $data ) {
+		$json = $this->get_json();
+
+		if ( ! $json ) {
+			$json = [];
+		}
+
+		$json[ $key ] = $data;
+
+		$this->set_json( $json );
 	}
 }

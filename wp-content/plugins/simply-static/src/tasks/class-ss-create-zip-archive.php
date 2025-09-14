@@ -1,4 +1,5 @@
 <?php
+
 namespace Simply_Static;
 
 require_once( ABSPATH . 'wp-admin/includes/class-pclzip.php' );
@@ -26,14 +27,22 @@ class Create_Zip_Archive_Task extends Task {
 		if ( is_wp_error( $download_url ) ) {
 			return $download_url;
 		} else {
+			if ( defined( 'SS_WASM' ) ) {
+				// Force download link to be SSL.
+				if ( strpos( $download_url, 'http://' ) !== false ) {
+					$download_url = str_replace( 'http://', 'https://', $download_url );
+				}
+			}
+
 			$message = __( 'ZIP archive created: ', 'simply-static' );
-            if ( $this->is_wp_cli_running() ) {
-                $message .= $download_url;
-            } else {
-                $message .= ' <a href="' . $download_url . '">' . __( 'Click here to download', 'simply-static' ) . '</a>';
-            }
+			if ( $this->is_wp_cli_running() ) {
+				$message .= $download_url;
+			} else {
+				$message .= ' <a href="' . $download_url . '">' . __( 'Click here to download', 'simply-static' ) . '</a>';
+			}
 
 			$this->save_status_message( $message );
+
 			return true;
 		}
 	}
@@ -45,6 +54,11 @@ class Create_Zip_Archive_Task extends Task {
 	 */
 	public function create_zip() {
 		$temp_dir = $this->options->get( 'temp_files_dir' );
+
+		if ( empty( $temp_dir ) ) {
+			$upload_dir = wp_upload_dir();
+			$temp_dir   = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'simply-static' . DIRECTORY_SEPARATOR . 'temp-files';
+		}
 
 		// check if temp directory is empty, if not delete old zip files.
 		$temp_dir_empty = ! ( new \FilesystemIterator( $temp_dir ) )->valid();
@@ -83,9 +97,10 @@ class Create_Zip_Archive_Task extends Task {
 			return new \WP_Error( 'create_zip_failed', __( 'Unable to create ZIP archive', 'simply-static' ) );
 		}
 
-		do_action('ss_zip_file_created', $zip_archive );
+		do_action( 'ss_zip_file_created', $zip_archive );
 
 		$download_url = Util::abs_path_to_url( $zip_archive->zipname );
+
 		return $download_url;
 	}
 }

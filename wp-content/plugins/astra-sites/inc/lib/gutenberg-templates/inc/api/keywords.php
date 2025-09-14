@@ -84,7 +84,7 @@ class Keywords extends Api_Base {
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return new \WP_Error(
 				'gt_rest_cannot_access',
-				__( 'Sorry, you are not allowed to do that.', 'ast-block-templates' ),
+				__( 'Sorry, you are not allowed to do that.', 'astra-sites' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -99,12 +99,12 @@ class Keywords extends Api_Base {
 	 */
 	public function get( $request ) {
 
-		$nonce = $request->get_header( 'X-WP-Nonce' );
+		$nonce = (string) $request->get_header( 'X-WP-Nonce' );
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
 			wp_send_json_error(
 				array(
-					'data' => __( 'Nonce verification failed.', 'ast-block-templates' ),
+					'data' => __( 'Nonce verification failed.', 'astra-sites' ),
 					'status'  => false,
 
 				)
@@ -119,11 +119,12 @@ class Keywords extends Api_Base {
 			'business_name' => isset( $request['business_name'] ) ? sanitize_text_field( $request['business_name'] ) : '',
 			'business_description' => isset( $request['business_description'] ) ? sanitize_text_field( $request['business_description'] ) : '',
 			'category' => isset( $request['category'] ) ? sanitize_text_field( $request['category'] ) : '',
-			'token' => isset( $token ) ? $token : '',
+			'token' => $token,
 		);
 
+		$body = wp_json_encode( $post_data );
 		$request_args = array(
-			'body' => wp_json_encode( $post_data ),
+			'body' => is_string( $body ) ? $body : '',
 			'headers' => array(
 				'Content-Type' => 'application/json',
 			),

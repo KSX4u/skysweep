@@ -93,7 +93,7 @@ class Favorite extends Api_Base {
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
 			return new \WP_Error(
 				'gt_rest_cannot_access',
-				__( 'Sorry, you are not allowed to do that.', 'ast-block-templates' ),
+				__( 'Sorry, you are not allowed to do that.', 'astra-sites' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -127,12 +127,12 @@ class Favorite extends Api_Base {
 	 */
 	public function save( $request ) {
 
-		$nonce = $request->get_header( 'X-WP-Nonce' );
+		$nonce = (string) $request->get_header( 'X-WP-Nonce' );
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( $nonce ), 'wp_rest' ) ) {
 			wp_send_json_error(
 				array(
-					'data' => __( 'Nonce verification failed.', 'ast-block-templates' ),
+					'data' => __( 'Nonce verification failed.', 'astra-sites' ),
 					'status'  => false,
 
 				)
@@ -145,17 +145,16 @@ class Favorite extends Api_Base {
 		$status = $request->get_param( 'status' );
 
 		// Empty favorite then add favorite in respective array tye and early return.
+		if ( ! isset( $favorites[ $block_type ] ) || ! is_array( $favorites[ $block_type ] ) ) {
+			$favorites[ $block_type ] = array();
+		}
 		if ( empty( $favorites ) && $status ) {
 			$favorites[ $block_type ][] = $id;
-			$update_status = update_option( 'ast_block_templates_favorites', $favorites );
-			return rest_ensure_response( array( 'success' => $update_status ) );
 		}
 
 		// Empty patterns OR blocks array then add favorite and return early.
 		if ( empty( $favorites[ $block_type ] ) && $status ) {
 			$favorites[ $block_type ][] = $id;
-			$update_status = update_option( 'ast_block_templates_favorites', $favorites );
-			return rest_ensure_response( array( 'success' => $update_status ) );
 		}
 
 		if ( $status ) {
@@ -176,6 +175,13 @@ class Favorite extends Api_Base {
 
 		$update_status = update_option( 'ast_block_templates_favorites', $favorites );
 
-		return rest_ensure_response( array( 'success' => $update_status ) );
+
+		$data = array( 
+			'success' => $update_status, 
+			'message' => $update_status ? __( 'Action Completed', 'astra-sites' ) : __( 'Action failed', 'astra-sites' ),
+			'data' => $favorites, 
+		);
+
+		return rest_ensure_response( $data );
 	}
 }

@@ -10,13 +10,15 @@ import Features from '../pages/features';
 import ImportAiSite from '../pages/import-ai-site';
 import BuildDone from '../pages/done';
 
+const skipFeatures = !! aiBuilderVars?.skipFeatures;
+
 // Steps
 const steps = [
 	{
 		path: '/',
 		component: GetStarted,
 		layoutConfig: {
-			hideSidebar: true,
+			hideHeader: true,
 			hideCloseIcon: true,
 			hideStep: true,
 			hideCredits: true,
@@ -28,7 +30,7 @@ const steps = [
 		component: BusinessDetails,
 		layoutConfig: {
 			stepNumber: 1,
-			name: __( 'Let’s Start', 'ai-builder' ),
+			name: __( "Let's Start", 'ai-builder' ),
 			description: __( 'Name, language & type', 'ai-builder' ),
 			screen: 'type',
 			hideCredits: false,
@@ -64,7 +66,7 @@ const steps = [
 		component: Images,
 		layoutConfig: {
 			stepNumber: 4,
-			name: __( 'Select Images', 'ai-builder' ),
+			name: __( 'Images', 'ai-builder' ),
 			description: __( 'Select relevant images as needed', 'ai-builder' ),
 			screen: 'images',
 			contentClassName:
@@ -87,23 +89,31 @@ const steps = [
 			contentClassName:
 				'px-0 pt-0 md:px-0 md:pt-0 lg:px-0 lg:pt-0 xl:px-0 xl:pt-0',
 			hideCredits: false,
+			...( skipFeatures && { screen: 'done' } ),
 		},
 		requiredStates: [ 'selectedTemplate' ],
 	},
-	{
-		path: '/features',
-		component: Features,
-		layoutConfig: {
-			stepNumber: 6,
-			name: __( 'Features', 'ai-builder' ),
-			description: __( 'Select features as you need', 'ai-builder' ),
-			screen: 'done',
-			contentClassName:
-				'px-0 pt-0 md:px-0 md:pt-0 lg:px-0 lg:pt-0 xl:px-0 xl:pt-0',
-			hideCredits: false,
-		},
-		requiredStates: [ 'websiteInfo' ],
-	},
+	...( ! skipFeatures
+		? [
+				{
+					path: '/features',
+					component: Features,
+					layoutConfig: {
+						stepNumber: 6,
+						name: __( 'Features', 'ai-builder' ),
+						description: __(
+							'Select features as you need',
+							'ai-builder'
+						),
+						hideCredits: false,
+						hideStep: true,
+						hideHeader: false,
+						screen: 'done',
+					},
+					requiredStates: [ 'websiteInfo' ],
+				},
+		  ]
+		: [] ),
 	{
 		path: '/building-website',
 		component: ImportAiSite,
@@ -113,6 +123,7 @@ const steps = [
 			description: __( 'Your website is ready!', 'ai-builder' ),
 			screen: 'done',
 			hideStep: true,
+			hideHeader: true,
 			hideCredits: true,
 		},
 		requiredStates: [],
@@ -129,6 +140,7 @@ const steps = [
 			screen: 'done',
 			contentClassName: 'pt-0 md:pt-0 lg:pt-0 xl:pt-0',
 			hideStep: true,
+			hideHeader: true,
 			hideCredits: true,
 		},
 		requiredStates: [],

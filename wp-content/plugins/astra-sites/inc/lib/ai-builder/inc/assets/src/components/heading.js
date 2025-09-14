@@ -1,15 +1,20 @@
 import { classNames } from '../helpers';
 
-const Heading = ( { heading, subHeading, className } ) => {
+const Heading = ( { heading, subHeading, className, subClassName } ) => {
 	return (
 		<div className={ classNames( 'space-y-3', className ) }>
 			{ !! heading && (
-				<div className="text-[2rem] font-semibold leading-[140%]">
+				<div className="text-[28px] text-heading-text text-[1.75rem] font-semibold">
 					{ heading }
 				</div>
 			) }
 			{ !! subHeading && (
-				<p className="text-zip-body-text text-base font-normal leading-6">
+				<p
+					className={ classNames(
+						'text-body-text text-base font-normal leading-6',
+						subClassName
+					) }
+				>
 					{ subHeading }
 				</p>
 			) }

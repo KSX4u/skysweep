@@ -199,7 +199,7 @@ trait ContentTrait {
 		$label = __( 'Add New Plan', 'wpforms-lite' );
 
 		if ( Helpers::is_allowed_license_type() ) {
-			$addon = wpforms()->get( 'addons' )->get_addon( 'wpforms-stripe' );
+			$addon = wpforms()->obj( 'addons' )->get_addon( 'wpforms-stripe' );
 
 			if ( empty( $addon ) ) {
 				return;
@@ -223,7 +223,7 @@ trait ContentTrait {
 				href="#"
 				class="wpforms-panel-content-section-payment-button wpforms-panel-content-section-payment-button-add-plan education-modal"
 				data-action="upgrade"
-				data-name="' . esc_attr__( 'Multiple Stripe Subscription Plans', 'wpforms-lite' ) . '"
+				data-name="' . esc_attr__( 'Multiple Subscriptions', 'wpforms-lite' ) . '"
 			>' . esc_html( $label ) . '</a>';
 	}
 
@@ -398,7 +398,9 @@ trait ContentTrait {
 		);
 
 		$content .= $this->get_customer_name_panel_field();
+		$content .= $this->get_customer_phone_field();
 		$content .= $this->get_address_panel_fields();
+		$content .= $this->get_custom_metadata_table();
 		$content .= $this->single_payments_conditional_logic_section();
 
 		return $content;
@@ -455,6 +457,8 @@ trait ContentTrait {
 			false
 		);
 
+		$is_empty_email = isset( $this->form_data['payments'][ $this->slug ]['recurring'][ $plan_id ]['email'] ) && empty( $this->form_data['payments'][ $this->slug ]['recurring'][ $plan_id ]['email'] );
+
 		$content .= wpforms_panel_field(
 			'select',
 			$this->slug,
@@ -465,6 +469,7 @@ trait ContentTrait {
 				'parent'      => 'payments',
 				'subsection'  => 'recurring',
 				'index'       => $plan_id,
+				'input_class' => $is_empty_email ? 'wpforms-required-field-error' : '',
 				'field_map'   => [ 'email' ],
 				'placeholder' => esc_html__( '--- Select Email ---', 'wpforms-lite' ),
 				'tooltip'     => esc_html__( "Select the field that contains the customer's email address. This field is required.", 'wpforms-lite' ),
@@ -473,7 +478,9 @@ trait ContentTrait {
 		);
 
 		$content .= $this->get_customer_name_panel_field( $plan_id );
+		$content .= $this->get_customer_phone_field( $plan_id );
 		$content .= $this->get_address_panel_fields( $plan_id );
+		$content .= $this->get_custom_metadata_table( $plan_id );
 		$content .= $this->recurring_payments_conditional_logic_section( $plan_id );
 
 		return $content;
@@ -558,7 +565,6 @@ trait ContentTrait {
 			'parent'      => 'payments',
 			'field_map'   => [ 'address' ],
 			'placeholder' => esc_html__( '--- Select Address ---', 'wpforms-lite' ),
-			'tooltip'     => esc_html__( 'Select the field that contains the customer\'s address. This is optional but required for some regions.', 'wpforms-lite' ),
 		];
 
 		$is_subscription = ! is_null( $plan_id );
@@ -566,6 +572,22 @@ trait ContentTrait {
 		if ( $is_subscription ) {
 			$args['subsection'] = 'recurring';
 			$args['index']      = $plan_id;
+		}
+
+		$is_pro = wpforms()->is_pro();
+
+		if ( ! $is_pro ) {
+			$args['pro_badge']   = true;
+			$args['data']        = [
+				'action'      => 'upgrade',
+				'name'        => esc_html__( 'Customer Address', 'wpforms-lite' ),
+				'utm-content' => 'Builder Stripe Address Field',
+				'licence'     => 'pro',
+			];
+			$args['input_class'] = 'education-modal';
+			$args['readonly']    = true;
+		} else {
+			$args['tooltip'] = esc_html__( 'Select the field that contains the customer\'s address. This is optional but required for some regions.', 'wpforms-lite' );
 		}
 
 		$output = wpforms_panel_field(
@@ -582,7 +604,11 @@ trait ContentTrait {
 			return $output;
 		}
 
-		$args['tooltip'] = esc_html__( 'Select the field that contains the shipping address. This is optional but required for some regions.', 'wpforms-lite' );
+		if ( ! $is_pro ) {
+			$args['data']['name'] = esc_html__( 'Shipping Address', 'wpforms-lite' );
+		} else {
+			$args['tooltip'] = esc_html__( 'Select the field that contains the shipping address. This is optional but required for some regions.', 'wpforms-lite' );
+		}
 
 		$output .= wpforms_panel_field(
 			'select',
@@ -595,5 +621,133 @@ trait ContentTrait {
 		);
 
 		return $output;
+	}
+
+	/**
+	 * Get Customer phone panel field.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param string|null $plan_id Plan ID.
+	 *
+	 * @return string
+	 */
+	private function get_customer_phone_field( string $plan_id = null ): string {
+
+		$args = [
+			'parent'      => 'payments',
+			'field_map'   => [ 'phone' ],
+			'placeholder' => esc_html__( '--- Select Phone ---', 'wpforms-lite' ),
+		];
+
+		if ( ! is_null( $plan_id ) ) {
+			$args['subsection'] = 'recurring';
+			$args['index']      = $plan_id;
+		}
+
+		$is_pro = wpforms()->is_pro();
+
+		if ( ! $is_pro ) {
+			$args['pro_badge']   = true;
+			$args['data']        = [
+				'action'      => 'upgrade',
+				'name'        => esc_html__( 'Customer Phone', 'wpforms-lite' ),
+				'utm-content' => 'Builder Stripe Phone Field',
+				'licence'     => 'pro',
+			];
+			$args['input_class'] = 'education-modal';
+			$args['readonly']    = true;
+		} else {
+			$args['tooltip'] = esc_html__( 'Select the field that contains the customer\'s phone. This is optional but recommended.', 'wpforms-lite' );
+		}
+
+		return wpforms_panel_field(
+			'select',
+			$this->slug,
+			'customer_phone',
+			$this->form_data,
+			esc_html__( 'Customer Phone', 'wpforms-lite' ),
+			$args,
+			false
+		);
+	}
+
+	/**
+	 * Get custom meta table html.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param string|null $plan_id Plan ID.
+	 *
+	 * @return string
+	 */
+	private function get_custom_metadata_table( $plan_id = null ): string {
+
+		$subsection      = ! is_null( $plan_id ) ? 'recurring_custom_metadata_' . $plan_id : 'custom_metadata';
+		$custom_metadata = $this->form_data['payments'][ $this->slug ][ $subsection ] ?? [ [] ];
+
+		/**
+		 * Filter the allowed fields for custom metadata.
+		 *
+		 * @since 1.9.6
+		 *
+		 * @param array $allowed_fields Allowed fields.
+		 */
+		$allowed_fields = (array) apply_filters( 'wpforms_stripe_custom_metadata_allowed_fields', $this->get_allowed_meta_value_fields() );
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		return wpforms_render(
+			'integrations/stripe/builder/custom-metadata',
+			[
+				'custom_metadata' => $custom_metadata,
+				'subsection'      => $subsection,
+				'slug'            => $this->slug,
+				'form_data'       => $this->form_data,
+				'fields'          => $allowed_fields,
+			],
+			true
+		);
+	}
+
+	/**
+	 * Get allowed meta value fields.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @return array
+	 */
+	private function get_allowed_meta_value_fields(): array {
+
+		$fields = [
+			'text',
+			'textarea',
+			'checkbox',
+			'radio',
+			'select',
+			'number',
+			'name',
+			'email',
+			'number-slider',
+			'payment-checkbox',
+			'payment-multiple',
+			'payment-select',
+			'payment-single',
+			'payment-total',
+		];
+
+		if ( ! wpforms()->is_pro() ) {
+			return $fields;
+		}
+
+		return array_merge(
+			$fields,
+			[
+				'address',
+				'date-time',
+				'hidden',
+				'phone',
+				'rating',
+			]
+		);
 	}
 }

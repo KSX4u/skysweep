@@ -40,18 +40,20 @@ class Template_Kit_Importer {
 	public function template_importer() {
 
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
-			wp_send_json_error( __( 'You are not allowed to perform this action', 'ast-block-templates' ) );
+			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 		}
 		// Verify Nonce.
 		check_ajax_referer( 'ast-block-templates-ajax-nonce', '_ajax_nonce' );
 
 		$api_uri = ( isset( $_REQUEST['api_uri'] ) ) ? esc_url_raw( $_REQUEST['api_uri'] ) : '';
 
+		$block_id = isset( $_REQUEST['id'] ) ? absint( $_REQUEST['id'] ) : 0;
+
 		if ( ! Plugin::instance()->is_valid_url( $api_uri ) ) {
 			wp_send_json_error(
 				array(
 					/* Translators: %s is API URL. */
-					'message' => sprintf( __( 'Invalid Request URL - %s', 'ast-block-templates' ), $api_uri ),
+					'message' => sprintf( __( 'Invalid Request URL - %s', 'astra-sites' ), $api_uri ),
 					'code'    => 'Error',
 				)
 			);
@@ -89,6 +91,9 @@ class Template_Kit_Importer {
 		}
 
 		$data = json_decode( wp_remote_retrieve_body( $response ), true );
+
+		// Flush the object when import is successful.
+		delete_option( 'ast-block-templates_data-' . $block_id );
 
 		wp_send_json_success( $data['original_content'] );
 	}

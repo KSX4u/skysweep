@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Plugin Name:       Simply Static
  * Plugin URI:        https://patrickposner.dev
  * Description:       A static site generator to create fast and secure static versions of your WordPress website.
- * Version:           3.1.7
+ * Version:           3.4.5.1
  * Author:            Patrick Posner
  * Author URI:        https://patrickposner.dev
  * License:           GPL-2.0+
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 define( 'SIMPLY_STATIC_PATH', plugin_dir_path( __FILE__ ) );
 define( 'SIMPLY_STATIC_URL', untrailingslashit( plugin_dir_url( __FILE__ ) ) );
-define( 'SIMPLY_STATIC_VERSION', '3.1.7' );
+define( 'SIMPLY_STATIC_VERSION', '3.4.5.1' );
 
 // Check PHP version.
 if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
@@ -27,12 +27,10 @@ if ( version_compare( PHP_VERSION, '7.4', '<' ) ) {
 	wp_die( esc_html__( 'Simply Static requires PHP 7.4 or higher.', 'simply-static' ), 'Plugin dependency check', array( 'back_link' => true ) );
 }
 
-// localize.
-add_action( 'init', 'simply_static_load_textdomain' );
-
-function simply_static_load_textdomain() {
-	$textdomain_dir = plugin_basename( dirname( __FILE__ ) ) . '/languages';
-	load_plugin_textdomain( 'simply-static', false, $textdomain_dir );
+// Check WordPress version.
+if ( version_compare( get_bloginfo( 'version' ), '6.2', '<' ) ) {
+	deactivate_plugins( plugin_basename( __FILE__ ) );
+	wp_die( esc_html__( 'Simply Static requires WordPress 6.2 or higher.', 'simply-static' ), 'Plugin dependency check', array( 'back_link' => true ) );
 }
 
 // Run autoloader.
@@ -54,18 +52,15 @@ if ( ! function_exists( 'simply_static_run_plugin' ) ) {
 
 		Simply_Static\Plugin::instance();
 
-		// Maybe update excludes.
 		$options = get_option( 'simply-static' );
 
-		if ( isset( $options['urls_to_exclude'] ) && is_array( $options['urls_to_exclude'] ) ) {
-			$urls_to_exclude = [];
+		if ( ! is_array( $options ) ) {
+			$options = [];
+		}
 
-			foreach ( $options['urls_to_exclude'] as $url => $data ) {
-				$urls_to_exclude[] = $url;
-			}
-
-			$options['urls_to_exclude'] = implode( "\n", $urls_to_exclude );
-			update_option( 'simply-static', $options );
+		// Server-side cron?
+		if ( isset( $options['server_cron'] ) && true === $options['server_cron'] ) {
+			define( 'SS_CRON', true );
 		}
 
 		// Generate a secure unique key.
@@ -76,12 +71,12 @@ if ( ! function_exists( 'simply_static_run_plugin' ) ) {
 	}
 
 	// Update required?
-	if ( defined( 'SIMPLY_STATIC_PRO_VERSION' ) && version_compare( SIMPLY_STATIC_PRO_VERSION, '1.4', '<' ) ) {
+	if ( defined( 'SIMPLY_STATIC_PRO_VERSION' ) && version_compare( SIMPLY_STATIC_PRO_VERSION, '1.6.3.2', '<' ) ) {
 		// Site notice.
 		add_action(
 			'admin_notices',
 			function () {
-				$message = esc_html__( 'You need to update Simply Static Pro to version 1.4 before continuing to use Simply Static, as we made significant changes requiring an upgrade.', 'simply-static' );
+				$message = esc_html__( 'You need to update Simply Static Pro to version 1.6.3.2 before continuing to use Simply Static, as we made significant changes requiring an upgrade.', 'simply-static' );
 				echo wp_kses_post( '<div class="notice notice-error"><p>' . $message . '</p></div>' );
 			}
 		);
@@ -92,7 +87,7 @@ if ( ! function_exists( 'simply_static_run_plugin' ) ) {
 				add_action(
 					'network_admin_notices',
 					function () {
-						$message = esc_html__( 'You need to update Simply Static Pro to version 1.4 before continuing to use Simply Static, as we made significant changes requiring an upgrade.', 'simply-static' );
+						$message = esc_html__( 'You need to update Simply Static Pro to version  1.6.3.2 before continuing to use Simply Static, as we made significant changes requiring an upgrade.', 'simply-static' );
 						echo wp_kses_post( '<div class="notice notice-error"><p>' . $message . '</p></div>' );
 					}
 				);

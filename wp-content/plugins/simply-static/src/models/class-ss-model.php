@@ -48,13 +48,6 @@ class Model {
 	protected static $primary_key = null;
 
 	/**
-	 * The content hash value for comparison.
-	 *
-	 * @var string|null
-	 */
-	public $content_hash;
-
-	/**
 	 * The stored data for this instance of the model.
 	 *
 	 * @var array
@@ -232,7 +225,7 @@ class Model {
 		$sql = 'CREATE TABLE ' . self::table_name() . ' (' . "\n";
 
 		foreach ( static::$columns as $column_name => $column_definition ) {
-			$sql .= $column_name . ' ' . $column_definition . ', ' . "\n";
+			$sql .= '`' . $column_name . '` ' . $column_definition . ', ' . "\n";
 		}
 		foreach ( static::$indexes as $index ) {
 			$sql .= $index . ', ' . "\n";

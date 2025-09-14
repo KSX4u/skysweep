@@ -13,7 +13,7 @@ const Input = (
 		label,
 		noBorder,
 		height = '[42px]',
-		labelColorClassName = 'text-heading-text',
+		labelColorClassName = '',
 		enableDebounce,
 		onChange,
 		prefixIcon,
@@ -36,7 +36,7 @@ const Input = (
 				<label
 					htmlFor={ name }
 					className={ classNames(
-						'sp-text-base font-medium text-heading-text',
+						'text-sm font-medium leading-5 items-center !mb-2',
 						labelColorClassName
 					) }
 				>
@@ -77,16 +77,17 @@ const Input = (
 						name={ name }
 						disabled={ disabled }
 						className={ classNames(
-							'w-full px-[1rem] placeholder:text-secondary-text rounded-md outline-none text-[0.9rem] placeholder:!text-base',
+							'w-full px-3 h-[40px] placeholder:text-secondary-text rounded-md outline-none !text-sm placeholder:!text-sm',
 							`h-${ height }`,
 							label ? 'mt-2' : '',
 							noBorder
-								? 'bg-transparent'
-								: 'px-3 border border-solid focus:ring-1 focus:ring-accent-st',
+								? 'bg-transparent border-none shadow-none'
+								: 'px-3 border border-solid focus:!ring-1 focus:ring-accent-st',
 							enableAutoGrow && 'absolute left-0 min-w-[50px]',
 							disabled ? 'cursor-not-allowed' : '',
+							suffixIcon ? 'pr-11' : '',
 							inputClassName,
-							! noBorder && 'input-focus-border'
+							! noBorder && 'focus:!border-accent-st'
 						) }
 						style={ {
 							borderColor:
@@ -94,7 +95,7 @@ const Input = (
 							boxShadow:
 								error && ! noBorder
 									? '0px 1px 1px 0px #EF4444, 0px 0px 0px 1px #EF4444'
-									: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
+									: '0px 1px 2px 0px rgba(0, 0, 0, 0.00)',
 						} }
 						onChange={
 							enableDebounce

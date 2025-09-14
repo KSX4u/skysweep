@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
-import { __ } from '@wordpress/i18n';
-import { useEffect, useState } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
+import { renderToString, useEffect, useState } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
 import SocialMediaAdd from '../components/social-media';
 import Textarea from '../components/textarea';
@@ -8,13 +8,14 @@ import Input from '../components/input';
 import { STORE_KEY } from '../store';
 import Divider from '../components/divider';
 import NavigationButtons from '../components/navigation-buttons';
-import StyledText from '../components/styled-text';
 import { useNavigateSteps } from '../router';
 import { z as zod } from 'zod';
+import Heading from '../components/heading';
+import Container from '../components/container';
+import AISitesNotice from '../components/ai-sites-notice';
 
-const PHONE_VALIDATION_REGEX = /^\+?[0-9()\s-]{6,20}$/,
-	EMAIL_VALIDATION_REGEX =
-		/^[a-z0-9!'#$%&*+\/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i;
+const EMAIL_VALIDATION_REGEX =
+	/^[a-z0-9!'#$%&*+\/=?^_`{|}~-]+(?:\.[a-z0-9!'#$%&*+\/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-zA-Z]{2,}$/i;
 
 const mapSocialUrl = ( list ) => {
 	return list.map( ( item ) => {
@@ -60,18 +61,6 @@ const BusinessContact = () => {
 					{
 						message: __(
 							'Please enter a valid email',
-							'ai-builder'
-						),
-					}
-				),
-			phone: zod
-				.string()
-				.refine(
-					( value ) =>
-						value === '' || PHONE_VALIDATION_REGEX.test( value ),
-					{
-						message: __(
-							'Please enter a valid phone number',
 							'ai-builder'
 						),
 					}
@@ -137,30 +126,45 @@ const BusinessContact = () => {
 		( item ) => ! item.valid
 	);
 
+	const getTitle = () => {
+		return (
+			<div
+				dangerouslySetInnerHTML={ {
+					__html: sprintf(
+						// translators: %s: Business name.
+						__(
+							'How can people get in touch with %1$s?',
+							'ai-builder'
+						),
+						renderToString( businessName )
+					),
+				} }
+			/>
+		);
+	};
 	return (
-		<form
-			className="w-full max-w-container flex flex-col gap-8 pb-10"
+		<Container
+			as="form"
 			action="#"
 			onSubmit={ handleSubmit( handleSubmitForm ) }
 		>
-			{ /* Heading */ }
-			<div className="text-[2rem] font-semibold leading-[140%]">
-				{ __( 'How can people get in touch with ', 'ai-builder' ) }
-				<StyledText text={ businessName } />?
-			</div>
-			{ /* Subheading */ }
-			<div className="text-zip-body-text text-[16px] font-normal leading-6">
-				{ __(
-					'Please provide the contact information details below. These will be used on the website.',
+			<AISitesNotice />
+			<Heading
+				heading={ getTitle() }
+				subHeading={ __(
+					'Please provide the contact information below. These will be used on the website.',
 					'ai-builder'
 				) }
-			</div>
+				className="leading-[36px]"
+				subClassName="!mt-2"
+			/>
 
 			<div className="space-y-5">
-				<div className="flex justify-between gap-x-8 items-start w-full h-[76px]">
+				<div className="block sm:flex justify-between gap-x-8 items-start w-full mt-[26px]">
 					<Input
-						className="w-full h-[48px]"
-						type="text"
+						className="w-full min-h-[48px] text-zip-app-heading"
+						inputClassName="!px-3"
+						type="email"
 						name="email"
 						id="email"
 						label={ __( 'Email', 'ai-builder' ) }
@@ -176,10 +180,11 @@ const BusinessContact = () => {
 								),
 							},
 						} }
-						height="[48px]"
+						height="12"
 					/>
 					<Input
-						className="w-full h-[48px]"
+						className="w-full min-h-[48px] text-zip-app-heading mt-8 sm:mt-0"
+						inputClassName="!px-3"
 						type="text"
 						name="phone"
 						id="phone"
@@ -187,24 +192,17 @@ const BusinessContact = () => {
 						placeholder={ __( 'Your phone number', 'ai-builder' ) }
 						register={ register }
 						error={ errors.phone }
-						validations={ {
-							pattern: {
-								value: PHONE_VALIDATION_REGEX,
-								message: __(
-									'Please enter a valid phone number',
-									'ai-builder'
-								),
-							},
-						} }
-						height="[48px]"
+						height="12"
 					/>
 				</div>
 				<Textarea
-					rows={ 4 }
+					className="text-zip-app-heading !mt-4"
+					textAreaClassName="!leading-6 !mt-0"
+					rows={ 2 }
 					name="address"
 					id="address"
 					label={ __( 'Address', 'ai-builder' ) }
-					placeholder=""
+					placeholder={ __( 'Enter address', 'ai-builder' ) }
 					register={ register }
 					error={ errors.address }
 				/>
@@ -214,13 +212,13 @@ const BusinessContact = () => {
 					onChange={ handleOnChangeSocialMedia }
 				/>
 			</div>
-			<Divider />
+			<Divider className="my-[26px]" />
 			<NavigationButtons
 				onClickPrevious={ handleClickPrevious }
 				onClickSkip={ nextStep }
 				disableContinue={ hasInvalidSocialMediaUrl }
 			/>
-		</form>
+		</Container>
 	);
 };
 

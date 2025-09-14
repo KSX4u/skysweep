@@ -1,4 +1,3 @@
-import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import { useCallback, useEffect } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 import Button from '../components/button';
@@ -6,11 +5,16 @@ import Confetti from '../components/confetti-firework';
 import { removeLocalStorageItem } from '../helpers';
 import { USER_KEYWORD } from './select-template';
 
-const { adminUrl, siteUrl } = aiBuilderVars;
+const { adminUrl, siteUrl, hideDashboardButton, hideFinishSetupButton } =
+	aiBuilderVars;
 
 const BuildDone = () => {
 	const handleClickVisitDashboard = () => {
 		window.open( adminUrl, '_self' );
+	};
+
+	const handleClickFinishSetup = () => {
+		window.open( adminUrl + 'admin.php?page=getting-started', '_self' );
 	};
 
 	const handleClickSeeWebsite = () => {
@@ -34,8 +38,8 @@ const BuildDone = () => {
 	}, [] );
 
 	return (
-		<div className="w-screen h-screen overflow-y-hidden">
-			<div className="relative grid grid-cols-1 grid-rows-1 place-items-center min-h-screen py-5 md:py-0 px-5 md:px-10 bg-app-light-background ">
+		<div className="w-full h-full overflow-y-hidden">
+			<div className="relative grid grid-cols-1 grid-rows-1 place-items-center min-h-full py-5 md:py-0 px-5 md:px-10 bg-app-light-background ">
 				<div className="w-full max-w-[32.5rem] p-8 my-10 md:my-0 rounded-lg space-y-6 shadow-xl bg-white">
 					<span className="flex items-center justify-center gap-3 text-2xl">
 						<span>🎉</span>
@@ -72,17 +76,45 @@ const BuildDone = () => {
 								{ __( 'See Your Website', 'ai-builder' ) }
 							</span>
 						</Button>
-						<Button
-							onClick={ handleClickVisitDashboard }
-							variant="blank"
-							size="l"
-							className="w-full min-w-fit py-0 text-accent-st"
-						>
-							<span>
-								{ __( 'Visit Dashboard', 'ai-builder' ) }
-							</span>
-							<ArrowRightIcon className="w-5 h-5" />
-						</Button>
+						{ ( () => {
+							if ( ! hideFinishSetupButton ) {
+								return (
+									<Button
+										onClick={ handleClickFinishSetup }
+										variant="blank"
+										size="l"
+										className="w-full min-w-fit py-0 text-accent-st"
+									>
+										<span>
+											{ __(
+												'Finish Setup',
+												'ai-builder'
+											) }
+										</span>
+									</Button>
+								);
+							}
+
+							if ( ! hideDashboardButton ) {
+								return (
+									<Button
+										onClick={ handleClickVisitDashboard }
+										variant="blank"
+										size="l"
+										className="w-full min-w-fit py-0 text-accent-st"
+									>
+										<span>
+											{ __(
+												'Visit Dashboard',
+												'ai-builder'
+											) }
+										</span>
+									</Button>
+								);
+							}
+
+							return null;
+						} )() }
 					</div>
 				</div>
 				{ /* Confetti firework */ }

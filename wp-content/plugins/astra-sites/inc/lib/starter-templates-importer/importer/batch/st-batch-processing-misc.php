@@ -26,7 +26,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 		 * @access private
 		 * @var object Class object.
 		 */
-		private static $instance;
+		private static $instance = null;
 
 		/**
 		 * Initiator
@@ -36,7 +36,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 		 */
 		public static function get_instance() {
 
-			if ( ! isset( self::$instance ) ) {
+			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
 			return self::$instance;
@@ -61,10 +61,10 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 				\WP_CLI::line( 'Processing "MISC" Batch Import' );
 			}
 
-			if ( 'ai' !== get_transient( 'astra_sites_current_import_template_type' ) ) {
+			if ( 'ai' !== get_option( 'astra_sites_current_import_template_type' ) ) {
 				return array(
 					'success' => true,
-					'msg'     => __( 'Template Type is not a AI.', 'st-importer', 'astra-sites' ),
+					'msg'     => __( 'Template Type is not a AI.', 'astra-sites' ),
 				);
 			}
 
@@ -82,7 +82,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Misc' ) ) :
 			if ( false === get_option( 'astra_sites_ai_import_started', false ) ) {
 				return array(
 					'success' => false,
-					'msg'     => __( 'Required flags are not set.', 'st-importer', 'astra-sites' ),
+					'msg'     => __( 'Required flags are not set.', 'astra-sites' ),
 				);
 			}
 

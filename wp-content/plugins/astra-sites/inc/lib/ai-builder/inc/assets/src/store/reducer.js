@@ -2,7 +2,7 @@ import { getFromSessionStorage } from '../utils/helpers';
 import { SESSION_STORAGE_KEY } from '../utils/constants';
 import { getLocalStorageItem } from '../helpers';
 import * as actionTypes from './action-types';
-import { omit } from 'lodash';
+import { omit, cloneDeep, merge } from 'lodash';
 
 export const siteLogoDefault = {
 	id: '',
@@ -18,47 +18,54 @@ const { selectedImages } = getFromSessionStorage( SESSION_STORAGE_KEY, {} );
 export const defaultOnboardingAIState = {
 	stepData: {
 		tokenExists: aiBuilderVars?.zip_token_exists || '',
-		businessType: aiStepValues?.business_category || '',
-		siteLanguage: 'en',
-		businessName: aiStepValues?.business_name || '',
-		businessDetails: aiStepValues?.business_description || '',
-		keywords: aiStepValues?.image_keywords || [],
-		selectedImages: !! selectedImages?.length
-			? selectedImages
-			: [
-					...( aiStepValues?.images?.landscape ?? [] ),
-					...( aiStepValues?.images?.portrait ?? [] ),
-			  ],
-		imagesPreSelected:
-			!! aiStepValues?.images?.landscape?.length ||
-			!! aiStepValues?.images?.portrait?.length ||
-			false,
+		businessType: aiBuilderVars?.default_business_type,
+		siteLanguage: aiBuilderVars?.default_website_language,
+		businessName: '',
+		businessDetails: '',
+		keywords: [],
+		selectedImages: [],
+		imagesPreSelected: false,
 		businessContact: {
-			phone: aiStepValues?.business_phone || '',
-			email: aiStepValues?.business_email || '',
-			address: aiStepValues?.business_address || '',
-			socialMedia: aiStepValues?.social_profiles || [],
+			phone: '',
+			email: '',
+			address: '',
+			socialMedia: [],
 		},
-		templateKeywords: aiStepValues?.template_keywords || [],
-		templateList: aiStepValues?.templateList || [],
-		selectedTemplate: aiStepValues?.selectedTemplate || '',
-		templateSearchResults: aiStepValues?.templateSearchResults || '',
+		templateKeywords: [],
+		templateList: [],
+		selectedTemplate: '',
+		templateSearchResults: '',
 		descriptionListStore: {
 			list: [],
 			currentPage: 0,
 		},
 		siteFeatures: [],
+		siteFeaturesData: { ecommerce_type: 'surecart' },
 		siteLogo: siteLogoDefault,
+		siteTitleVisible: true,
 		activeColorPalette: null,
 		activeTypography: null,
 		defaultColorPalette: null,
+		pageBuilder: '',
 	},
 	websiteInfo: aiStepValues?.websiteInfo || {},
 	websiteVersionList: [],
 	limitExceedModal: {
 		open: false,
 	},
+	apiErrorModal: {
+		open: false,
+	},
 	continueProgressModal: {
+		open: false,
+	},
+	confirmationStartOverModal: {
+		open: false,
+	},
+	signupLoginModal: {
+		open: false,
+	},
+	planInformationModal: {
 		open: false,
 	},
 	importSiteProgressData: {
@@ -68,7 +75,7 @@ export const defaultOnboardingAIState = {
 		requiredPlugins: [],
 		tryAgainCount: 0,
 		pluginInstallationAttempts: 0,
-		reset: 'yes' === aiBuilderVars.firstImportStatus ? true : false,
+		reset: 'yes' === aiBuilderVars?.firstImportStatus ? true : false,
 		themeStatus: false,
 		importStatusLog: '',
 		importStatus: '',
@@ -95,14 +102,60 @@ export const defaultOnboardingAIState = {
 		themeActivateFlag: true,
 		widgetImportFlag: true,
 		contentImportFlag: true,
-		analyticsFlag: aiBuilderVars.analytics !== 'yes' ? true : false,
+		analyticsFlag: aiBuilderVars?.analytics !== 'yes' ? true : false,
 		shownRequirementOnce: false,
 		createSiteStatus: false,
 	},
 	loadingNextStep: false,
+	failedSites: aiBuilderVars?.failed_sites,
 };
 
-const keysToIgnore = [ 'limitExceedModal' ];
+let updatedInitialValue = cloneDeep( defaultOnboardingAIState );
+updatedInitialValue = {
+	...updatedInitialValue,
+	stepData: {
+		tokenExists: aiBuilderVars?.zip_token_exists || '',
+		businessType:
+			aiStepValues?.business_category_name ||
+			aiBuilderVars?.default_business_type,
+		siteLanguage:
+			aiStepValues?.language || aiBuilderVars?.default_website_language,
+		businessName: aiStepValues?.business_name || '',
+		businessDetails: aiStepValues?.business_description || '',
+		keywords: aiStepValues?.image_keyword || [],
+		selectedImages: !! selectedImages?.length
+			? selectedImages
+			: aiStepValues.images || [],
+		imagesPreSelected:
+			!! aiStepValues?.images?.landscape?.length ||
+			!! aiStepValues?.images?.portrait?.length ||
+			false,
+		businessContact: {
+			phone: aiStepValues?.business_phone || '',
+			email: aiStepValues?.business_email || '',
+			address: aiStepValues?.business_address || '',
+			socialMedia: aiStepValues?.social_profiles || [],
+		},
+		templateKeywords: aiStepValues?.template_keywords || [],
+		templateList: aiStepValues?.templateList || [],
+		selectedTemplate: aiStepValues?.selectedTemplate || '',
+		templateSearchResults: aiStepValues?.templateSearchResults || '',
+		descriptionListStore: {
+			list: [],
+			currentPage: 0,
+		},
+		siteFeatures: [],
+		siteFeaturesData: { ecommerce_type: 'surecart' },
+		siteLogo: siteLogoDefault,
+		siteTitleVisible: true,
+		activeColorPalette: null,
+		activeTypography: null,
+		defaultColorPalette: null,
+	},
+	websiteInfo: aiStepValues?.websiteInfo || {},
+};
+
+const keysToIgnore = [ 'limitExceedModal', 'apiErrorModal' ];
 // Saved AI onboarding state.
 let savedAiOnboardingState = getLocalStorageItem(
 	'ai-builder-onboarding-details'
@@ -110,27 +163,14 @@ let savedAiOnboardingState = getLocalStorageItem(
 if ( savedAiOnboardingState ) {
 	savedAiOnboardingState = omit( savedAiOnboardingState, keysToIgnore );
 	savedAiOnboardingState = {
-		...defaultOnboardingAIState,
+		...updatedInitialValue,
 		...savedAiOnboardingState,
 	};
 }
 
-// if (
-// 	savedAiOnboardingState?.currentStep === 1 &&
-// 	aiBuilderVars?.zip_token_exists
-// ) {
-// 	savedAiOnboardingState.currentStep = 2;
-// }
-
 export const initialState = {
-	// Credits.
-	/* credits: {
-		flatRates: objSnakeToCamelCase( aiBuilderVars?.flat_rates ),
-		...aiBuilderVars?.spec_credit_details,
-	}, */
-
 	// Onboarding AI.
-	...( savedAiOnboardingState ?? defaultOnboardingAIState ),
+	...( savedAiOnboardingState ?? updatedInitialValue ),
 };
 
 const reducer = ( state = initialState, action ) => {
@@ -156,10 +196,30 @@ const reducer = ( state = initialState, action ) => {
 				...state,
 				limitExceedModal: action.payload,
 			};
+		case actionTypes.SET_API_ERROR_MODAL:
+			return {
+				...state,
+				apiErrorModal: action.payload,
+			};
+		case actionTypes.SET_PLAN_INFORMATION_MODAL:
+			return {
+				...state,
+				planInformationModal: action.payload,
+			};
 		case actionTypes.SET_CONTINUE_PROGRESS_MODAL:
 			return {
 				...state,
 				continueProgressModal: action.payload,
+			};
+		case actionTypes.SET_CONFIRMATION_START_OVER_MODAL:
+			return {
+				...state,
+				confirmationStartOverModal: action.payload,
+			};
+		case actionTypes.SET_SIGNUP_LOGIN_MODAL:
+			return {
+				...state,
+				signupLoginModal: action.payload,
 			};
 		case actionTypes.SET_WEBSITE_TYPE_AI_STEP:
 			return {
@@ -239,6 +299,22 @@ const reducer = ( state = initialState, action ) => {
 					selectedTemplate: action.payload,
 				},
 			};
+		case actionTypes.SET_SITE_FEATURES_DATA:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					siteFeaturesData: action.payload,
+				},
+			};
+		case actionTypes.SET_SELECTED_TEMPLATE_IS_PREMIUM:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					selectedTemplateIsPremium: action.payload,
+				},
+			};
 		case actionTypes.SET_WEBSITE_DATA_AI_STEP:
 			return {
 				...state,
@@ -310,12 +386,29 @@ const reducer = ( state = initialState, action ) => {
 				currentStep: ! state.updateImages ? 6 : 1,
 			};
 		case actionTypes.STORE_SITE_FEATURES:
-			const stepData = { ...state.stepData };
+			const stepData = { ...state.stepData },
+				{ selectedTemplate } = stepData,
+				templateData = state.stepData.templateList.find(
+					( item ) => item.uuid === selectedTemplate
+				);
+
 			return {
 				...state,
 				stepData: {
 					...stepData,
-					siteFeatures: action.payload,
+					siteFeatures: merge(
+						stepData?.siteFeatures ?? [],
+						( action?.payload ?? [] ).map( ( feature ) => {
+							const defaultValue =
+								templateData?.features?.[ feature.id ] ===
+								'yes';
+							return {
+								enabled: defaultValue,
+								compulsory: defaultValue,
+								...feature,
+							};
+						} )
+					),
 				},
 			};
 		case actionTypes.SET_SITE_FEATURES:
@@ -323,15 +416,17 @@ const reducer = ( state = initialState, action ) => {
 				...state,
 				stepData: {
 					...state.stepData,
-					siteFeatures: state.stepData.siteFeatures.map( ( item ) => {
-						if ( item.id === action.payload ) {
-							return {
-								...item,
-								enabled: ! item.enabled,
-							};
+					siteFeatures: state.stepData?.siteFeatures.map(
+						( item ) => {
+							if ( item.id === action.payload ) {
+								return {
+									...item,
+									enabled: ! item.enabled,
+								};
+							}
+							return item;
 						}
-						return item;
-					} ),
+					),
 				},
 			};
 		case actionTypes.SET_WEBSITE_TEMPLATE_KEYWORDS:
@@ -353,6 +448,14 @@ const reducer = ( state = initialState, action ) => {
 				stepData: {
 					...state.stepData,
 					siteLogo: action.payload,
+				},
+			};
+		case actionTypes.SET_SITE_TITLE_VISIBLE:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					siteTitleVisible: action.payload,
 				},
 			};
 		case actionTypes.SET_WEBSITE_COLOR_PALETTE:
@@ -392,6 +495,19 @@ const reducer = ( state = initialState, action ) => {
 			return {
 				...state,
 				loadingNextStep: action.payload,
+			};
+		case actionTypes.SET_FULL_ONBOARDING_STATE:
+			return {
+				...state,
+				stepData: { ...action.payload.stepData },
+			};
+		case actionTypes.SET_SELECTED_PAGE_BUILDER:
+			return {
+				...state,
+				stepData: {
+					...state.stepData,
+					pageBuilder: action.payload,
+				},
 			};
 		default:
 			return state;

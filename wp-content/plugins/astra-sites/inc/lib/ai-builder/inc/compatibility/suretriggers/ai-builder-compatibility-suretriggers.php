@@ -21,7 +21,14 @@ class Ai_Builder_Compatibility_Suretriggers {
 	 * @var object Class object.
 	 * @since 4.0.8
 	 */
-	private static $instance;
+	private static $instance = null;
+
+	/**
+	 * Constructor.
+	 */
+	public function __construct() {
+		add_action( 'astra_sites_after_plugin_activation', array( $this, 'suretriggers_activation' ), 10 );
+	}
 
 	/**
 	 * Initiator
@@ -37,19 +44,16 @@ class Ai_Builder_Compatibility_Suretriggers {
 	}
 
 	/**
-	 * Constructor.
-	 */
-	public function __construct() {
-		add_action( 'astra_sites_after_plugin_activation', array( $this, 'suretriggers_activation' ), 10 );
-	}
-
-	/**
-	 * Disable redirec after installing and activating UABB.
+	 * Disable redirect after installing and activating UABB.
 	 *
+	 * @since 4.0.8
+	 * @param string $plugin_init The path to the plugin file that was just activated.
 	 * @return void
 	 */
-	public function suretriggers_activation() {
-		delete_transient( 'st-redirect-after-activation' );
+	public function suretriggers_activation( $plugin_init ) {
+		if ( 'suretriggers/suretriggers.php' === $plugin_init ) {
+			delete_transient( 'st-redirect-after-activation' );
+		}
 	}
 }
 

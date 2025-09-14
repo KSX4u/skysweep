@@ -1,38 +1,47 @@
 import {
 	ArrowUpTrayIcon,
+	CheckIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
 	MagnifyingGlassIcon,
+	SparklesIcon,
 	XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { useForm } from 'react-hook-form';
-import Masonry from 'react-layout-masonry';
+
 import apiFetch from '@wordpress/api-fetch';
-import { useEffect, useState, useCallback, useRef } from '@wordpress/element';
 import { useDispatch, useSelect } from '@wordpress/data';
-import Tile from '../components/tile';
-import SuggestedKeywords from '../components/suggested-keywords';
-import Dropdown from '../components/dropdown';
-import { useDebounce, useDebounceWithCancel } from '../hooks/use-debounce';
-import { AnimatePresence } from 'framer-motion';
-import { STORE_KEY } from '../store';
-import NavigationButtons from '../components/navigation-buttons';
-import Heading from '../components/heading';
-import { classNames } from '../helpers';
-import Input from '../components/input';
-import ImagePreview from '../components/image-preview';
-import { clearSessionStorage } from '../utils/helpers';
-import { USER_KEYWORD } from './select-template';
-import { useNavigateSteps } from '../router';
-import UploadImage from '../components/upload-image';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
 import { uploadMedia } from '@wordpress/media-utils';
+
+import { AnimatePresence } from 'framer-motion';
+import { uniqBy } from 'lodash';
 import { useDropzone } from 'react-dropzone';
-import { __ } from '@wordpress/i18n';
+import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
+import Masonry from 'react-layout-masonry';
+
+import Dropdown from '../components/dropdown';
+import Heading from '../components/heading';
+import ImagePreview from '../components/image-preview';
+import NavigationButtons from '../components/navigation-buttons';
+import SuggestedKeywords from '../components/suggested-keywords';
+import Tile from '../components/tile';
+import UploadImage from '../components/upload-image';
+
+import { classNames, getScreenWidthBreakPoint, toastBody } from '../helpers';
+import { useDebounce, useDebounceWithCancel } from '../hooks/use-debounce';
+import usePopper from '../hooks/use-popper';
+import { useNavigateSteps } from '../router';
+import { STORE_KEY } from '../store';
+import { MB_IN_BYTE } from '../utils/constants';
+import { clearSessionStorage, isValidImageURL } from '../utils/helpers';
+import { USER_KEYWORD } from './select-template';
 
 const ORIENTATIONS = {
 	all: {
 		value: 'all',
-		label: __( 'All', 'ai-builder' ),
+		label: __( 'All orientations', 'ai-builder' ),
 	},
 	landscape: {
 		value: 'landscape',
@@ -51,6 +60,7 @@ const TABS = [
 	},
 	{
 		label: __( 'Upload Your Images', 'ai-builder' ),
+		mobileLabel: __( 'Upload', 'ai-builder' ),
 		value: 'upload',
 	},
 	{
@@ -97,16 +107,92 @@ const getImageSkeleton = ( count = SKELETON_COUNT ) => {
 
 const Images = () => {
 	const { nextStep, previousStep } = useNavigateSteps();
+	const [ uploadingImagesCount, setUploadingImagesCount ] = useState( [ 0 ] );
 
 	const { setWebsiteImagesAIStep, setWebsiteTemplateKeywords } =
 		useDispatch( STORE_KEY );
-	const { acceptedFiles, getRootProps, getInputProps } = useDropzone( {
+
+	const [ uploadedImages, setUploadedImages ] = useState( [] );
+
+	const uploadDroppedFiles = ( filesList ) => {
+		setUploadedImages( [] );
+		setUploadingImagesCount( filesList.length );
+		filesList.forEach( async ( file ) => {
+			try {
+				await uploadMedia( {
+					filesList: [ file ],
+					onFileChange: ( files ) => {
+						if ( ! files[ 0 ].id ) {
+							return;
+						}
+						// if NOT a valid image name
+						if ( ! isValidImageURL( files[ 0 ]?.url ) ) {
+							toast.error(
+								toastBody( {
+									message: sprintf(
+										/* translators: %s: file name */
+										__(
+											'Invalid file name! Please avoid special characters. (%s)',
+											'ai-builder'
+										),
+										files[ 0 ].title
+									),
+								} )
+							);
+							setUploadingImagesCount( ( prev ) => prev - 1 );
+							return;
+						}
+						setUploadedImages( ( prevState ) => [
+							...prevState,
+							...files,
+						] );
+						setUploadingImagesCount( ( prev ) => prev - 1 );
+					},
+				} );
+			} catch ( error ) {
+				console.error( error );
+				toast.error(
+					toastBody( {
+						message: error.message.toString(),
+					} )
+				);
+				setUploadingImagesCount( ( prevState ) => prevState - 1 );
+			}
+		} );
+	};
+
+	const onDropRejected = ( rejectedList ) => {
+		if ( rejectedList.length > 20 ) {
+			toast.error(
+				toastBody( {
+					message: __(
+						`You can only upload 20 images at once`,
+						'ai-builder'
+					),
+				} )
+			);
+			return;
+		}
+		rejectedList.forEach( ( { errors, file } ) => {
+			toast.error(
+				toastBody( {
+					message: `${ errors[ 0 ].message } (${ file?.name })`,
+				} )
+			);
+		} );
+	};
+
+	const { getRootProps, getInputProps } = useDropzone( {
 		accept: {
-			'image/jpeg': [],
-			'image/png': [],
+			'image/png': [ '.png' ],
+			'image/jpeg': [ '.jpeg', '.jpg' ],
 		},
 		noClick: true,
 		noKeyboard: true,
+		onDropAccepted: uploadDroppedFiles,
+		maxFiles: 20,
+		maxSize: 5 * MB_IN_BYTE,
+		onDropRejected,
 	} );
 
 	const {
@@ -141,6 +227,31 @@ const Images = () => {
 		};
 	} );
 
+	useEffect( () => {
+		setWebsiteImagesAIStep(
+			uniqBy(
+				[
+					...selectedImages,
+					...uploadedImages.map( ( image ) => ( {
+						id: String( image.id ),
+						url: image?.originalImageURL ?? image.url,
+						optimized_url: image?.sizes?.large?.url ?? image.url,
+						engine: '',
+						description: '',
+						orientation:
+							image?.orientation ??
+							( image?.width > image?.height
+								? 'landscape'
+								: 'portrait' ),
+						author_name: image?.author_name ?? '',
+						author_url: '',
+					} ) ),
+				],
+				'id'
+			)
+		);
+	}, [ uploadedImages.length ] );
+
 	const [ orientation, setOrientation ] = useState( ORIENTATIONS.all );
 	const [ keyword, setKeyword ] = useState(
 		keywords?.length > 0 ? keywords[ 0 ] : ''
@@ -151,23 +262,26 @@ const Images = () => {
 	const [ isLoading, setIsLoading ] = useState( false );
 	const [ backToTop, setBackToTop ] = useState( false );
 	const [ activeTab, setActiveTab ] = useState( 'all' );
+	const [ breakpoint, setBreakpoint ] = useState(
+		getScreenWidthBreakPoint()
+	);
+
+	const [ openSuggestedKeywords, setOpenSuggestedKeywords ] =
+		useState( false );
+	const [ referenceRef, popperRef ] = usePopper( {
+		placement: 'bottom',
+		modifiers: [ { name: 'offset', options: { offset: [ 0, 0 ] } } ],
+	} );
 
 	const mainWrapper = useRef( null );
 	const scrollContainerRef = useRef( null );
 	const imageRequestCompleted = useRef( false );
 	const blackListedEngines = useRef( new Set() );
-	const previouslySelected = useRef( [ ...selectedImages ] );
+	const previouslySelected = useRef( selectedImages );
 	const uploadImagesBtn = useRef( null );
 
-	const {
-		register,
-		handleSubmit,
-		formState: { errors },
-		setValue,
-		reset,
-		setFocus,
-		watch,
-	} = useForm( { defaultValues: { keyword } } );
+	const { register, handleSubmit, setValue, reset, setFocus, watch } =
+		useForm( { defaultValues: { keyword } } );
 	const watchedKeyword = watch( 'keyword' );
 
 	const [ debouncedImageKeywords, cancelDebouncedImageKeywords ] =
@@ -182,6 +296,7 @@ const Images = () => {
 		cancelDebouncedImageKeywords();
 		setKeyword( keyword_value );
 		setValue( 'keyword', keyword_value );
+		setOpenSuggestedKeywords( false );
 	};
 
 	const getSuggestedKeywords = () => {
@@ -342,7 +457,9 @@ const Images = () => {
 				},
 			} );
 			const imageResponse = res.data?.data || [];
-
+			if ( ! res?.success ) {
+				throw new Error( res?.data?.data );
+			}
 			// If there are no images, blacklist the engine
 			if ( imageResponse?.length === 0 ) {
 				blackListedEngines.current.add( engine );
@@ -365,41 +482,48 @@ const Images = () => {
 			// Return image response length
 			return imageResponse?.length || 0;
 		} catch ( error ) {
-			// Do nothing
+			if ( error.name === 'AbortError' ) {
+				throw error;
+			}
+			toast.error( toastBody( error ) );
 		}
 
 		return 0;
 	};
 
 	const getTemplates = async () => {
-		await apiFetch( {
-			path: 'zipwp/v1/template-keywords',
-			method: 'POST',
-			headers: {
-				'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
-			},
-			data: {
-				business_name: businessName,
-				business_description: businessDetails,
-				business_category: businessType,
-				business_category_name: businessType,
-			},
-		} ).then( ( response ) => {
+		try {
+			const response = await apiFetch( {
+				path: 'zipwp/v1/template-keywords',
+				method: 'POST',
+				headers: {
+					'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
+				},
+				data: {
+					business_name: businessName,
+					business_description: businessDetails,
+					business_category: businessType,
+					business_category_name: businessType,
+				},
+			} );
+
 			if ( response.success ) {
 				const templateKeywords = response?.data?.data ?? [];
 				setWebsiteTemplateKeywords( [
 					...new Set( templateKeywords ),
 				] );
 			} else {
-				// Handle error.
+				throw new Error( response?.data?.data );
 			}
-		} );
+		} catch ( error ) {
+			toast.error( toastBody( error ) );
+		}
 	};
 
 	useEffect( () => {
 		imageRequestCompleted.current = false;
 		const fetchAllImagesFromAllEngines = async () => {
-			if ( isLoading ) {
+			if ( isLoading || ! hasMore ) {
 				return;
 			}
 			try {
@@ -422,6 +546,9 @@ const Images = () => {
 				}
 			} catch ( error ) {
 				// Do nothing
+				if ( error.name === 'AbortError' ) {
+					return;
+				}
 			} finally {
 				imageRequestCompleted.current = true;
 				setIsLoading( false );
@@ -473,7 +600,10 @@ const Images = () => {
 
 	const getUploadedImages = ( imagesArray = [] ) => {
 		return imagesArray.filter( ( image ) =>
-			IMAGE_ENGINES.some( ( engine ) => engine !== image.engine )
+			IMAGE_ENGINES.some(
+				( engine ) =>
+					engine !== image.engine && image.engine !== 'placeholder'
+			)
 		);
 	};
 
@@ -483,14 +613,24 @@ const Images = () => {
 		);
 	};
 
+	const getUploadingImageSkeleon = () => {
+		if ( ! uploadingImagesCount ) {
+			return [];
+		}
+		return getImageSkeleton( uploadingImagesCount, [ 'aspect-[1/1]' ] );
+	};
+
 	const getRenderItems = () => {
 		switch ( activeTab ) {
 			case TABS[ 0 ].value:
-				return isLoading
+				return isLoading || ! imageRequestCompleted.current
 					? [ ...images, ...getImageSkeleton() ]
 					: images;
 			case TABS[ 1 ].value:
-				return getUploadedImages( selectedImages );
+				return [
+					...getUploadedImages( selectedImages ),
+					...getUploadingImageSkeleon(),
+				];
 			case TABS[ 2 ].value:
 				return getSelectedImages( selectedImages );
 			default:
@@ -552,52 +692,50 @@ const Images = () => {
 		}
 		setKeyword( '' );
 		reset( { keyword: '' } );
+		setTimeout( () => {
+			setFocus( 'keyword' );
+		}, 10 );
 	};
 
-	const uploadDroppedFiles = async ( filesList ) => {
-		try {
-			const uploadedImages = [];
-			await uploadMedia( {
-				filesList,
-				allowedTypes: [ 'image' ],
-				onFileChange: ( files ) => {
-					if ( ! files.every( ( file ) => !! file.id ) ) {
-						return;
-					}
-					files.forEach( ( file ) => uploadedImages.push( file ) );
-				},
-				onError: ( error ) => console.error( error ),
-			} );
+	const handleClickOutside = ( event ) => {
+		const businessTypesWrapper = document.getElementById(
+			'search-images-wrapper'
+		);
+		if (
+			businessTypesWrapper &&
+			! businessTypesWrapper.contains( event.target )
+		) {
+			setOpenSuggestedKeywords( false );
+		}
+	};
 
-			setWebsiteImagesAIStep( [
-				...selectedImages,
-				...uploadedImages.map( ( image ) => ( {
-					id: String( image.id ),
-					url: image?.originalImageURL ?? image.url,
-					optimized_url: image?.sizes?.large?.url ?? image.url,
-					engine: '',
-					description: '',
-					orientation:
-						image?.orientation ??
-						( image?.width > image?.height
-							? 'landscape'
-							: 'portrait' ),
-					author_name: image?.author_name ?? '',
-					author_url: '',
-				} ) ),
-			] );
-		} catch ( error ) {
-			// Handle error
-			console.error( error );
+	// handle outside click to close the suggestions.
+	useEffect( () => {
+		document.addEventListener( 'mousedown', handleClickOutside );
+		return () =>
+			document.removeEventListener( 'mousedown', handleClickOutside );
+	}, [ handleClickOutside ] );
+
+	const handleOpenSuggestedKeywords = ( event ) => {
+		if ( openSuggestedKeywords ) {
+			return;
+		}
+
+		// Check if the event type is on click
+		if ( event?.type === 'click' || event?.type === 'keydown' ) {
+			setOpenSuggestedKeywords( true );
 		}
 	};
 
 	useEffect( () => {
-		if ( ! acceptedFiles?.length ) {
-			return;
-		}
-		uploadDroppedFiles( acceptedFiles );
-	}, [ acceptedFiles ] );
+		const handleResize = () => {
+			setBreakpoint( getScreenWidthBreakPoint() );
+		};
+		window.addEventListener( 'resize', handleResize );
+		return () => {
+			window.removeEventListener( 'resize', handleResize );
+		};
+	}, [] );
 
 	return (
 		<div
@@ -605,57 +743,104 @@ const Images = () => {
 			ref={ scrollContainerRef }
 			onScroll={ handleScroll }
 		>
-			<Heading
-				heading="Select Images"
-				className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-10 lg:pt-12 xl:pt-12"
-			/>
-			<div className="pt-4 sticky top-0 space-y-4 z-[1] bg-zip-app-light-bg px-5 md:px-10 lg:px-14 xl:px-15">
+			<div className="w-full space-y-6 px-5 md:px-10 lg:px-14 xl:px-15 pb-2">
+				<Heading
+					heading={ __( 'Select the Images', 'ai-builder' ) }
+					className="px-5 md:px-10 lg:px-14 xl:px-15 pt-5 md:pt-8 lg:pt-8 xl:pt-8 max-w-fit mx-auto leading-9"
+				/>
+			</div>
+			<div className="sticky top-0 pt-4 space-y-6 z-[1] bg-container-background px-5 md:px-10 lg:px-14 xl:px-15">
 				<form
+					className="w-full overflow-visible min-h-[3.125rem]"
 					onSubmit={ handleSubmit( handleImageSearch ) }
 					data-disabled={ loadingNextStep }
 				>
-					<Input
-						className="w-full"
-						inputClassName="pl-11"
-						height="12"
-						name="keyword"
-						register={ register }
-						placeholder="Add more relevant keywords..."
-						validations={ {
-							required: false,
+					<div
+						id="search-images-wrapper"
+						ref={ referenceRef }
+						className={ classNames(
+							'relative w-full max-w-[37.5rem] mx-auto pl-4 pr-12 py-3 border border-button-disabled rounded-md shadow bg-white z-[2]',
+							{
+								'pb-0 rounded-b-none border-b-0 shadow-md':
+									openSuggestedKeywords,
+								'focus-within:ring-1 focus-within:ring-accent-st focus-within:border-accent-st focus-within:outline-none':
+									! openSuggestedKeywords,
+							}
+						) }
+						onClick={ ( event ) => {
+							// If event target is `search-images-wrapper` then focus input.
+							if ( event.target.id !== 'search-images-wrapper' ) {
+								return;
+							}
+							setFocus( 'keyword' );
+							if ( openSuggestedKeywords ) {
+								return;
+							}
+							setOpenSuggestedKeywords( true );
 						} }
-						error={ errors?.keyword }
-						prefixIcon={
-							<div className="absolute left-4 flex items-center">
-								<button
-									type="button"
-									className="w-auto h-auto p-0 flex items-center justify-center cursor-pointer bg-transparent border-0 focus:outline-none"
-									onClick={ handleClearSearch }
-								>
-									{ watchedKeyword ? (
-										<XMarkIcon className="w-5 h-5 text-zip-app-inactive-icon" />
-									) : (
-										<MagnifyingGlassIcon className="w-5 h-5 text-zip-app-inactive-icon" />
-									) }
-								</button>
-							</div>
-						}
-					/>
+					>
+						<div className="absolute top-[0.875rem] right-3 flex items-center">
+							<button
+								type="button"
+								className="w-auto h-auto p-0 flex items-center justify-center cursor-pointer bg-transparent border-0 focus:outline-none"
+								onClick={ handleClearSearch }
+							>
+								{ watchedKeyword ? (
+									<XMarkIcon className="w-5 h-5 text-zip-app-inactive-icon" />
+								) : (
+									<MagnifyingGlassIcon className="w-5 h-5 text-zip-app-inactive-icon" />
+								) }
+							</button>
+						</div>
+						<input
+							className="!text-base p-0 border-0 w-full focus:outline-none focus:ring-0 focus-visible:outline-none"
+							placeholder={ __(
+								'Add more relevant keywords…',
+								'ai-builder'
+							) }
+							autoComplete="off"
+							onKeyDown={ handleOpenSuggestedKeywords }
+							onClick={ handleOpenSuggestedKeywords }
+							{ ...register( 'keyword' ) }
+						/>
+						<div
+							ref={ popperRef }
+							className={ classNames(
+								'w-[calc(100%_+_2px)] px-3 pb-4 z-10 bg-white shadow-md border-x border-b border-t-0 border-solid border-border-tertiary rounded-b-md',
+								{
+									invisible: ! openSuggestedKeywords,
+								}
+							) }
+						>
+							{ openSuggestedKeywords && (
+								<hr
+									className="!mx-0 !my-3 border-t border-solid border-b-0 border-border-tertiary"
+									tabIndex={ -1 }
+								/>
+							) }
+							<h6 className="flex items-center justify-start gap-1.5 text-sm text-heading-text font-medium mb-4">
+								<span>
+									{ __( 'Suggested Keywords', 'ai-builder' ) }
+								</span>
+								<SparklesIcon className="inline-block size-4" />
+							</h6>
+							<SuggestedKeywords
+								keywords={ getSuggestedKeywords() }
+								onClick={ handleSelectKeyword }
+								data-disabled={ loadingNextStep }
+							/>
+						</div>
+					</div>
 				</form>
-				<SuggestedKeywords
-					keywords={ getSuggestedKeywords() }
-					onClick={ handleSelectKeyword }
-					data-disabled={ loadingNextStep }
-				/>
-				<div className=" rounded-t-lg py-4">
-					<div className="flex items-center justify-between">
-						<div className="flex items-center gap-1 text-sm font-normal leading-[21px]">
+				<div className=" rounded-t-lg py-4 !mt-0">
+					<div className="flex sm:flex-row flex-col items-start sm:items-center justify-between">
+						<div className="flex items-center gap-1 text-sm font-normal leading-[21px] sm:mb-0 mb-5 w-full h-[67px]">
 							{ /* Tabs */ }
 							<div className="flex items-center justify-start gap-3">
 								{ TABS.map( ( tab ) => (
 									<button
 										className={ classNames(
-											'before:content-[attr(data-title)] before:block before:font-bold before:text-sm before:invisible before:h-0',
+											'before:content-[""] before:block before:font-bold before:text-sm before:invisible before:h-0',
 											'pb-3 px-0 pt-0 !border-x-0 !border-t-0 border-b-2 border-solid !border-b-accent-st bg-transparent text-sm font-semibold text-accent-st cursor-pointer focus-visible:outline-none focus:outline-none',
 											tab.value !== activeTab &&
 												'border-0 font-normal text-body-text'
@@ -668,7 +853,10 @@ const Images = () => {
 										data-title={ tab.label }
 										disabled={ loadingNextStep }
 									>
-										{ tab.label }
+										{ tab.value === TABS[ 1 ].value &&
+										breakpoint === 'xs'
+											? tab.mobileLabel
+											: tab.label }
 										{ tab.value === TABS[ 2 ].value &&
 											!! getSelectedImages(
 												selectedImages
@@ -696,11 +884,10 @@ const Images = () => {
 								placement="right"
 								trigger={
 									<div
-										className="flex items-center gap-2 min-w-[100px] cursor-pointer"
+										className="flex items-center justify-between gap-2 min-w-[100px] w-[160px] py-3 pl-4 pr-3 cursor-pointer border border-border-primary rounded-md"
 										data-disabled={ loadingNextStep }
 									>
 										<span className="text-sm font-normal text-body-text leading-[150%]">
-											Orientation: { '' }
 											{ orientation.label }
 										</span>
 										<ChevronDownIcon className="w-5 h-5 text-app-inactive-icon" />
@@ -708,7 +895,7 @@ const Images = () => {
 								}
 								align="top"
 								width="48"
-								contentClassName="p-4 bg-white [&>:first-child]:pb-3 [&>:last-child]:pt-3 [&>:not(:first-child,:last-child)]:py-3 !divide-y !divide-border-primary divide-solid divide-x-0"
+								contentClassName="p-1 bg-white"
 								disabled={ loadingNextStep }
 							>
 								{ Object.values( ORIENTATIONS ).map(
@@ -720,12 +907,18 @@ const Images = () => {
 										>
 											<button
 												type="button"
-												className="w-full flex items-center gap-2 px-1.5 py-1 text-sm font-normal leading-5 text-body-text hover:bg-background-secondary transition duration-150 ease-in-out space-x-2 rounded bg-white border-none cursor-pointer"
+												className="w-full flex items-center justify-between gap-2 py-1.5 px-2 text-sm font-normal leading-5 text-body-text hover:bg-background-secondary transition duration-150 ease-in-out space-x-2 rounded bg-white border-none cursor-pointer"
 												onClick={ handleOrientationChange(
 													orientationItem
 												) }
 											>
-												{ orientationItem.label }
+												<span>
+													{ orientationItem.label }
+												</span>
+												{ orientationItem.value ===
+													orientation.value && (
+													<CheckIcon className="w-4 h-4 text-heading-text" />
+												) }
 											</button>
 										</Dropdown.Item>
 									)
@@ -736,10 +929,11 @@ const Images = () => {
 							!! selectedImages?.length && (
 								<button
 									onClick={ handleClearImageSelection }
-									className="px-1 py-px bg-transparent border border-solid border-border-primary rounded text-xs leading-4 text-body-text cursor-pointer"
+									className="flex border px-2.5 py-2 font-semibold border-blue-crayola text-xs rounded text-blue-crayola bg-white w-24"
 									disabled={ loadingNextStep }
 								>
-									{ __( 'Clear', 'ai-builder' ) }
+									<XMarkIcon className="w-4 h-4 block mr-1 text-zip-body-text" />
+									{ __( 'Clear all', 'ai-builder' ) }
 								</button>
 							) }
 						{ activeTab === TABS[ 1 ].value && (
@@ -747,7 +941,7 @@ const Images = () => {
 								render={ ( { open } ) => (
 									<button
 										ref={ uploadImagesBtn }
-										className="px-0 bg-transparent border-none rounded text-xs leading-5 font-semibold text-accent-st cursor-pointer inline-flex items-center justify-end gap-2"
+										className="px-0 bg-transparent border-none rounded text-xs leading-5 font-semibold text-accent-st cursor-pointer inline-flex items-center justify-end gap-2 w-auto sm:w-44"
 										onClick={ open }
 										disabled={ loadingNextStep }
 									>
@@ -775,21 +969,31 @@ const Images = () => {
 				{ activeTab === TABS[ 1 ].value && ! renderImages.length && (
 					<div
 						className={ classNames(
-							'relative flex flex-col items-center justify-center gap-3 py-[3.125rem] px-4 bg-preview-background border border-dashed border-border-tertiary rounded cursor-pointer'
+							'relative flex flex-col items-center justify-center gap-3 py-[3.125rem] px-4 bg-background-primary border border-dashed border-border-tertiary rounded cursor-pointer'
 						) }
 						data-disabled={ loadingNextStep }
 						{ ...getRootProps() }
 					>
 						<input { ...getInputProps() } />
 						<ArrowUpTrayIcon className="w-6 h-6 text-zip-app-inactive-icon" />
-						<p className="text-zip-body-text text-base">
+						<p className="text-zip-body-text text-base text-center">
 							<span className="text-accent-st min-w-fit break-keep text-nowrap whitespace-nowrap font-semibold mr-1">
 								{ __( 'Upload images', 'ai-builder' ) }
 							</span>
-							{ __( 'or drop your images here', 'ai-builder' ) }
+							<span>
+								{ __(
+									'or drop your images here',
+									'ai-builder'
+								) }
+								<br />
+								{ __( '(Max 20)', 'ai-builder' ) }
+							</span>
 						</p>
 						<p className="text-zip-body-text text-base">
 							{ __( 'PNG, JPG, JPEG', 'ai-builder' ) }
+						</p>
+						<p className="text-zip-body-text text-base">
+							{ __( 'Max size: 5 MB per file', 'ai-builder' ) }
 						</p>
 						<div
 							className="absolute inset-0"
@@ -806,14 +1010,14 @@ const Images = () => {
 				<AnimatePresence>
 					{ renderImages?.length > 0 && (
 						<Masonry
-							className="gap-6 [&>div]:gap-6"
+							className="gap-4 sm:gap-6 [&>div]:gap-6"
 							columns={ {
 								default: 1,
-								220: 1,
-								767: 2,
-								1024: 2,
-								1280: 4,
-								1441: 5,
+								640: 2,
+								767: 3,
+								1024: 3,
+								1280: 5,
+								1441: 6,
 								1920: 6,
 							} }
 						>
@@ -906,11 +1110,14 @@ const Images = () => {
 					</button>
 				</div>
 			) }
-			<div className="min-h-[100px] py-4 sticky bottom-0 bg-zip-app-light-bg px-5 md:px-10 lg:px-14 xl:px-15">
+			<div className="sticky bottom-0 bg-container-background py-4.75 px-5 md:px-10 lg:px-14 xl:px-15">
 				<NavigationButtons
 					{ ...( updateImages
 						? {
-								continueButtonText: 'Save & Exit',
+								continueButtonText: __(
+									'Save & Exit',
+									'ai-builder'
+								),
 								onClickContinue: handleSaveDetails,
 						  }
 						: {

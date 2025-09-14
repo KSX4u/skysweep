@@ -3,18 +3,22 @@
 namespace Elementor\Core\Admin\Menu;
 
 use Elementor\Core\Admin\Menu\Interfaces\Admin_Menu_Item;
+use Elementor\Core\Admin\Menu\Interfaces\Admin_Menu_Item_Has_Position;
 use Elementor\Core\Admin\Menu\Interfaces\Admin_Menu_Item_With_Page;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class Admin_Menu_Manager {
-
 	/**
 	 * @var Admin_Menu_Item[]
 	 */
 	private $items = [];
+
+	public function __construct() {
+		add_action( 'admin_init', [ $this, 'handle_external_redirects' ] );
+	}
 
 	public function register( $item_slug, Admin_Menu_Item $item ) {
 		$this->items[ $item_slug ] = $item;
@@ -44,6 +48,30 @@ class Admin_Menu_Manager {
 		add_action( 'admin_head', function () {
 			$this->hide_invisible_menus();
 		} );
+
+		add_action( 'elementor/admin/menu/register', [ $this, 'register_cloud_hosting_plans' ], 999 );
+	}
+
+	/**
+	 * Register Cloud Hosting Plans menu item.
+	 */
+	public function register_cloud_hosting_plans( Admin_Menu_Manager $admin_menu ) {
+		$admin_menu->register( 'go_cloud_hosting_plans', new Cloud_Hosting_Plans_Menu_Item() );
+	}
+
+	/**
+	 * Handle external redirects.
+	 */
+	public function handle_external_redirects() {
+		if ( empty( $_GET['page'] ) ) {
+			return;
+		}
+
+		if ( 'go_cloud_hosting_plans' === $_GET['page'] ) {
+			wp_redirect( Cloud_Hosting_Plans_Menu_Item::get_url() );
+
+			exit;
+		}
 	}
 
 	private function register_wp_menus() {
@@ -66,16 +94,20 @@ class Admin_Menu_Manager {
 
 	private function register_top_level_menu( $item_slug, Admin_Menu_Item $item ) {
 		$has_page = ( $item instanceof Admin_Menu_Item_With_Page );
+		$has_position = ( $item instanceof Admin_Menu_Item_Has_Position );
 
 		$page_title = $has_page ? $item->get_page_title() : '';
 		$callback = $has_page ? [ $item, 'render' ] : '';
+		$position = $has_position ? $item->get_position() : null;
 
 		return add_menu_page(
 			$page_title,
 			$item->get_label(),
 			$item->get_capability(),
 			$item_slug,
-			$callback
+			$callback,
+			'',
+			$position
 		);
 	}
 

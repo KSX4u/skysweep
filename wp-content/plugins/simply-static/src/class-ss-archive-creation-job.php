@@ -12,7 +12,7 @@ require_once( ABSPATH . 'wp-admin/includes/admin.php' );
 /**
  * Simply Static archive manager class
  */
-class Archive_Creation_Job extends \WP_Background_Process {
+class Archive_Creation_Job extends Background_Process {
 
 	/**
 	 * The name of the job/action
@@ -44,13 +44,49 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	 * @param string $option_key The options key name
 	 */
 	public function __construct() {
-		$this->options   = Options::instance();
+		$this->options = Options::instance();
 
 		if ( ! $this->is_job_done() ) {
 			register_shutdown_function( array( $this, 'shutdown_handler' ) );
 		}
 
+		// Set the cron interval for the job
+		add_filter( 'wp_archive_creation_job_cron_interval', array( $this, 'set_job_interval' ) );
+
 		parent::__construct();
+
+		// Marking on REST API for now.
+		//add_action( $this->identifier . '_paused', [ $this, 'mark_as_paused' ] );
+		//add_action( $this->identifier . '_resumed', [ $this, 'mark_as_resumed' ] );
+	}
+
+	/**
+	 * Mark as Paused.
+	 *
+	 * @return void
+	 */
+	public function mark_as_paused() {
+		$this->save_status_message( "Export paused.", 'pause', true );
+	}
+
+	/**
+	 * Mark as resumed.
+	 *
+	 * @return void
+	 */
+	public function mark_as_resumed() {
+		$this->save_status_message( "Export resumed.", 'resume', true );
+	}
+
+	/**
+	 * Set the interval for the job
+	 *
+	 * @param int $interval The interval in seconds
+	 *
+	 * @return int The interval in seconds
+	 */
+	public function set_job_interval( $interval ) {
+		return 2;    // default 5.
 	}
 
 	public function get_task_list() {
@@ -85,7 +121,7 @@ class Archive_Creation_Job extends \WP_Background_Process {
 
 			do_action( 'ss_archive_creation_job_before_start_queue', $blog_id, $this );
 
-			$first_task   = $task_list[0];
+			$first_task = $task_list[0];
 
 			if ( 'update' !== $type ) {
 				$archive_name = join( '-', array( Plugin::SLUG, $blog_id, time() ) );
@@ -118,23 +154,13 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	}
 
 	/**
-	 * Perform the task at hand
+	 * Get the task object or false if doesn't exist.
 	 *
-	 * The way Archive_Creation_Job works is by taking a task name, performing
-	 * that task, and then either (a) returnning the current task name to
-	 * continue processing it (e.g. fetch more urls), (b) returning the next
-	 * task name if we're done with the current one, or (c) returning false if
-	 * we're done with our job, which then runs complete().
+	 * @param $task_name
 	 *
-	 * @param string $task Task name to process
-	 *
-	 * @return false|string       task name to process, or false if done
+	 * @return false|mixed
 	 */
-	protected function task( $task_name ) {
-		$this->set_current_task( $task_name );
-
-		Util::debug_log( "Current task: " . $task_name );
-
+	public function get_task_object( $task_name ) {
 		// convert 'an_example' to 'An_Example_Task'
 		$class_name = 'Simply_Static\\' . ucwords( $task_name ) . '_Task';
 		$class_name = apply_filters( 'simply_static_class_name', $class_name, $task_name );
@@ -146,13 +172,45 @@ class Archive_Creation_Job extends \WP_Background_Process {
 			return false;
 		}
 
-		$task = new $class_name();
+		return new $class_name();
+	}
+
+	/**
+	 * Perform the task at hand
+	 *
+	 * The way Archive_Creation_Job works is by taking a task name, performing
+	 * that task, and then either (a) returnning the current task name to
+	 * continue processing it (e.g. fetch more urls), (b) returning the next
+	 * task name if we're done with the current one, or (c) returning false if
+	 * we're done with our job, which then runs complete().
+	 *
+	 * @param string $task_name Task name to process
+	 *
+	 * @return false|string       task name to process, or false if done
+	 */
+	protected function task( $task_name ) {
+		$this->set_current_task( $task_name );
+
+		Util::debug_log( "Current task: " . $task_name );
+
+		$task = $this->get_task_object( $task_name );
+
+		if ( false === $task ) {
+			return false;
+		}
+
+		if ( $this->is_paused() ) {
+			return $task_name;
+		}
 
 		// attempt to perform the task
 		try {
 			Util::debug_log( 'Performing task: ' . $task_name );
 			$is_done = $task->perform();
-		} catch ( SimplerStaticException $e ) {
+		} catch (Pause_Exception $e ) {
+			// If it's a pause execption, just return task since we've paused the execution of tha tasks.
+			return $task_name;
+		} catch ( \Exception $e ) {
 			Util::debug_log( 'Caught an exception' );
 
 			return $this->exception_occurred( $e );
@@ -174,6 +232,8 @@ class Archive_Creation_Job extends \WP_Background_Process {
 			} else {
 				Util::debug_log( "We've found our next task: " . $next_task );
 
+				$this->task_cleanup( $next_task );
+
 				// start the next task
 				return $next_task;
 			}
@@ -187,6 +247,22 @@ class Archive_Creation_Job extends \WP_Background_Process {
 		Util::debug_log( "We shouldn't have gotten here; returning false to remove the " . $task_name . " task from the queue" );
 
 		return false; // remove item from queue
+	}
+
+	/**
+	 * Cleanup the task.
+	 *
+	 * @param string $task_name Task name.
+	 *
+	 * @return void
+	 */
+	protected function task_cleanup( $task_name ) {
+		$task = $this->get_task_object( $task_name );
+
+		if ( $task && method_exists( $task, 'cleanup' ) ) {
+			Util::debug_log( "Cleaning on first run for task: " . $task_name );
+			$task->cleanup();
+		}
 	}
 
 	/**
@@ -216,9 +292,12 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	 * Cancel the currently running job
 	 * @return void
 	 */
-	public function cancel( $message = '' ) {
+	public function cancel() {
 		if ( ! $this->is_job_done() ) {
-			Util::debug_log( "Cancelling job; job is not done" );
+			if ( $this->is_paused() ) {
+				$this->resume();
+			}
+			/*Util::debug_log( "Cancelling job; job is not done" );
 
 			if ( $this->is_queue_empty() ) {
 				Util::debug_log( "The queue is empty, pushing the cancel task" );
@@ -237,13 +316,15 @@ class Archive_Creation_Job extends \WP_Background_Process {
 				$batch       = $this->get_batch();
 				$batch->data = array( 'cancel' );
 				$this->update( $batch->key, $batch->data );
-			}
+			}*/
 
-			if ( $message ) {
-				$this->save_status_message( $message );
-			}
+			$end_time    = Util::formatted_datetime();
+			$this->options->set( 'archive_end_time', $end_time );
 
-			$this->dispatch();
+			$cancel_task = new Cancel_Task();
+			$cancel_task->perform();
+
+			parent::cancel();
 		} else {
 			Util::debug_log( "Can't cancel; job is done" );
 		}
@@ -262,6 +343,13 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	}
 
 	public function is_running() {
+		if ( $this->is_paused() ) {
+			return false;
+		}
+
+		if ( $this->is_cancelled() ) {
+			return false;
+		}
 		$start_time = $this->options->get( 'archive_start_time' );
 
 		return $start_time != null && ! $this->is_job_done();
@@ -278,7 +366,7 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	/**
 	 * Set the current task name
 	 *
-	 * @param stroing $task_name The name of the current task
+	 * @param string $task_name The name of the current task
 	 */
 	protected function set_current_task( $task_name ) {
 		$this->current_task = $task_name;
@@ -313,27 +401,29 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	 *
 	 * @param string $message Message to display about the status of the job
 	 * @param string $key Unique key for the message
+	 * @param boolean $unique If unique, the key, if exists, will get a suffix.
 	 *
 	 * @return void
 	 */
-    public function save_status_message( $message, $key = null ) {
-        $task_name = $key ?: $this->get_current_task();
-        $this->options
-            ->add_status_message($message, $task_name)
-            ->save();
-        Util::debug_log( 'Status message: [' . $task_name . '] ' . $message );
-    }
+	public function save_status_message( $message, $key = null, $unique = false ) {
+		$task_name = $key ?: $this->get_current_task();
+		$this->options
+			->add_status_message( $message, $task_name, $unique )
+			->save();
+		Util::debug_log( 'Status message: [' . $task_name . '] ' . $message );
+	}
 
 	/**
 	 * Add a status message about the exception and cancel the job
 	 *
-	 * @param Exception $exception The exception that occurred
+	 * @param \Exception $exception The exception that occurred
 	 *
 	 * @return void
 	 */
 	protected function exception_occurred( $exception ) {
 		Util::debug_log( "An exception occurred: " . $exception->getMessage() );
 		Util::debug_log( $exception );
+
 		$message = sprintf( __( "An exception occurred: %s", 'simply-static' ), $exception->getMessage() );
 		$this->save_status_message( $message, 'error' );
 		do_action( 'ss_completed', 'exception', $message );
@@ -351,6 +441,7 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	protected function error_occurred( $wp_error ) {
 		Util::debug_log( "An error occurred: " . $wp_error->get_error_message() );
 		Util::debug_log( $wp_error );
+
 		$message = sprintf( __( "An error occurred: %s", 'simply-static' ), $wp_error->get_error_message() );
 		$this->save_status_message( $message, 'error' );
 		do_action( 'ss_completed', 'error', $message );
@@ -393,7 +484,7 @@ class Archive_Creation_Job extends \WP_Background_Process {
 	 *
 	 * @return string
 	 */
-	public function maybe_wp_die( $return = null) {
+	public function maybe_wp_die( $return = null ) {
 		return 'cancel';
 	}
 }

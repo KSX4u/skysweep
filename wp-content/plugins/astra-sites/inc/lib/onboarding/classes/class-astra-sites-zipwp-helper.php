@@ -50,7 +50,7 @@ class Astra_Sites_ZipWP_Helper {
      * Get Saved settings.
      * 
      * @since 4.0.0
-     * @return string
+     * @return array<string, string>
      */
     public static function get_setting() {
         return get_option( 'zip_ai_settings', array( 'auth_token' => '', 'zip_token' => '', 'email' => '' ) );
@@ -99,7 +99,7 @@ class Astra_Sites_ZipWP_Helper {
 	 *
 	 * @since 4.0.0
 	 * @param string $key options name.
-	 * @return array<string,string,string,string,string,string,string,int> | string Array for business details or single detail in a string.
+	 * @return mixed|array<string, mixed> Array for business details or single detail in a string.
 	 */
 	public static function get_business_details( $key = '' ) {
 		$details = get_option(
@@ -141,35 +141,9 @@ class Astra_Sites_ZipWP_Helper {
 	}
 
 	/**
-	 * Get image placeholder array.
-	 *
-	 * @since 4.0.9
-	 * @return array<string, array<string, string>>
-	 */
-	public static function get_image_placeholders() {
-
-		return array(
-				array(
-					"auther_name"=> 'Placeholder',
-					"id"=> "placeholder-landscape",
-					"orientation"=> 'landscape',
-					'optimized_url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-landscape.png',
-					'url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-landscape.png'
-				),
-				array(
-					"auther_name"=> 'Placeholder',
-					"id"=> "placeholder-portrait",
-					"orientation"=> 'portrait',
-					'optimized_url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-portrait.png',
-					'url' => 'https://websitedemos.net/wp-content/uploads/2024/02/placeholder-portrait.png'
-				),
-			);
-	}
-
-		/**
 	 * Download image from URL.
 	 *
-	 * @param array $image Image data.
+	 * @param array<string> $image Image data.
 	 * @return int|\WP_Error Image ID or WP_Error.
 	 * @since {{since}}
 	 */
@@ -189,18 +163,18 @@ class Astra_Sites_ZipWP_Helper {
 		// Check if image is uploaded/downloaded already. If yes the update meta and mark it as downloaded.
 		$site_domain = parse_url( get_home_url(), PHP_URL_HOST );
 
-		if( strpos( $image_url, $site_domain ) !== false ){
+		if ( strpos( $image_url, strval( $site_domain ) ) !== false ) {
 
 			$downloaded_ids[ $id ] = $id;
 
 			// Add our meta data for uploaded image.
 			if( '1' !== get_post_meta( intval( $downloaded_ids[ $id ] ), '_astra_sites_imported_post', true ) ){
-				update_post_meta( $downloaded_ids[ $id ], '_astra_sites_imported_post', true );
+				update_post_meta( intval( $downloaded_ids[ $id ] ), '_astra_sites_imported_post', true );
 			}
 			
 			update_option( 'ast_sites_downloaded_images', $downloaded_ids );
 
-			return $downloaded_ids[ $id ];
+			return intval( $downloaded_ids[ $id ] );
 		}
 
 		// Use parse_url to get the path component of the URL.
@@ -212,9 +186,6 @@ class Astra_Sites_ZipWP_Helper {
 
 		// Using $id to create image name instead of $path.
 		$image_name = 'zipwp-image-' . sanitize_title( $id );
-
-		// Fallback name.
-		$image_name = $image_name ? $image_name : sanitize_title( $id );
 
 		// Use pathinfo to get the file name without the extension.
 		$image_extension = pathinfo( $image_name, PATHINFO_EXTENSION );

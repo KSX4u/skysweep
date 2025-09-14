@@ -1,24 +1,28 @@
+import clsx from 'clsx';
+import { twMerge } from 'tailwind-merge';
 import { __ } from '@wordpress/i18n';
 import { decodeEntities } from '@wordpress/html-entities';
+import { ReactComponent as BlackDiamond } from '../../images/black-diamond.svg';
+import { STEPS } from '../steps/util';
 
 export const whiteLabelEnabled = () => {
-	return astraSitesVars.isWhiteLabeled ? true : false;
+	return astraSitesVars?.isWhiteLabeled ? true : false;
 };
 
 export const getWhileLabelName = () => {
-	return astraSitesVars.whiteLabelName;
+	return astraSitesVars?.whiteLabelName;
 };
 
 export const getWhiteLabelAuthorUrl = () => {
-	return astraSitesVars.whiteLabelUrl;
+	return astraSitesVars?.whiteLabelUrl;
 };
 
 export const isPro = () => {
-	return astraSitesVars.isPro;
+	return astraSitesVars?.isPro;
 };
 
 export const getProUrl = () => {
-	return astraSitesVars.getProURL;
+	return astraSitesVars?.getProURL;
 };
 
 export const sendPostMessage = ( data ) => {
@@ -77,7 +81,7 @@ export const getDefaultColorPalette = ( demo ) => {
 		if ( customizerData ) {
 			const globalPalette =
 				customizerData[ 'astra-settings' ][ 'global-color-palette' ]
-					.palette || [];
+					?.palette || [];
 
 			if ( globalPalette ) {
 				defaultPaletteValues = [
@@ -162,7 +166,7 @@ export const getColorScheme = ( demo ) => {
 };
 
 export const getAllSites = () => {
-	return astraSitesVars.all_sites;
+	return astraSitesVars?.all_sites;
 };
 
 export const getSupportLink = ( templateId, subject ) => {
@@ -172,21 +176,33 @@ export const getSupportLink = ( templateId, subject ) => {
 export const getGridItem = ( site ) => {
 	let imageUrl = site[ 'thumbnail-image-url' ] || '';
 	if ( '' === imageUrl && false === whiteLabelEnabled() ) {
-		if ( astraSitesVars.default_page_builder === 'fse' ) {
+		if ( astraSitesVars?.default_page_builder === 'fse' ) {
 			imageUrl = `${ starterTemplates.imageDir }spectra-placeholder.png`;
 		} else {
 			imageUrl = `${ starterTemplates.imageDir }placeholder.png`;
 		}
 	}
 
+	let badge = '';
+	let type = 'free';
+	if ( site[ 'astra-sites-type' ] === 'signature' ) {
+		badge = (
+			<>
+				<BlackDiamond /> { __( 'Signature', 'astra-sites' ) }
+			</>
+		);
+		type = 'signature';
+	} else if ( site[ 'astra-sites-type' ] !== 'free' ) {
+		badge = <>{ __( 'Premium', 'astra-sites' ) }</>;
+		type = 'premium';
+	}
+
 	return {
 		id: site.id,
 		image: imageUrl,
 		title: decodeEntities( site.title ),
-		badge:
-			'free' !== site[ 'astra-sites-type' ]
-				? __( 'Premium', 'astra-sites' )
-				: '',
+		type,
+		badge,
 		...site,
 	};
 };
@@ -206,11 +222,75 @@ export const getTotalTime = ( value ) => {
 export const saveGutenbergAsDefaultBuilder = ( pageBuilder = 'gutenberg' ) => {
 	const content = new FormData();
 	content.append( 'action', 'astra-sites-change-page-builder' );
-	content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+	content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 	content.append( 'page_builder', pageBuilder );
 
-	fetch( ajaxurl, {
+	return fetch( ajaxurl, {
 		method: 'post',
 		body: content,
 	} );
+};
+
+export const classNames = ( ...classes ) => twMerge( clsx( classes ) );
+
+/**
+ *
+ * @param {string} key
+ * @param {any}    value
+ * @return {any} value
+ */
+export const setLocalStorageItem = ( key, value ) => {
+	try {
+		if ( typeof window === 'undefined' ) {
+			return;
+		}
+		localStorage.setItem( key, JSON.stringify( value ) );
+	} catch ( error ) {
+		// Handle error (e.g., localStorage is full, etc.)
+	}
+};
+
+/**
+ * Get localStorage item
+ *
+ * @param {string} key
+ * @return {any} value
+ */
+export const removeLocalStorageItem = ( key ) => {
+	try {
+		if ( typeof window === 'undefined' ) {
+			return;
+		}
+		localStorage.removeItem( key );
+	} catch ( error ) {
+		console.error( 'Error while removing localStorage:', error );
+	}
+};
+
+export const debounce = ( func, wait, immediate ) => {
+	let timeout;
+	return ( ...args ) => {
+		const later = () => {
+			timeout = null;
+			if ( ! immediate ) {
+				func( ...args );
+			}
+		};
+		const callNow = immediate && ! timeout;
+		clearTimeout( timeout );
+		timeout = setTimeout( later, wait );
+		if ( callNow ) {
+			func( ...args );
+		}
+	};
+};
+
+/**
+ * Get step index from step name.
+ *
+ * @param {string} name
+ * @return {number} index
+ */
+export const getStepIndex = ( name = '' ) => {
+	return STEPS.findIndex( ( step ) => step.name === name );
 };

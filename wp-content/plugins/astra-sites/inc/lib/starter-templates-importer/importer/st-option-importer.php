@@ -26,17 +26,17 @@ class ST_Option_Importer {
 	 * Instance of this class.
 	 *
 	 * @since 1.0.0
-	 * @var object Class object.
+	 * @var self Class object.
 	 */
-	private static $instance;
+	private static $instance = null;
 
 	/**
 	 * Images IDs
 	 *
-	 * @var array   The Array of already image IDs.
+	 * @var array<int, int>   The Array of already image IDs.
 	 * @since 1.0.0
 	 */
-	private static $already_imported_ids = array();
+	private static $already_imported_ids = array(); // @phpstan-ignore-line
 
 	/**
 	 * Initiator of this class.
@@ -45,7 +45,7 @@ class ST_Option_Importer {
 	 * @return self initialized object of this class.
 	 */
 	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -56,20 +56,43 @@ class ST_Option_Importer {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return array    List of defined array.
+	 * @return array<int, string>    List of defined array.
 	 */
 	public static function site_options() {
-		return array(
-			'custom_logo',
-			'nav_menu_locations',
-			'show_on_front',
-			'page_on_front',
-			'page_for_posts',
-			'site_title',
+		return apply_filters(
+			'st_importer_site_options',
+			array(
+				'custom_logo',
+				'nav_menu_locations',
+				'show_on_front',
+				'page_on_front',
+				'page_for_posts',
+				'site_title',
 
-			// Astra Theme Global Color Palette and Typography Preset options.
-			'astra-color-palettes',
-			'astra-typography-presets',
+				// Astra Theme Global Color Palette and Typography Preset options.
+				'astra-color-palettes',
+				'astra-typography-presets',
+
+				// Plugin: Elementor.
+				'elementor_container_width',
+				'elementor_cpt_support',
+				'elementor_css_print_method',
+				'elementor_default_generic_fonts',
+				'elementor_disable_color_schemes',
+				'elementor_disable_typography_schemes',
+				'elementor_editor_break_lines',
+				'elementor_exclude_user_roles',
+				'elementor_global_image_lightbox',
+				'elementor_page_title_selector',
+				'elementor_scheme_color',
+				'elementor_scheme_color-picker',
+				'elementor_scheme_typography',
+				'elementor_space_between_widgets',
+				'elementor_stretched_section_container',
+				'elementor_load_fa4_shim',
+				'elementor_active_kit',
+				'elementor_experiment-container',
+			)
 		);
 	}
 
@@ -120,7 +143,7 @@ class ST_Option_Importer {
 
 		$page = self::get_page_by_title( $option_value, 'page' );
 
-		if ( is_object( $page ) ) {
+		if ( is_object( $page ) && isset( $page->ID ) ) {
 			update_option( $option_name, $page->ID );
 		}
 	}
@@ -131,20 +154,22 @@ class ST_Option_Importer {
 	 * In import we set 'menu_id' from menu slug like ( 'menu_location' => 'menu_id' );
 	 *
 	 * @since 1.0.0
-	 * @param array $nav_menu_locations Array of nav menu locations.
+	 * @param array<string, mixed> $nav_menu_locations Array of nav menu locations.
+	 *
+	 * @return void
 	 */
 	public static function set_nav_menu_locations( $nav_menu_locations = array() ) {
 
 		$menu_locations = array();
 
 		// Update menu locations.
-		if ( isset( $nav_menu_locations ) ) {
+		if ( is_array( $nav_menu_locations ) ) {
 
 			foreach ( $nav_menu_locations as $menu => $value ) {
 
 				$term = get_term_by( 'slug', $value, 'nav_menu' );
 
-				if ( is_object( $term ) ) {
+				if ( is_object( $term ) && isset( $term->term_id ) ) {
 					$menu_locations[ $menu ] = $term->term_id;
 				}
 			}
@@ -180,8 +205,8 @@ class ST_Option_Importer {
 	 * Import Image
 	 *
 	 * @since 1.0.0
-	 * @param  array $attachment Attachment array.
-	 * @return array              Attachment array.
+	 * @param  array<string, mixed> $attachment Attachment array.
+	 * @return array<string, mixed>              Attachment array.
 	 *
 	 * @throws \Exception Exception that is catched.
 	 */
@@ -201,7 +226,7 @@ class ST_Option_Importer {
 			wp_safe_remote_get(
 				$attachment['url'],
 				array(
-					'timeout'   => '60',
+					'timeout'   => 60,
 					'sslverify' => false,
 				)
 			)
@@ -223,7 +248,7 @@ class ST_Option_Importer {
 		);
 
 		$info = wp_check_filetype( $upload['file'] );
-		if ( $info ) {
+		if ( is_array( $info ) && ! empty( $info['type'] ) ) {
 			$post['post_mime_type'] = $info['type'];
 		} else {
 			// For now just return the origin attachment.
@@ -263,8 +288,8 @@ class ST_Option_Importer {
 	 * Get Saved Image.
 	 *
 	 * @since 1.0.0
-	 * @param  string $attachment   Attachment Data.
-	 * @return string                 Hash string.
+	 * @param  array<string, mixed> $attachment   Attachment Data.
+	 * @return array<string, mixed>                 Hash string.
 	 */
 	public static function get_saved_image( $attachment ) {
 
@@ -277,6 +302,8 @@ class ST_Option_Importer {
 
 		global $wpdb;
 
+		$url = $attachment['url'] ?? '';
+
 		// 1. Is already imported in Batch Import Process?
 		$post_id = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- We are checking if this image is already processed. WO_Query would have been overkill.
 			$wpdb->prepare(
@@ -284,7 +311,7 @@ class ST_Option_Importer {
                     WHERE `meta_key` = \'_astra_sites_image_hash\'
                         AND `meta_value` = %s
                 ;',
-				ST_Importer_Helper::get_hash_image( $attachment['url'] )
+				ST_Importer_Helper::get_hash_image( $url )
 			)
 		);
 
@@ -293,7 +320,7 @@ class ST_Option_Importer {
 
 			// Get file name without extension.
 			// To check it exist in attachment.
-			$filename = basename( $attachment['url'] );
+			$filename = basename( $url );
 
 			// Find the attachment by meta value.
 			// Code reused from Elementor plugin.
@@ -331,7 +358,7 @@ class ST_Option_Importer {
 	 *
 	 * @since 1.0.0
 	 * @param  string $link image URL.
-	 * @return bool
+	 * @return int|bool
 	 */
 	public static function is_valid_image_url( $link = '' ) {
 		return preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?\/[\w\-\@]+\.(jpg|png|gif|jpeg|svg)\/?$/i', $link );

@@ -31,6 +31,15 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 		$this->icon    = 'fa-sliders';
 		$this->order   = 10;
 		$this->sidebar = true;
+
+		/**
+		 * Filters the form data for the form builder.
+		 *
+		 * @since 1.9.0
+		 *
+		 * @param array $form_data Form data.
+		 */
+		$this->form_data = apply_filters( 'wpforms_builder_panel_settings_init_form_data', $this->form_data );
 	}
 
 	/**
@@ -163,7 +172,12 @@ class WPForms_Builder_Panel_Settings extends WPForms_Builder_Panel {
 				$this->form_data,
 				esc_html__( 'Form Description', 'wpforms-lite' ),
 				[
-					'tooltip' => esc_html__( 'Enter descriptive text or instructions to help your users understand the requirements of your form.', 'wpforms-lite' ),
+					'tooltip'     => esc_html__( 'Enter descriptive text or instructions to help your users understand the requirements of your form.', 'wpforms-lite' ),
+					'input_class' => 'wpforms-smart-tags-enabled',
+					'data'        => [
+						'type'   => 'all',
+						'fields' => '',
+					],
 				]
 			);
 

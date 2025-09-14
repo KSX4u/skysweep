@@ -118,7 +118,7 @@ class Options {
 	public function get( $name = '' ) {
 		return array_key_exists( $name, $this->options ) ?
 			(
-			defined( 'SIMPLY_STATIC_' . strtoupper( $name ) ) ?
+			'VERSION' !== strtoupper( $name ) && defined( 'SIMPLY_STATIC_' . strtoupper( $name ) ) ?
 				constant( 'SIMPLY_STATIC_' . strtoupper( $name ) ) :
 				apply_filters( 'ss_get_option_' . strtolower( $name ), $this->options[ $name ], $this )
 			)
@@ -163,7 +163,9 @@ class Options {
 	 * @return string The path to the temp static archive directory
 	 */
 	public function get_archive_dir() {
-		return Util::add_trailing_directory_separator( $this->get( 'temp_files_dir' ) . apply_filters( 'ss_archive_file_name', $this->get( 'archive_name' ) ) );
+		$temp_files_dir = Util::get_temp_dir();
+
+		return Util::add_trailing_directory_separator( $temp_files_dir . apply_filters( 'ss_archive_file_name', $this->get( 'archive_name' ) ) );
 	}
 
 	/**
@@ -183,16 +185,19 @@ class Options {
 		return './';
 	}
 
-    /**
-     * Add status message
-     * @param $message
-     * @param $task_name
-     * @return $this
-     */
-    public function add_status_message( $message, $task_name ) : self
-    {
-        $messages = $this->get( 'archive_status_messages' );
-        $messages = Util::add_archive_status_message( $messages, $task_name, $message );
-        return $this->set( 'archive_status_messages', $messages );
-    }
+	/**
+	 * Add status message
+	 *
+	 * @param string $message The status message to add.
+	 * @param string $task_name The name of the task associated with the status message.
+	 * @param bool $unique Whether the status message should be unique (default: false).
+	 *
+	 * @return $this
+	 */
+	public function add_status_message( $message, $task_name, $unique = false ) : self
+	{
+		$messages = $this->get( 'archive_status_messages' );
+		$messages = Util::add_archive_status_message( $messages, $task_name, $message, $unique );
+		return $this->set( 'archive_status_messages', $messages );
+	}
 }

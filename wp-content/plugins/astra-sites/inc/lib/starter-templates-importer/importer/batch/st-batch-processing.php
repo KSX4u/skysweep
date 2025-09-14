@@ -27,7 +27,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @var object Class object.
 		 * @access private
 		 */
-		private static $instance;
+		private static $instance = null;
 
 		/**
 		 * Process All
@@ -72,7 +72,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 * @return object initialized object of class.
 		 */
 		public static function get_instance() {
-			if ( ! isset( self::$instance ) ) {
+			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
 			return self::$instance;
@@ -96,6 +96,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		/**
 		 * Include Files
 		 *
+		 * @return void
 		 * @since 2.5.0
 		 */
 		public function includes() {
@@ -121,7 +122,9 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( $message );
 			} else {
-				astra_sites_error_log( $message );
+				if ( function_exists( 'astra_sites_error_log' ) ) {
+					astra_sites_error_log( $message );
+				}
 				update_site_option( 'astra-sites-batch-status-string', $message );
 			}
 		}
@@ -135,9 +138,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 */
 		public function start_process_single( $page_id ) {
 
-			$default_page_builder = 'gutenbrg';
-
-			if ( 'gutenberg' === $default_page_builder ) {
+			if ( method_exists( self::$process_single, 'push_to_queue' ) ) {
 				// Add "gutenberg" in import [queue].
 				self::$process_single->push_to_queue(
 					array(
@@ -147,8 +148,10 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 				);
 			}
 
-			// Dispatch Queue.
-			self::$process_single->save()->dispatch();
+			if ( method_exists( self::$process_single, 'save' ) ) {
+				// Dispatch Queue.
+				self::$process_single->save()->dispatch();
+			}
 		}
 
 		/**
@@ -156,8 +159,8 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 *
 		 * @since 1.0.14
 		 *
-		 * @param  boolean $can_process Batch process image status.
-		 * @param  array   $attachment  Batch process image input.
+		 * @param  boolean               $can_process Batch process image status.
+		 * @param  array<string, string> $attachment  Batch process image input.
 		 * @return boolean
 		 */
 		public function skip_image( $can_process, $attachment ) {
@@ -200,11 +203,11 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 */
 		public function start_process() {
 
-			if ( 'ai' === get_transient( 'astra_sites_current_import_template_type' ) ) {
+			if ( 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
 				return;
 			}
 
-			set_transient( 'astra_sites_batch_process_started', 'yes', HOUR_IN_SECONDS );
+			update_option( 'astra_sites_batch_process_started', 'yes' );
 
 			/** WordPress Plugin Administration API */
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
@@ -228,6 +231,23 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 			// Add "misc" in import [queue].
 			$classes[] = ST_Batch_Processing_Misc::get_instance();
 
+			// Add "customizer" in import [queue].
+			$classes[] = ST_Batch_Processing_Customizer::get_instance();
+
+			$all_attachments = get_option( 'st_attachments', array() );
+			$count           = count( $all_attachments );
+
+			if ( ! empty( $count ) ) {
+				$no_of_times = (int) ceil( $count / 10 ); // Divide in chunks of 10.
+
+				for ( $i = 1; $i <= $no_of_times; $i++ ) {
+					// Add "gutenberg" in import [queue].
+					$classes[] = ST_Batch_CE_Process_Images::get_instance();
+				}
+
+				$classes[] = ST_Batch_Process_Cleanup::get_instance();
+			}
+
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'Batch Process Started..' );
 				// Process all classes.
@@ -240,13 +260,16 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 			} else {
 				// Add all classes to batch queue.
 				foreach ( $classes as $key => $class ) {
-					self::$process_all->push_to_queue( $class );
+					if ( method_exists( self::$process_all, 'push_to_queue' ) ) {
+						self::$process_all->push_to_queue( $class );
+					}
 				}
 
-				// Dispatch Queue.
-				self::$process_all->save()->dispatch();
+				if ( method_exists( self::$process_all, 'save' ) ) {
+					// Dispatch Queue.
+					self::$process_all->save()->dispatch();
+				}
 			}
-
 		}
 
 		/**
@@ -254,8 +277,8 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 *
 		 * @since 1.0.14
 		 *
-		 * @param  array $post_types Post types.
-		 * @return array
+		 * @param  array<int, string> $post_types Post types.
+		 * @return array<int, int>
 		 */
 		public static function get_pages( $post_types = array() ) {
 
@@ -282,12 +305,12 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 				// Have posts?
 				if ( $query->have_posts() ) :
 
-					return $query->posts;
+					return $query->posts; // @phpstan-ignore-line
 
 				endif;
 			}
 
-			return null;
+			return array();
 		}
 
 		/**
@@ -295,7 +318,7 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 		 *
 		 * @since 1.3.7
 		 * @param  integer $feature Feature.
-		 * @return array
+		 * @return array<int, string>
 		 */
 		public static function get_post_types_supporting( $feature ) {
 			global $_wp_post_type_features;
@@ -306,11 +329,6 @@ if ( ! class_exists( 'ST_Batch_Processing' ) ) :
 
 			return $post_types;
 		}
-
-
-
-
-
 	}
 
 	/**

@@ -28,7 +28,7 @@ abstract class SmartTag {
 	 *
 	 * @var string
 	 */
-	protected $context;
+	public $context;
 
 	/**
 	 * List of attributes.
@@ -110,7 +110,7 @@ abstract class SmartTag {
 			return $user;
 		}
 
-		return is_user_logged_in() ? wp_get_current_user() : '';
+		return ! wpforms_doing_scheduled_action() && is_user_logged_in() ? wp_get_current_user() : '';
 	}
 
 	/**
@@ -124,29 +124,41 @@ abstract class SmartTag {
 	 */
 	private function get_entry_user( $entry_id ) {
 
-		if ( empty( $entry_id ) ) {
+		$entry_user_id = $this->get_entry_user_id( $entry_id );
+
+		if ( empty( $entry_user_id ) ) {
 			return '';
 		}
 
-		$entry = wpforms()->get( 'entry' );
+		$user = get_user_by( 'id', $entry_user_id );
+
+		return $user instanceof WP_User ? $user : '';
+	}
+
+	/**
+	 * Retrieve user ID from entry meta or AS task.
+	 *
+	 * @since 1.9.4
+	 *
+	 * @param int|string $entry_id Entry ID.
+	 *
+	 * @return int
+	 */
+	private function get_entry_user_id( $entry_id ): int {
+
+		if ( empty( $entry_id ) ) {
+			return (int) $this->get_meta( 0, 'user_id' );
+		}
+
+		$entry = wpforms()->obj( 'entry' );
 
 		if ( empty( $entry ) ) {
-			return '';
+			return 0;
 		}
 
-		$user          = null;
-		$entry_data    = $entry->get( $entry_id );
-		$entry_user_id = $entry_data->user_id ?? 0;
+		$entry_data = $entry->get( $entry_id );
 
-		if ( ! empty( $entry_user_id ) ) {
-			$user = get_user_by( 'id', $entry_user_id );
-		}
-
-		if ( ! $user instanceof WP_User ) {
-			return '';
-		}
-
-		return $user;
+		return $entry_data && isset( $entry_data->user_id ) ? (int) $entry_data->user_id : 0;
 	}
 
 	/**
@@ -177,10 +189,6 @@ abstract class SmartTag {
 	 */
 	protected function get_author_meta( $entry_id, string $meta_key ): string {
 
-		if ( empty( $entry_id ) ) {
-			return '';
-		}
-
 		$page_id = $this->get_meta( $entry_id, 'page_id' );
 
 		if ( empty( $page_id ) ) {
@@ -206,26 +214,109 @@ abstract class SmartTag {
 	 *
 	 * @return string Meta value.
 	 */
-	public function get_meta( $entry_id, string $meta_key ) {
+	public function get_meta( $entry_id, string $meta_key ): string {
 
-		if ( empty( $entry_id ) ) {
-			return '';
+		$meta_data = '';
+
+		if ( ! empty( $entry_id ) ) {
+			$entry_meta = wpforms()->obj( 'entry_meta' );
+
+			if ( $entry_meta ) {
+				$meta = $entry_meta->get_meta(
+					[
+						'entry_id' => $entry_id,
+						'type'     => $meta_key,
+						'number'   => 1,
+					]
+				);
+
+				$meta_data = isset( $meta[0]->data ) ? (string) $meta[0]->data : '';
+			}
 		}
 
-		$entry_meta = wpforms()->get( 'entry_meta' );
+		/**
+		 * Allow modifying the entry meta-value.
+		 *
+		 * @since 1.9.4
+		 *
+		 * @param string     $meta_data Meta value.
+		 * @param string     $meta_key  Meta key.
+		 * @param string|int $entry_id  Entry ID.
+		 * @param SmartTag   $smart_tag Smart tag object.
+		 *
+		 * @return string
+		 */
+		return (string) apply_filters( 'wpforms_smart_tags_smart_tag_get_meta_value', $meta_data, $meta_key, $entry_id, $this ); //phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+	}
 
-		if ( empty( $entry_meta ) ) {
-			return '';
+	/**
+	 * Get formatted field value.
+	 *
+	 * @since 1.8.9
+	 *
+	 * @param int    $field_id  Field ID.
+	 * @param array  $fields    List of fields.
+	 * @param string $field_key Field key to get value from.
+	 * @param array  $form_data Form data.
+	 *
+	 * @return string
+	 */
+	protected function get_formatted_field_value( int $field_id, array $fields, string $field_key, array $form_data = [] ): string {
+
+		$value = $fields[ $field_id ][ $field_key ] ?? '';
+
+		/**
+		 * Allow modifying the formatted field value.
+		 *
+		 * @since 1.9.0
+		 *
+		 * @param string $value     Field value.
+		 * @param int    $field_id  Field ID.
+		 * @param array  $fields    List of fields.
+		 * @param string $field_key Field key to get value from.
+		 * @param array  $form_data Form data.
+		 *
+		 * @return string
+		 */
+		$value = (string) apply_filters( 'wpforms_smart_tags_formatted_field_value', $value, $field_id, $fields, $field_key, $form_data ); //phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+
+		if ( ! wpforms_is_repeated_field( $field_id, $fields ) ) {
+			return $value;
 		}
 
-		$meta = $entry_meta->get_meta(
-			[
-				'entry_id' => $entry_id,
-				'type'     => $meta_key,
-				'number'   => 1,
-			]
-		);
+		return $this->get_repeated_field_value( $value, $field_id, $fields, $field_key );
+	}
 
-		return $meta[0]->data ?? '';
+	/**
+	 * Get repeated fields value.
+	 *
+	 * @since 1.8.9
+	 *
+	 * @param string $value     Field value.
+	 * @param int    $field_id  Field ID.
+	 * @param array  $fields    List of fields.
+	 * @param string $field_key Field key to get value from.
+	 *
+	 * @return string
+	 */
+	private function get_repeated_field_value( string $value, int $field_id, array $fields, string $field_key ): string {
+
+		$comma_separated_contexts = [ 'notification-send-to-email', 'notification-carboncopy' ];
+		$prefix                   = $field_id . '_';
+		$separator                = in_array( $this->context, $comma_separated_contexts, true ) ? ',' : "\n";
+
+		foreach ( $fields as $key => $field ) {
+			if ( strpos( $key, $prefix ) !== 0 ) {
+				continue;
+			}
+
+			if ( ! isset( $field[ $field_key ] ) ) {
+				continue;
+			}
+
+			$value .= $separator . $field[ $field_key ];
+		}
+
+		return $value;
 	}
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Simply_Static;
 
 trait canProcessPages {
@@ -16,6 +17,13 @@ trait canProcessPages {
 	 * @var int
 	 */
 	protected $batch_size = 50;
+
+	/**
+	 * Processing Column.
+	 *
+	 * @var string
+	 */
+	protected $processing_column = 'last_transferred_at';
 
 	/**
 	 * Get batch size.
@@ -55,7 +63,7 @@ trait canProcessPages {
 	 * @return mixed|string|null
 	 */
 	public function get_generate_type() {
-		$type = $this->options->get('generate_type');
+		$type = $this->options->get( 'generate_type' );
 
 		if ( ! $type ) {
 			$type = 'export';
@@ -78,19 +86,26 @@ trait canProcessPages {
 			$processed_pages = $this->get_processed_pages();
 			$message         = $this->processed_pages_message( $processed_pages, $total_pages );
 			$this->save_status_message( $message );
+
 			return true; // No Pages to process anymore. It's done.
 		}
 
-		$message = $this->processing_pages_message( $pages_to_process_count, $total_pages );
-		$this->save_status_message( $message );
-
 		while ( $static_page = array_shift( $pages_to_process ) ) {
+			if ( method_exists( $this, 'check_if_running' ) ) {
+				$this->check_if_running();
+			}
+
 			try {
 				$this->process_page( $static_page );
 
-				$static_page->last_transferred_at = Util::formatted_datetime();
+				$static_page->{$this->processing_column} = Util::formatted_datetime();
 				$static_page->save();
-			} catch (\Exception $e) {
+			} catch ( Skip_Further_Processing_Exception $e ) {
+				Util::debug_log( 'Encountered Processing Error. We are skipping further until next iteration. Error: ' . $e->getMessage() );
+				$static_page->set_error_message( $e->getMessage() );
+				$static_page->save();
+				break;
+			} catch ( \Exception $e ) {
 				Util::debug_log( 'Page URL: ' . $static_page->url . ' not being processed. Error: ' . $e->getMessage() );
 				$static_page->set_error_message( $e->getMessage() );
 				$static_page->save();
@@ -110,18 +125,7 @@ trait canProcessPages {
 	 *
 	 * @return void
 	 */
-	protected function process_page( $static_page ) {}
-
-	/**
-	 * Message to see when starting to process new pages.
-	 *
-	 * @param integer $to_process Number of pages to process.
-	 * @param integer $total Total of pages.
-	 *
-	 * @return string
-	 */
-	protected function processing_pages_message( $to_process, $total ) {
-		return sprintf( __( "Uploading %d of %d files", 'simply-static' ), $to_process, $total );
+	protected function process_page( $static_page ) {
 	}
 
 	/**
@@ -143,19 +147,31 @@ trait canProcessPages {
 	 * @throws \Exception
 	 */
 	public function get_processed_pages() {
+		$query = $this->get_processed_pages_sql();
+
+		return $query->count();
+	}
+
+	/**
+	 * Return the query for processed pages.
+	 *
+	 * @return Query
+	 * @throws \Exception
+	 */
+	public function get_processed_pages_sql() {
 		$start_time = $this->get_start_time();
 		$query      = $this->get_main_query();
 
 		if ( 'export' === $this->get_generate_type() ) {
-			$query->where("last_transferred_at >= ?", $start_time );
+			$query->where( "{$this->processing_column} >= ?", $start_time );
 		}
 
 		if ( 'update' === $this->get_generate_type() ) {
-			$query->where("last_transferred_at >= last_modified_at" );
-			$query->where("last_transferred_at >= ?", $start_time );
+			$query->where( "{$this->processing_column} >= last_modified_at" );
+			$query->where( "{$this->processing_column} >= ?", $start_time );
 		}
 
-		return $query->count();
+		return $query;
 	}
 
 	/**
@@ -165,19 +181,45 @@ trait canProcessPages {
 	 * @throws \Exception
 	 */
 	public function get_pages_to_process() {
-		$start_time = $this->get_start_time();
 		$batch_size = $this->get_batch_size();
+		$query      = $this->get_pages_to_process_sql();
+
+		return $query->limit( $batch_size )->find();
+	}
+
+	/**
+	 * Get the Pages to process SQL.
+	 *
+	 * @return Query
+	 * @throws \Exception
+	 */
+	public function get_pages_to_process_sql() {
+		$start_time = $this->get_start_time();
 		$query      = $this->get_main_query();
 
 		if ( 'export' === $this->get_generate_type() ) {
-			$query->where("( last_transferred_at < ? OR last_transferred_at IS NULL )", $start_time );
+			$query->where( "( {$this->processing_column} < ? OR {$this->processing_column} IS NULL )", $start_time );
 		}
 
 		if ( 'update' === $this->get_generate_type() ) {
-			$query->where("( ( last_transferred_at < last_modified_at AND last_transferred_at < ? ) OR last_transferred_at IS NULL )", $start_time );
+			$query->where( "( ( {$this->processing_column} < last_modified_at AND {$this->processing_column} < ? ) OR {$this->processing_column} IS NULL )", $start_time );
 		}
 
-		return $query->limit( $batch_size )->find();
+		// Modify the query based on post id column.
+		$post_id = get_option( 'simply-static-use-single' );
+
+		if ( ! empty( $post_id ) ) {
+			$query->where( "post_id = ?", $post_id );
+		}
+
+		// Modify the query based on build id column.
+		$build_id = get_option( 'simply-static-use-build' );
+
+		if ( ! empty( $build_id ) ) {
+			$query->where( "build_id = ?", $build_id );
+		}
+
+		return $query;
 	}
 
 	public function get_total_pages( $cached = true ) {
@@ -185,17 +227,17 @@ trait canProcessPages {
 			return $this->get_total_pages_sql();
 		}
 
-		$count = get_transient( 'simply_static_' . static::$task_name . '_total_pages' );
+		$count = get_option( 'simply_static_' . static::$task_name . '_total_pages' );
 		if ( false === $count ) {
 			$count = $this->get_total_pages_sql();
-			set_transient( 'simply_static_' . static::$task_name . '_total_pages', $count );
+			update_option( 'simply_static_' . static::$task_name . '_total_pages', $count );
 		}
 
 		return $count;
 	}
 
-	public static function delete_transients() {
-		delete_transient( 'simply_static_' . static::$task_name . '_total_pages' );
+	public static function delete_total_pages() {
+		delete_option( 'simply_static_' . static::$task_name . '_total_pages' );
 	}
 
 	/**
@@ -205,13 +247,27 @@ trait canProcessPages {
 	 * @throws \Exception
 	 */
 	public function get_total_pages_sql() {
-		$query = $this->get_main_query();
+		$query      = $this->get_main_query();
 		$start_time = $this->get_start_time();
 
 		// Caching totals so this is fetched on first run (all pages already fetched).
 		if ( 'update' === $this->get_generate_type() ) {
-			$query->where("( ( last_transferred_at < last_modified_at AND last_transferred_at < ? ) OR last_transferred_at IS NULL )", $start_time );
-			Util::debug_log('Total Pages Query: ' . $query->get_raw_sql("COUNT(*)") );
+			$query->where( "( ( {$this->processing_column} < last_modified_at AND {$this->processing_column} < ? ) OR {$this->processing_column} IS NULL )", $start_time );
+			Util::debug_log( 'Total Pages Query: ' . $query->get_raw_sql( "COUNT(*)" ) );
+		}
+
+		// Modify the query based on post id column.
+		$post_id = get_option( 'simply-static-use-single' );
+
+		if ( ! empty( $post_id ) ) {
+			$query->where( "post_id = ?", $post_id );
+		}
+
+		// Modify the query based on build id column.
+		$build_id = get_option( 'simply-static-use-build' );
+
+		if ( ! empty( $build_id ) ) {
+			$query->where( "build_id = ?", $build_id );
 		}
 
 		return $query->count();
@@ -227,5 +283,14 @@ trait canProcessPages {
 		return Page::query()
 		           ->where( "file_path IS NOT NULL" )
 		           ->where( "file_path != ''" );
+	}
+
+	/**
+	 * Cleanup
+	 *
+	 * @return void
+	 */
+	public function cleanup() {
+		self::delete_total_pages();
 	}
 }

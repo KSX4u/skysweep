@@ -15,7 +15,6 @@ use STImporter\Importer\ST_Importer_File_System;
  * Ai_Builder
  */
 class Ai_Builder_Importer {
-
 	use Instance;
 
 	/**
@@ -60,17 +59,20 @@ class Ai_Builder_Importer {
 
 		add_action( 'astra_sites_batch_process_complete', array( $this, 'clear_related_cache' ) );
 		add_action( 'astra_sites_batch_process_complete', array( $this, 'delete_related_transient' ) );
+		add_action( 'init', array( $this, 'permalink_update_after_import' ) );
 	}
 
 	/**
 	 * Clear Cache.
+	 *
+	 * @return void
 	 *
 	 * @since  1.0.9
 	 */
 	public function clear_related_cache() {
 
 		// Clear 'Astra Addon' cache.
-		if ( is_callable( 'Astra_Minify::refresh_assets' ) ) {
+		if ( class_exists( 'Astra_Minify' ) && is_callable( 'Astra_Minify::refresh_assets' ) ) {
 			\Astra_Minify::refresh_assets();
 		}
 
@@ -98,17 +100,25 @@ class Ai_Builder_Importer {
 	/**
 	 * Delete related transients
 	 *
+	 * @return void
+	 *
 	 * @since 3.1.3
 	 */
 	public function delete_related_transient() {
-		delete_transient( 'astra_sites_batch_process_started' );
-		ST_Importer_File_System::get_instance()->delete_demo_content();
+		delete_option( 'astra_sites_batch_process_started' );
+
+		if ( class_exists( 'STImporter\Importer\ST_Importer_File_System' ) ) {
+			ST_Importer_File_System::get_instance()->delete_demo_content();
+		}
+
 		delete_option( 'ast_ai_import_current_url' );
 		delete_option( 'astra_sites_ai_import_started' );
 	}
 
 	/**
 	 * Include files.
+	 *
+	 * @return void
 	 *
 	 * @since  1.0.0
 	 */
@@ -123,6 +133,8 @@ class Ai_Builder_Importer {
 	/**
 	 * Get the API URL.
 	 *
+	 * @return string
+	 *
 	 * @since  1.0.0
 	 */
 	public static function get_api_domain() {
@@ -132,6 +144,8 @@ class Ai_Builder_Importer {
 	/**
 	 * Setter for $api_url
 	 *
+	 * @return void
+	 *
 	 * @since  1.0.0
 	 */
 	public function set_api_url() {
@@ -140,6 +154,20 @@ class Ai_Builder_Importer {
 
 		$this->search_analytics_url = apply_filters( 'astra_sites_search_api_url', $this->api_domain . 'wp-json/analytics/v2/search/' );
 		$this->import_analytics_url = apply_filters( 'astra_sites_import_analytics_api_url', $this->api_domain . 'wp-json/analytics/v2/import/' );
+	}
+
+	/**
+	 * Flush Rewrite rules
+	 *
+	 * @since  1.0.36
+	 * @return void
+	 */
+	public function permalink_update_after_import() {
+		if ( 'no' === get_option( 'astra-site-permalink-update-status', '' ) ) {
+			// Flush the rewrite rules to apply the changes.
+			flush_rewrite_rules();
+			delete_option( 'astra-site-permalink-update-status' );
+		}
 	}
 }
 

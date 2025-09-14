@@ -127,24 +127,9 @@ class Util {
 		$options = get_option( 'simply-static' );
 
 		if ( isset( $options['encryption_key'] ) ) {
-			$htaccess_file = get_home_path() . '.htaccess';
-
-			if ( file_exists( $htaccess_file ) && ! is_multisite() ) {
-				// Set up log file path.
-				$log_file = untrailingslashit( $simply_static_dir ) . DIRECTORY_SEPARATOR . $options['encryption_key'] . '-debug.txt';
-
-				// Write to .htaccess file.
-				$htaccess_inner_content = "\nrequire all denied\nrequire host localhost\n";
-				$htaccess_file_content  = '<Files "' . $log_file . '">' . $htaccess_inner_content . '</Files>';
-
-				if ( file_exists( $log_file ) ) {
-					insert_with_markers( $htaccess_file, 'Simply Static', $htaccess_file_content );
-				}
-			}
-
-			return $simply_static_dir . $options['encryption_key'] . '-debug.txt';
+			return apply_filters( 'ss_debug_log_file', $simply_static_dir . $options['encryption_key'] . '-debug.txt', $options['encryption_key'] );
 		} else {
-			return $simply_static_dir . 'debug.txt';
+			return apply_filters( 'ss_debug_log_file', $simply_static_dir . 'debug.txt', '' );
 		}
 	}
 
@@ -156,16 +141,39 @@ class Util {
 	 * @return string         String containing the contents of the object
 	 */
 	protected static function get_contents_from_object( $object ) {
+		// Handle common scalar types early and safely
 		if ( is_string( $object ) ) {
-			return $object;
+			// Prevent huge memory usage by truncating very large strings
+			return self::truncate( $object, 5000 );
+		}
+		if ( is_null( $object ) ) {
+			return 'NULL';
+		}
+		if ( is_bool( $object ) ) {
+			return $object ? 'TRUE' : 'FALSE';
+		}
+		if ( is_int( $object ) || is_float( $object ) ) {
+			return (string) $object;
+		}
+		if ( is_resource( $object ) ) {
+			return 'resource(' . get_resource_type( $object ) . ')';
 		}
 
-		ob_start();
-		var_dump( $object );
-		$contents = ob_get_contents();
-		ob_end_clean();
+		// For arrays/objects, avoid var_dump which can explode memory usage.
+		// Prefer JSON with partial output on error; fall back to print_r.
+		$max_length = apply_filters( 'simply_static_debug_max_length', 100000 ); // 100 KB by default
+		$json_opts  = defined( 'JSON_PARTIAL_OUTPUT_ON_ERROR' ) ? JSON_PARTIAL_OUTPUT_ON_ERROR : 0;
+		$encoded    = function_exists( 'wp_json_encode' ) ? wp_json_encode( $object, $json_opts, 5 ) : json_encode( $object, $json_opts, 5 );
 
-		return $contents;
+		if ( $encoded === false || $encoded === null ) {
+			$encoded = print_r( $object, true );
+		}
+
+		if ( strlen( $encoded ) > $max_length ) {
+			$encoded = substr( $encoded, 0, $max_length ) . '... [truncated]';
+		}
+
+		return $encoded;
 	}
 
 	public static function is_valid_scheme( $scheme ) {
@@ -193,6 +201,11 @@ class Util {
 	 * @return string|null                   Absolute URL, or null
 	 */
 	public static function relative_to_absolute_url( $extracted_url, $page_url ) {
+
+		// we can't do anything with null or blank urls
+		if ( $extracted_url === null ) {
+			return null;
+		}
 
 		$extracted_url = trim( $extracted_url );
 
@@ -284,7 +297,7 @@ class Util {
 	public static function create_offline_path( $extracted_path, $page_path, $iterations = 0 ) {
 		// We're done if we get a match between the path of the page and the extracted URL
 		// OR if there are no more slashes to remove
-		if ( strpos( $page_path, '/' ) === false || strpos( $extracted_path, $page_path ) === 0 ) {
+		if ( strpos( $page_path, '/' ) === false || strpos( $extracted_path, trailingslashit( $page_path ) ) === 0 ) {
 			$extracted_path = substr( $extracted_path, strlen( $page_path ) );
 			$iterations     = ( $iterations == 0 ) ? 0 : $iterations - 1;
 			$new_path       = '.' . str_repeat( '/..', $iterations ) . self::add_leading_slash( $extracted_path );
@@ -460,16 +473,16 @@ class Util {
 		}
 
 		$allowed_asset_extensions = apply_filters( 'simply_static_allowed_local_asset_extensions', [
-			'webp',
-			'gif',
-			'jpg',
-			'jpeg',
-			'png',
-			'svg',
-			'json',
-			'js',
-			'css',
-			'xml',
+			// Images
+			'webp', 'gif', 'jpg', 'jpeg', 'png', 'svg', 'ico', 'cur',
+			// Media
+			'mp4', 'webm', 'ogg', 'ogv', 'mp3', 'wav',
+			// Data/Docs
+			'json', 'xml', 'csv', 'pdf', 'txt',
+			// Web assets
+			'js', 'css',
+			// Fonts
+			'woff2', 'woff', 'ttf', 'eot', 'otf'
 		] );
 
 		$path_info = self::url_path_info( $url );
@@ -505,6 +518,9 @@ class Util {
 	 * @param string $path File path to remove leading directory separators from
 	 */
 	public static function remove_leading_directory_separator( $path ) {
+		if ( $path === null ) {
+			return '';
+		}
 		return ltrim( $path, DIRECTORY_SEPARATOR );
 	}
 
@@ -523,6 +539,9 @@ class Util {
 	 * @param string $path URL path to remove leading slash from
 	 */
 	public static function remove_leading_slash( $path ) {
+		if ( $path === null ) {
+			return '';
+		}
 		return ltrim( $path, '/' );
 	}
 
@@ -532,12 +551,20 @@ class Util {
 	 * @param array $messages Array of messages to add the message to
 	 * @param string $task_name Name of the task
 	 * @param string $message Message to display about the status of the job
+	 * @param boolean $unique If unique, the task_name/key will get a prefix if the same exists.
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public static function add_archive_status_message( $messages, $task_name, $message ) {
+	public static function add_archive_status_message( $messages, $task_name, $message, $unique = false ) {
+		if ( ! is_array( $messages ) ) {
+			$messages = array();
+		}
+
 		// if the state exists, set the datetime and message
-		if ( ! array_key_exists( $task_name, $messages ) ) {
+		if ( ! array_key_exists( $task_name, $messages ) || $unique ) {
+			if ( $unique ) {
+				$task_name = $task_name . '_' . uniqid();
+			}
 			$messages[ $task_name ] = array(
 				'message'  => $message,
 				'datetime' => self::formatted_datetime()
@@ -557,10 +584,29 @@ class Util {
 	 * @return string
 	 */
 	public static function abs_path_to_url( $path = '' ) {
+		$normalized_path = wp_normalize_path( $path );
+
+		// Check if the path is within WP_CONTENT_DIR
+		if ( defined( 'WP_CONTENT_DIR' ) && defined( 'WP_CONTENT_URL' ) ) {
+			$normalized_content_dir = wp_normalize_path( untrailingslashit( WP_CONTENT_DIR ) );
+
+			// If the path starts with the content directory, use WP_CONTENT_URL for replacement
+			if ( strpos( $normalized_path, $normalized_content_dir ) === 0 ) {
+				$url = str_replace(
+					$normalized_content_dir,
+					untrailingslashit( WP_CONTENT_URL ),
+					$normalized_path
+				);
+
+				return esc_url_raw( $url );
+			}
+		}
+
+		// Default behavior for paths not in WP_CONTENT_DIR
 		$url = str_replace(
 			wp_normalize_path( untrailingslashit( ABSPATH ) ),
 			site_url(),
-			wp_normalize_path( $path )
+			$normalized_path
 		);
 
 		return esc_url_raw( $url );
@@ -598,5 +644,143 @@ class Util {
 	 */
 	public static function normalize_slashes( string $path ): string {
 		return strpos( $path, '\\' ) !== false ? str_replace( '\\', '/', $path ) : $path;
+	}
+
+	/**
+	 * Build a safe relative path from an absolute path and its base directory.
+	 * Ensures forward slashes and a leading slash for consistent URL building.
+	 *
+	 * @param string $base_dir      The base directory (prefix) of the absolute path.
+	 * @param string $absolute_path The absolute path to the file.
+	 * @return string               The normalized relative path starting with '/'.
+	 */
+	public static function safe_relative_path( string $base_dir, string $absolute_path ): string {
+		$dir_norm = rtrim( $base_dir, DIRECTORY_SEPARATOR );
+		$rel      = substr( $absolute_path, strlen( $dir_norm ) );
+		if ( $rel === false ) {
+			$rel = str_replace( $base_dir, '', $absolute_path );
+		}
+		$rel = str_replace( '\\', '/', $rel );
+		if ( $rel === '' || $rel[0] !== '/' ) {
+			$rel = '/' . ltrim( $rel, '/' );
+		}
+		return $rel;
+	}
+
+	/**
+	 * Join a base URL and a relative path with exactly one slash.
+	 *
+	 * @param string $base_url      Base URL (may end with or without a slash).
+	 * @param string $relative_path Relative path (may start with or without a slash).
+	 * @return string               The joined URL.
+	 */
+	public static function safe_join_url( string $base_url, string $relative_path ): string {
+		return rtrim( $base_url, '/' ) . '/' . ltrim( $relative_path, '/' );
+	}
+
+	/**
+	 * Returns the global $wp_filesystem with credentials set.
+	 * Returns null in case of any errors.
+	 *
+	 * @return \WP_Filesystem_Base|null
+	 */
+	public static function get_file_system() {
+		global $wp_filesystem;
+
+		$success = true;
+
+		// Initialize the file system if it has not been done yet.
+		if ( ! $wp_filesystem ) {
+			require_once ABSPATH . '/wp-admin/includes/file.php';
+
+			$constants = array(
+				'hostname'    => 'FTP_HOST',
+				'username'    => 'FTP_USER',
+				'password'    => 'FTP_PASS',
+				'public_key'  => 'FTP_PUBKEY',
+				'private_key' => 'FTP_PRIKEY',
+			);
+
+			$credentials = array();
+
+			// We provide credentials based on wp-config.php constants.
+			// Reference https://developer.wordpress.org/apis/wp-config-php/#wordpress-upgrade-constants
+			foreach ( $constants as $key => $constant ) {
+				if ( defined( $constant ) ) {
+					$credentials[ $key ] = constant( $constant );
+				}
+			}
+
+			$success = WP_Filesystem( $credentials );
+		}
+
+		if ( ! $success || $wp_filesystem->errors->has_errors() ) {
+			return null;
+		}
+
+		return $wp_filesystem;
+	}
+
+	/**
+	 * Clear all transients used in Simply Static.
+	 *
+	 * @return void
+	 */
+	public static function clear_transients() {
+		// Diagnostics.
+		delete_transient( 'simply_static_checks' );
+		delete_transient( 'simply_static_failed_tests' );
+
+		// Tasks.
+		$tasks = [
+			'fetch_urls',
+			'search',
+			'minify',
+			'optimize_directories',
+			'shortpixel',
+			'shortpixel_download',
+			'aws_empty',
+			'create_zip_archive',
+			'transfer_files_locally',
+			'github_blobs',
+			'github_commit',
+			'bunny_deploy',
+			'tiiny_deploy',
+			'aws_deploy',
+			'sftp_deploy',
+		];
+
+		foreach ( $tasks as $task ) {
+			delete_option( 'simply_static_' . $task . '_total_pages' );
+		}
+	}
+
+	public static function get_temp_dir_url() {
+		$dir = self::get_temp_dir();
+
+		return self::abs_path_to_url( $dir );
+	}
+
+	/*
+	 * Get the absolute path to the temporary file directory.
+	 *
+	 */
+	public static function get_temp_dir() {
+		$options = get_option( 'simply-static' );
+
+		if ( empty( $options['temp_files_dir'] ) ) {
+			$upload_dir = wp_upload_dir();
+			$temp_dir   = $upload_dir['basedir'] . DIRECTORY_SEPARATOR . 'simply-static' . DIRECTORY_SEPARATOR . 'temp-files';
+
+			// Check if directory exists.
+			if ( ! is_dir( $temp_dir ) ) {
+				wp_mkdir_p( $temp_dir );
+			}
+
+		} else {
+			$temp_dir = $options['temp_files_dir'];
+		}
+
+		return trailingslashit( $temp_dir );
 	}
 }

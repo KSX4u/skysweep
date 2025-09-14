@@ -16,14 +16,15 @@ import {
 	setSiteTitle,
 	saveTypography,
 	setSiteLanguage,
+	showErrorToast,
+	generateAnalyticsLead,
 } from '../utils/import-site/import-utils';
 const { migrateSvg, reportError } = aiBuilderVars;
-let sendReportFlag = reportError;
 const successMessageDelay = 8000; // 8 seconds delay for fully assets load.
 import { STORE_KEY } from '../store';
 import ErrorModel from '../components/error-model';
-import { TOTAL_STEPS, useNavigateSteps } from '../router';
-import { SITE_CREATION_STATUS_CODES } from '../helpers';
+import { stepNextButtonClick, TOTAL_STEPS, useNavigateSteps } from '../router';
+import { SITE_CREATION_STATUS_CODES, getLocalStorageItem } from '../helpers';
 
 const RANDOM_FINAL_FINISHING_MESSAGES = [
 	__( 'Double-checking for grammar and spelling errors…', 'ai-builder' ),
@@ -61,22 +62,31 @@ const ImportAiSite = () => {
 			siteLanguage,
 		},
 		aiSiteLogo,
+		aiSiteTitleVisible,
 		aiActiveTypography,
 		aiActivePallette,
+		siteFeatures,
+		siteFeaturesData,
 	} = useSelect( ( select ) => {
 		const {
 			getWebsiteInfo,
 			getAIStepData,
 			getSiteLogo,
+			getSiteTitleVisible,
 			getActiveTypography,
 			getActiveColorPalette,
+			getSiteFeatures,
+			getSiteFeaturesData,
 		} = select( STORE_KEY );
 		return {
 			websiteInfo: getWebsiteInfo(),
 			aiStepData: getAIStepData(),
 			aiSiteLogo: getSiteLogo(),
+			aiSiteTitleVisible: getSiteTitleVisible(),
 			aiActiveTypography: getActiveTypography(),
 			aiActivePallette: getActiveColorPalette(),
+			siteFeatures: getSiteFeatures(),
+			siteFeaturesData: getSiteFeaturesData(),
 		};
 	}, [] );
 
@@ -99,6 +109,7 @@ const ImportAiSite = () => {
 		xmlImportDone,
 		pluginInstallationAttempts,
 		importErrorMessages,
+		templateId,
 	} = useSelect( ( select ) => {
 		const { getImportSiteProgressData } = select( STORE_KEY );
 		return {
@@ -164,29 +175,48 @@ const ImportAiSite = () => {
 		solution = '',
 		stack = ''
 	) => {
+		const error = JSON.stringify( {
+			primaryText: primary,
+			secondaryText: secondary,
+			errorCode: code,
+			errorText: text,
+			solutionText: solution,
+			tryAgain: true,
+			stack,
+			tryAgainCount,
+		} );
+
 		if ( tryAgainCount >= 2 ) {
-			// generateAnalyticsLead( tryAgainCount, false, templateId, builder );
+			generateAnalyticsLead( tryAgainCount, false, {
+				id: templateId,
+				page_builder: stepsData?.pageBuilder,
+				template_type: stepsData?.selectedTemplateIsPremium
+					? 'premium'
+					: 'free',
+				error,
+			} );
 		}
-		if ( ! sendReportFlag ) {
+		if ( ! reportError ) {
 			return;
 		}
 		const reportErr = new FormData();
 		reportErr.append( 'action', 'astra-sites-report_error' );
 		reportErr.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+		reportErr.append( 'type', 'ai-builder' );
+		reportErr.append( 'page_builder', stepsData?.pageBuilder );
 		reportErr.append(
-			'error',
-			JSON.stringify( {
-				primaryText: primary,
-				secondaryText: secondary,
-				errorCode: code,
-				errorText: text,
-				solutionText: solution,
-				tryAgain: true,
-				stack,
-				tryAgainCount,
-			} )
+			'template_type',
+			stepsData?.selectedTemplateIsPremium ? 'premium' : 'free'
 		);
-		reportErr.append( 'id', templateResponse?.id );
+
+		reportErr.append(
+			'local_storage',
+			JSON.stringify(
+				getLocalStorageItem( 'ai-builder-onboarding-details' )
+			)
+		);
+		reportErr.append( 'error', error );
+		reportErr.append( 'id', templateId );
 		reportErr.append( 'plugins', JSON.stringify( requiredPlugins ) );
 		fetch( ajaxurl, {
 			method: 'post',
@@ -200,7 +230,7 @@ const ImportAiSite = () => {
 		);
 		await setSiteLogo( aiSiteLogo );
 		await setColorPalettes( JSON.stringify( aiActivePallette ) );
-		await setSiteTitle( businessName );
+		await setSiteTitle( businessName, aiSiteTitleVisible );
 		await saveTypography( aiActiveTypography );
 		await setSiteLanguage( languageItem?.[ 'wordpress-code' ] ?? 'en_US' );
 	};
@@ -255,6 +285,7 @@ const ImportAiSite = () => {
 		let finalStepStatus = false;
 		let gtReplaceBatch = false;
 		let imagesReplaceBatch = false;
+		let setSiteOptions = false;
 
 		optionsStatus = await importSiteOptions();
 
@@ -275,8 +306,43 @@ const ImportAiSite = () => {
 		}
 
 		if ( finalStepStatus ) {
-			await waitForFullMigration();
+			setSiteOptions = await waitForFullMigration();
 		}
+
+		if ( setSiteOptions ) {
+			await importSuccess();
+
+			generateAnalyticsLead( tryAgainCount, true, {
+				id: templateId,
+				page_builder: stepsData?.pageBuilder,
+				template_type: stepsData?.selectedTemplateIsPremium
+					? 'premium'
+					: 'free',
+			} );
+		}
+	};
+
+	/**
+	 * Import Success.
+	 */
+	const importSuccess = async () => {
+		const data = new FormData();
+		data.append( 'action', 'astra-sites-import_success' );
+		data.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+
+		const status = await fetch( ajaxurl, {
+			method: 'post',
+			body: data,
+		} )
+			.then( ( response ) => response.json() )
+			.then( async ( response ) => {
+				if ( response.success ) {
+					return true;
+				}
+				return false;
+			} );
+
+		return status;
 	};
 
 	/**
@@ -400,6 +466,7 @@ const ImportAiSite = () => {
 			'_ajax_nonce',
 			aiBuilderVars._ajax_nonce
 		);
+		activatePluginOptions.append( 'slug', plugin.slug );
 		fetch( ajaxurl, {
 			method: 'post',
 			body: activatePluginOptions,
@@ -447,12 +514,13 @@ const ImportAiSite = () => {
 						error,
 						'',
 						sprintf(
-							// translators: Support article URL.
+							// translators: %1$s is the opening <a> tag with the URL, %2$s is the closing </a> tag.
 							__(
-								'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
+								'%1$sRead article%2$s to resolve the issue and continue importing the template.',
 								'ai-builder'
 							),
-							'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
+							'<a href="https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging" target="_blank">',
+							'</a>'
 						),
 						text
 					);
@@ -481,12 +549,13 @@ const ImportAiSite = () => {
 					error?.data?.message,
 					'',
 					sprintf(
-						// translators: Support article URL.
+						// translators: %1$s is the opening <a> tag, %2$s is the closing </a> tag.
 						__(
-							'<a href="%1$s">Read article</a> to resolve the issue and continue importing template.',
+							'%1$sRead article%2$s to resolve the issue and continue importing the template.',
 							'ai-builder'
 						),
-						'https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging'
+						'<a href="https://wpastra.com/docs/enable-debugging-in-wordpress/#how-to-use-debugging" target="_blank">',
+						'</a>'
 					),
 					error
 				);
@@ -960,7 +1029,10 @@ const ImportAiSite = () => {
 				importStatus: __( 'Resetting posts done.', 'ai-builder' ),
 			} );
 		} else {
-			report( __( 'Resetting posts failed.', 'ai-builder' ), '', err );
+			showErrorToast(
+				__( 'Resetting posts failed.', 'ai-builder' ),
+				err
+			);
 		}
 		return status;
 	};
@@ -1058,9 +1130,8 @@ const ImportAiSite = () => {
 					);
 				}
 			} catch ( error ) {
-				report(
+				showErrorToast(
 					__( 'Downloading images failed.', 'ai-builder' ),
-					'',
 					error
 				);
 			}
@@ -1097,6 +1168,12 @@ const ImportAiSite = () => {
 		} );
 		if ( wxr.success ) {
 			importXML( wxr.data );
+		} else {
+			report(
+				'Importing Site Content Failed.',
+				'',
+				JSON.stringify( wxr.data ?? wxr, null, 4 )
+			);
 		}
 
 		return true;
@@ -1109,7 +1186,11 @@ const ImportAiSite = () => {
 		const spectraSettings =
 			templateResponse[ 'astra-site-spectra-options' ] || '';
 
-		if ( '' === spectraSettings || 'null' === spectraSettings ) {
+		if (
+			'' === spectraSettings ||
+			'null' === spectraSettings ||
+			spectraSettings?.length === 0
+		) {
 			return true;
 		}
 
@@ -1178,14 +1259,27 @@ const ImportAiSite = () => {
 		const sourceCurrency =
 			templateResponse?.[ 'astra-site-surecart-settings' ]?.currency ||
 			'usd';
-		if ( '' === sourceID || 'null' === sourceID ) {
-			return true;
-		}
+
 		const surecart = new FormData();
 		surecart.append( 'action', 'astra-sites-import_surecart_settings' );
+		surecart.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
+
+		if ( '' === sourceID || 'null' === sourceID ) {
+			const enabledFeatures = siteFeatures
+				.filter( ( feature ) => feature?.enabled )
+				.map( ( feature ) => feature?.id );
+			if (
+				enabledFeatures?.includes( 'ecommerce' ) &&
+				siteFeaturesData?.ecommerce_type === 'surecart'
+			) {
+				surecart.append( 'create_account', true );
+			} else {
+				return true;
+			}
+		}
+
 		surecart.append( 'source_id', sourceID );
 		surecart.append( 'source_currency', sourceCurrency );
-		surecart.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 
 		const status = await fetch( ajaxurl, {
 			method: 'post',
@@ -1434,7 +1528,7 @@ const ImportAiSite = () => {
 		} );
 
 		const finalSteps = new FormData();
-		finalSteps.append( 'action', 'astra-sites-gutenberg_batch' );
+		finalSteps.append( 'action', 'astra-sites-page_builder_batch' );
 		finalSteps.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 
 		const status = await fetch( ajaxurl, {
@@ -1464,7 +1558,7 @@ const ImportAiSite = () => {
 					throw data.data;
 				} catch ( error ) {
 					report(
-						__( 'Gutenberg batch failed.', 'ai-builder' ),
+						__( 'Batch process failed.', 'ai-builder' ),
 						'',
 						error,
 						'',
@@ -1486,7 +1580,7 @@ const ImportAiSite = () => {
 			} )
 			.catch( ( error ) => {
 				report(
-					__( 'Gutenberg Batch Failed.', 'ai-builder' ),
+					__( 'Batch process failed.', 'ai-builder' ),
 					'',
 					error
 				);
@@ -1660,6 +1754,12 @@ const ImportAiSite = () => {
 					importPercent: 100,
 					importEnd: true,
 				} );
+
+				stepNextButtonClick( {
+					stepNumber: 8,
+					slug: 'building-website',
+				} );
+
 				setShowProgressBar( false );
 				return true;
 			} else if ( response?.data?.data === 'no' ) {
@@ -1730,6 +1830,7 @@ const ImportAiSite = () => {
 		content.append( 'action', 'astra-sites-set_start_flag' );
 		content.append( '_ajax_nonce', aiBuilderVars._ajax_nonce );
 		content.append( 'uuid', websiteInfo.uuid );
+		content.append( 'template_type', 'ai' );
 
 		await fetch( ajaxurl, {
 			method: 'post',
@@ -1786,7 +1887,6 @@ const ImportAiSite = () => {
 				themeStatus: true,
 			} );
 		}
-		sendReportFlag = false;
 	};
 
 	const tryAainCallback = () => {
@@ -1957,7 +2057,6 @@ const ImportAiSite = () => {
 	 */
 	useEffect( () => {
 		if ( requiredPluginsDone && themeStatus ) {
-			sendReportFlag = reportError;
 			importPart1();
 		}
 	}, [ requiredPluginsDone, themeStatus ] );
@@ -2020,11 +2119,15 @@ const ImportAiSite = () => {
 	return (
 		<>
 			<div className="flex flex-1 flex-col items-center justify-center w-full gap-y-4 pb-10">
-				<div className="flex items-center justify-center gap-x-6">
+				<div className="flex flex-col sm:flex-row items-center justify-center gap-6">
 					{ showProgressBar && ! importError && (
 						<CircularProgressBar
-							colorCircle="#3d45921a"
-							colorSlice={ importError ? '#EF4444' : '#3D4592' }
+							colorCircle="rgba(var(--zip-blue-crayola) / var(--zip-circle-bg-opacity, 0.102))"
+							colorSlice={
+								importError
+									? 'rgb(var(--zip-alert-error))'
+									: 'rgb(var(--accent-st))'
+							}
 							percent={ importPercent }
 							round
 							speed={
@@ -2045,7 +2148,7 @@ const ImportAiSite = () => {
 					) }
 					<div className="flex flex-col">
 						{ ! importEnd && ! importError && (
-							<h4 className="text-xl">
+							<h4 className="text-xl sm:text-left text-center">
 								{ __(
 									'We are building your website…',
 									'ai-builder'
@@ -2061,7 +2164,7 @@ const ImportAiSite = () => {
 				</div>
 				{ ! importError && (
 					<>
-						<div className="relative flex items-center justify-center px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
+						<div className="relative flex items-center justify-center px-0 sm:px-10 py-6 h-120 w-120 bg-loading-website-grid-texture">
 							<img
 								className="w-[30rem] h-[20.875rem]"
 								src={ migrateSvg }

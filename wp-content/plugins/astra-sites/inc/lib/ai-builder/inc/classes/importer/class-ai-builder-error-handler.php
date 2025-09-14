@@ -8,8 +8,10 @@
 
 namespace AiBuilder\Inc\Classes\Importer;
 
-use AiBuilder\Inc\Traits\Instance;
 use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
+use AiBuilder\Inc\Traits\Instance;
+use Exception;
+use Throwable;
 
 define( 'ST_ERROR_FATALS', E_ERROR | E_PARSE | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR );
 
@@ -17,7 +19,6 @@ define( 'ST_ERROR_FATALS', E_ERROR | E_PARSE | E_COMPILE_ERROR | E_USER_ERROR | 
  * Ai_Builder_Error_Handler
  */
 class Ai_Builder_Error_Handler {
-
 	use Instance;
 
 	/**
@@ -46,6 +47,8 @@ class Ai_Builder_Error_Handler {
 
 	/**
 	 * Start the error handling.
+	 *
+	 * @return void
 	 */
 	public function start_error_handler() {
 		if ( ! interface_exists( 'Throwable' ) ) {
@@ -59,6 +62,8 @@ class Ai_Builder_Error_Handler {
 
 	/**
 	 * Stop and restore the error handlers.
+	 *
+	 * @return void
 	 */
 	public function stop_error_handler() {
 		// Restore the error handlers.
@@ -74,6 +79,8 @@ class Ai_Builder_Error_Handler {
 	 *
 	 * @throws Exception Exception that is catched.
 	 * @param Throwable|Exception $e The error or exception.
+	 *
+	 * @return void
 	 */
 	public function exception_handler( $e ) {
 		if ( is_a( $e, 'Exception' ) ) {
@@ -81,14 +88,13 @@ class Ai_Builder_Error_Handler {
 		} else {
 			$error = 'Uncaught Error';
 		}
-
 		Ai_Builder_Importer_Log::add( 'There was an error on website: ' . $error );
 		Ai_Builder_Importer_Log::add( $e );
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'There was an error on your website.', 'ai-builder', 'astra-sites' ),
+					'message' => __( 'There was an error on your website.', 'astra-sites' ),
 					'stack'   => array(
 						'error-message' => sprintf(
 							'%s: %s',
@@ -108,6 +114,8 @@ class Ai_Builder_Error_Handler {
 
 	/**
 	 * Displays fatal error output for sites running PHP < 7.
+	 *
+	 * @return void
 	 */
 	public function shutdown_handler() {
 		$e = error_get_last();
@@ -123,12 +131,12 @@ class Ai_Builder_Error_Handler {
 		}
 
 		Ai_Builder_Importer_Log::add( 'There was an error on website: ' . $error );
-		Ai_Builder_Importer_Log::add( $e );
+		Ai_Builder_Importer_Log::add( $e['message'] );
 
 		if ( wp_doing_ajax() ) {
 			wp_send_json_error(
 				array(
-					'message' => __( 'There was an error your website.', 'ai-builder', 'astra-sites' ),
+					'message' => __( 'There was an error your website.', 'astra-sites' ),
 					'stack'   => array(
 						'error-message' => $error,
 						'error'         => $e,
@@ -140,6 +148,6 @@ class Ai_Builder_Error_Handler {
 }
 
 /**
-* Kicking this off by calling 'get_instance()' method
-*/
+ * Kicking this off by calling 'get_instance()' method
+ */
 Ai_Builder_Error_Handler::Instance();

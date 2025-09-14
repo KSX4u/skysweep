@@ -1,9 +1,9 @@
 import { useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { ArrowRightIcon, ArrowLongLeftIcon } from '@heroicons/react/24/outline';
-import { useDispatch } from '@wordpress/data';
+// import { useDispatch } from '@wordpress/data';
 import Button from '../components/button';
-import { STORE_KEY } from '../store';
+// import { STORE_KEY } from '../store';
 import { Graphics } from '../ui/graphics';
 import { useNavigateSteps } from '../router';
 import Header from '../components/header';
@@ -11,36 +11,35 @@ import Header from '../components/header';
 const GetStarted = () => {
 	const { nextStep } = useNavigateSteps();
 
-	const { setLimitExceedModal } = useDispatch( STORE_KEY );
+	// const { setLimitExceedModal } = useDispatch( STORE_KEY );
 
-	const authenticated = aiBuilderVars?.zip_token_exists;
-	const zipPlans = aiBuilderVars?.zip_plans;
-	const sitesRemaining = zipPlans?.plan_data?.remaining;
-	const aiSitesRemainingCount = sitesRemaining?.ai_sites_count;
-	const allSitesRemainingCount = sitesRemaining?.all_sites_count;
+	// const authenticated = aiBuilderVars?.zip_token_exists;
+	// const zipPlans = aiBuilderVars?.zip_plans;
+	// const sitesRemaining = zipPlans?.plan_data?.remaining;
+	// const aiSitesRemainingCount = sitesRemaining?.ai_sites_count;
 
 	useEffect( () => {
-		const urlParams = new URLSearchParams( window.location.search );
+		nextStep();
 
-		const token = urlParams.get( 'token' );
-		if ( token || authenticated ) {
-			if (
-				( typeof aiSitesRemainingCount === 'number' &&
-					aiSitesRemainingCount <= 0 ) ||
-				( typeof allSitesRemainingCount === 'number' &&
-					allSitesRemainingCount <= 0 )
-			) {
-				setLimitExceedModal( {
-					open: true,
-				} );
-			} else {
-				nextStep();
-			}
-		}
+		// const urlParams = new URLSearchParams( window.location.search );
+
+		// const token = urlParams.get( 'token' );
+		// if ( token || authenticated ) {
+		// 	if (
+		// 		typeof aiSitesRemainingCount === 'number' &&
+		// 		aiSitesRemainingCount <= 0
+		// 	) {
+		// 		setLimitExceedModal( {
+		// 			open: true,
+		// 		} );
+		// 	} else {
+		// 		nextStep();
+		// 	}
+		// }
 	}, [] );
 
 	return (
-		<div className="flex-1 w-full bg-st-background-secondary">
+		<div className="flex-1 w-full bg-container-background">
 			<Header />
 			<div className="flex w-full mt-7 md:mt-14 lg:mt-28">
 				<div className="gap-10 lg:gap-16 flex-wrap lg:flex-nowrap h-full flex items-center justify-center w-full px-8 lg:px-10">
@@ -93,19 +92,7 @@ const GetStarted = () => {
 								variant="blank"
 								hasSuffixIcon
 								onClick={ () => {
-									const url =
-										wpApiSettings?.zipwp_auth?.screen_url +
-										'?type=token&redirect_url=' +
-										wpApiSettings?.zipwp_auth
-											?.redirect_url +
-										'&ask=/register' +
-										( wpApiSettings?.zipwp_auth?.partner_id
-											? '&aff=' +
-											  wpApiSettings?.zipwp_auth
-													?.partner_id
-											: '' );
-
-									window.location.href = url;
+									nextStep();
 								} }
 							>
 								<span className="mr-2">

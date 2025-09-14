@@ -4,7 +4,11 @@ import {
 	useLayoutEffect,
 	useRef,
 } from '@wordpress/element';
-import { ArrowRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline';
+import {
+	ArrowRightIcon,
+	ChevronLeftIcon,
+	ExclamationCircleIcon,
+} from '@heroicons/react/24/outline';
 import { useSelect, useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
@@ -27,6 +31,10 @@ import { getDataUri } from '../utils/functions';
 import { motion, useAnimation } from 'framer-motion';
 import { useNavigateSteps } from '../router';
 import CustomColorPalette from '../components/custom-color-palette';
+import withBuildSiteController from '../hoc/withBuildSiteController';
+import LoadingSpinner from '../components/loading-spinner';
+import Tooltip from '../components/tooltip';
+import { PremiumCrownCircleIcon } from '../ui/icons';
 
 const { logoUrlDark } = aiBuilderVars;
 
@@ -48,7 +56,9 @@ const sidebarVariants = {
 	expanded: { x: 0 },
 };
 
-const SitePreview = () => {
+const skipFeatures = !! aiBuilderVars?.skipFeatures;
+
+const SitePreview = ( { handleClickStartBuilding, isInProgress } ) => {
 	const { nextStep } = useNavigateSteps();
 
 	const [ loadingIframe, setLoadingIframe ] = useState( true );
@@ -56,7 +66,8 @@ const SitePreview = () => {
 		RESPONSIVE_MODES.desktop
 	);
 	const [ collapsed, setCollapsed ] = useState( window.innerWidth < 1024 );
-	const { setWebsiteSelectedTemplateAIStep } = useDispatch( STORE_KEY );
+	const { setWebsiteSelectedTemplateAIStep, setSelectedTemplateIsPremium } =
+		useDispatch( STORE_KEY );
 	const previewAnimationControl = useAnimation();
 
 	const previewContainer = useRef( null );
@@ -70,6 +81,7 @@ const SitePreview = () => {
 			businessContact,
 		},
 		aiSiteLogo,
+		aiSiteTitleVisible,
 		aiActiveTypography,
 		aiActivePallette,
 	} = useSelect( ( select ) => {
@@ -77,6 +89,7 @@ const SitePreview = () => {
 			getWebsiteInfo,
 			getAIStepData,
 			getSiteLogo,
+			getSiteTitleVisible,
 			getActiveTypography,
 			getActiveColorPalette,
 		} = select( STORE_KEY );
@@ -85,6 +98,7 @@ const SitePreview = () => {
 			websiteInfo: getWebsiteInfo(),
 			stepData: getAIStepData(),
 			aiSiteLogo: getSiteLogo(),
+			aiSiteTitleVisible: getSiteTitleVisible(),
 			aiActiveTypography: getActiveTypography(),
 			aiActivePallette: getActiveColorPalette(),
 		};
@@ -96,6 +110,11 @@ const SitePreview = () => {
 	const sendPostMessage = ( data ) => {
 		dispatchPostMessage( data, 'astra-starter-templates-preview' );
 	};
+
+	const isTemplateRestricted =
+		selectedTemplateItem?.is_premium &&
+		( ! aiBuilderVars?.zip_plans?.active_plan ||
+			aiBuilderVars?.zip_plans?.active_plan?.slug === 'free' );
 
 	const updateScaling = () => {
 		const container = previewContainer.current;
@@ -141,6 +160,10 @@ const SitePreview = () => {
 				sendPostMessage( {
 					param: 'siteLogo',
 					data: mediaData,
+				} );
+				sendPostMessage( {
+					param: 'siteTitle',
+					data: aiSiteTitleVisible,
 				} );
 			}, 100 );
 		}
@@ -267,38 +290,77 @@ const SitePreview = () => {
 		} );
 	};
 
-	const renderBrowserFrame = () => (
-		<div
-			className={ classNames(
-				'flex items-center justify-start py-3 px-4 bg-white shadow-sm rounded-t-lg mx-auto h-[44px] z-[1] relative',
-				responsiveMode?.name === 'desktop' && 'w-full mx-0',
-				responsiveMode?.name === 'tablet' && 'w-[800px]',
-				responsiveMode?.name === 'mobile' && 'w-[400px]'
-			) }
-		>
-			<div className="flex gap-2 py-[3px] w-20">
-				<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
-				<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
-				<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
-			</div>
-			<p className="!m-0 w-full truncate !text-sm !text-zip-body-text text-center">
-				{ __(
-					'This is just a sneak peek. The actual website and its content will be created in the next step.',
-					'ai-builder'
+	const renderBrowserFrame = () => {
+		const isDesktopOrTablet =
+			responsiveMode?.name === 'desktop' ||
+			responsiveMode?.name === 'tablet';
+		const isMobile = responsiveMode?.name === 'mobile';
+
+		const message = __(
+			'This is just a sneak peek. The actual website and its content will be created in the next step.',
+			'ai-builder'
+		);
+
+		const TooltipContent = () => <p>{ message }</p>;
+
+		return (
+			<div
+				className={ classNames(
+					'flex items-center py-3 px-4 bg-white shadow-sm rounded-t-lg mx-auto h-[44px] z-[1] group',
+					responsiveMode?.name === 'desktop' &&
+						'w-full mx-0 relative justify-between md:justify-start',
+					responsiveMode?.name === 'tablet' &&
+						'w-[800px] justify-between md:justify-start',
+					responsiveMode?.name === 'mobile' &&
+						'w-[400px] justify-between'
 				) }
-			</p>
-		</div>
-	);
+			>
+				<div className="flex gap-2 py-[3px] w-20">
+					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
+					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
+					<div className="w-[14px] h-[14px] border border-solid border-border-primary rounded-full" />
+				</div>
+				{ isDesktopOrTablet && (
+					<div className="flex-grow flex justify-end md:justify-center items-center relative">
+						<p className="absolute md:static top-1 sm:top-2 right-10 sm:right md:right-80 lg:right-24 xl:right-52 px-2 py-1 bg-white rounded-md max-md:shadow-lg text-center !text-sm !text-zip-body-text !m-0 max-md:hidden">
+							{ message }
+						</p>
+						<Tooltip
+							content={ <TooltipContent /> }
+							placement="right"
+							offset={ [ 10, 0 ] }
+							className="zw-tooltip__material"
+							arrow={ false }
+						>
+							<ExclamationCircleIcon className="w-[18px] text-gray-600 cursor-pointer block md:hidden" />
+						</Tooltip>
+					</div>
+				) }
+				{ isMobile && (
+					<>
+						<Tooltip
+							content={ <TooltipContent /> }
+							placement="right"
+							offset={ [ 10, 0 ] }
+							className="zw-tooltip__material"
+						>
+							<ExclamationCircleIcon className="w-[18px] text-gray-600 cursor-pointer block" />
+						</Tooltip>
+					</>
+				) }
+			</div>
+		);
+	};
 
 	return (
 		<motion.div
 			id="spectra-onboarding-ai"
 			key="spectra-onboarding-ai"
 			className="relative font-sans flex flex-wrap h-screen w-screen"
-			initial={ { opacity: 0 } }
-			animate={ { opacity: 1 } }
-			exit={ { opacity: 0 } }
-			transition={ { type: 'spring' } }
+			initial={ { opacity: 0, scale: 0.95 } }
+			animate={ { opacity: 1, scale: 1, transition: { duration: 0.2 } } }
+			exit={ { opacity: 1 } }
+			transition={ { type: 'tween' } }
 		>
 			<motion.div
 				className={ classNames(
@@ -323,12 +385,15 @@ const SitePreview = () => {
 						/>
 						{ /* Exit button */ }
 						<div className="absolute top-3 right-0">
-							<AiBuilderExitButton />
+							<AiBuilderExitButton exitButtonClassName="text-icon-tertiary" />
 						</div>
 					</div>
 					<nav className="flex flex-1 flex-col gap-y-1">
 						<div className="w-full mt-2">
-							<div className="space-y-5">
+							<div
+								className="space-y-5"
+								data-disabled={ isInProgress }
+							>
 								<div>
 									<SiteLogo />
 								</div>
@@ -345,22 +410,75 @@ const SitePreview = () => {
 								) }
 							</div>
 						</div>
+						{ isTemplateRestricted &&
+						aiBuilderVars?.show_premium_badge ? (
+							<div className="mt-5">
+								<div className="flex flex-col p-4 rounded-md border border-solid border-alert-info-text gap-4 bg-transparent text-white">
+									<div className="flex gap-4 flex-col">
+										<div className="flex gap-3 items-center leading-[1em]">
+											<span>
+												<PremiumCrownCircleIcon
+													className={ 'w-5 h-5' }
+												/>
+											</span>
+											<h4 className="text-base font-semibold leading-[1em] tracking-normal text-left text-white">
+												{ __(
+													'Premium Design',
+													'ai-builder'
+												) }
+											</h4>
+										</div>
+										<p className="text-brand-secondary-200 text-white text-sm">
+											{ __(
+												"You've chosen a Premium Design. Access this design and all others with our paid plans starting at just $79.",
+												'ai-builder'
+											) }
+										</p>
+									</div>
+								</div>
+							</div>
+						) : (
+							<></>
+						) }
 						<div className="mt-8 mb-5 space-y-5">
 							<Button
 								className="h-10 w-full font-semibold text-sm leading-5"
-								onClick={ nextStep }
+								onClick={
+									skipFeatures
+										? handleClickStartBuilding( true )
+										: nextStep
+								}
 								variant="primary"
-								hasSuffixIcon
+								hasSuffixIcon={ ! isInProgress }
 							>
-								<span>{ __( 'Continue', 'ai-builder' ) }</span>
-								<ArrowRightIcon className="w-5 h-5" />
+								{ isInProgress ? (
+									<LoadingSpinner className="w-5 h-5" />
+								) : (
+									<>
+										<span>
+											{ skipFeatures ? (
+												<span>
+													{ __(
+														'Start Building',
+														'ai-builder'
+													) }
+												</span>
+											) : (
+												__( 'Continue', 'ai-builder' )
+											) }
+										</span>
+										<ArrowRightIcon className="w-5 h-5" />
+									</>
+								) }
 							</Button>
 							<Button
 								className="mx-auto text-white h-10 w-full font-semibold text-sm leading-5 bg-zip-dark-theme-content-background"
 								variant="blank"
 								onClick={ () => {
 									setWebsiteSelectedTemplateAIStep( '' );
+									setSelectedTemplateIsPremium( '' );
 								} }
+								disabled={ isInProgress }
 							>
 								<span>
 									{ __(
@@ -372,7 +490,10 @@ const SitePreview = () => {
 						</div>
 
 						{ /* Responsive preview buttons */ }
-						<div className="mt-auto mb-6 flex items-center justify-between gap-3">
+						<div
+							className="mt-auto mb-6 flex items-center justify-between gap-3"
+							data-disabled={ isInProgress }
+						>
 							<span className="text-zip-dark-theme-body text-sm font-semibold">
 								{ __( 'Responsive Preview', 'ai-builder' ) }
 							</span>
@@ -420,19 +541,26 @@ const SitePreview = () => {
 
 							{ selectedTemplateItem?.domain && (
 								<motion.div
-									className="w-full h-full p-8"
+									className={ classNames(
+										'w-full h-full p-8',
+										responsiveMode?.name !== 'desktop' &&
+											'relative'
+									) }
 									animate={ previewAnimationControl }
 								>
 									<div
 										ref={ previewContainer }
 										className={ classNames(
-											'h-full mx-auto relative overflow-hidden shadow-template-preview',
+											'h-full mx-auto shadow-template-preview',
 											responsiveMode?.name ===
 												'desktop' && 'w-full mx-0',
 											responsiveMode?.name === 'tablet' &&
 												'w-[800px]',
 											responsiveMode?.name === 'mobile' &&
-												'w-[400px]'
+												'w-[400px]',
+											responsiveMode?.name ===
+												'desktop' &&
+												'overflow-hidden relative'
 										) }
 									>
 										{ renderBrowserFrame() }
@@ -485,4 +613,4 @@ const SitePreview = () => {
 	);
 };
 
-export default SitePreview;
+export default withBuildSiteController( SitePreview );

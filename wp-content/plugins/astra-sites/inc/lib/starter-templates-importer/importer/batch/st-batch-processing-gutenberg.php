@@ -28,7 +28,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 		 * @access private
 		 * @var object Class object.
 		 */
-		private static $instance;
+		private static $instance = null;
 
 		/**
 		 * Initiator
@@ -38,7 +38,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 		 */
 		public static function get_instance() {
 
-			if ( ! isset( self::$instance ) ) {
+			if ( null === self::$instance ) {
 				self::$instance = new self();
 			}
 			return self::$instance;
@@ -54,11 +54,11 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 		/**
 		 * Allowed tags for the batch update process.
 		 *
-		 * @param  array        $allowedposttags   Array of default allowable HTML tags.
-		 * @param  string|array $context    The context for which to retrieve tags. Allowed values are 'post',
-		 *                                  'strip', 'data', 'entities', or the name of a field filter such as
-		 *                                  'pre_user_description'.
-		 * @return array Array of allowed HTML tags and their allowed attributes.
+		 * @param  array<string, array<string, bool>> $allowedposttags   Array of default allowable HTML tags.
+		 * @param  string|array<int, string>          $context    The context for which to retrieve tags. Allowed values are 'post',
+		 *                                           'strip', 'data', 'entities', or the name of a field filter such as
+		 *                                           'pre_user_description'.
+		 * @return array<string, array<string, bool>> Array of allowed HTML tags and their allowed attributes.
 		 */
 		public function allowed_tags_and_attributes( $allowedposttags, $context ) {
 
@@ -95,17 +95,17 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				\WP_CLI::line( 'Processing "Gutenberg" Batch Import' );
 			}
 
-			$post_types = apply_filters( 'astra_sites_gutenberg_batch_process_post_types', array( 'page', 'post', 'wp_block', 'wp_template', 'wp_navigation', 'wp_template_part', 'wp_global_styles', 'sc_form' ) );
+			$post_types = apply_filters( 'astra_sites_gutenberg_batch_process_post_types', array( 'page', 'post', 'wp_block', 'wp_template', 'wp_navigation', 'wp_template_part', 'wp_global_styles', 'sc_form', 'spectra-popup' ) );
 			if ( defined( 'WP_CLI' ) ) {
 				\WP_CLI::line( 'For post types: ' . implode( ', ', $post_types ) );
 			}
 
 			$post_ids = St_Batch_Processing::get_pages( $post_types );
 
-			if ( empty( $post_ids ) && ! is_array( $post_ids ) ) {
+			if ( ! is_array( $post_ids ) ) {
 				return array(
 					'success' => false,
-					'msg'     => __( 'Post ids are empty', 'st-importer', 'astra-sites' ),
+					'msg'     => __( 'Post ids are empty', 'astra-sites' ),
 				);
 			}
 
@@ -115,14 +115,14 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 
 			return array(
 				'success' => true,
-				'msg'     => __( 'Gutenberg batch completed.', 'st-importer', 'astra-sites' ),
+				'msg'     => __( 'Gutenberg batch completed.', 'astra-sites' ),
 			);
 		}
 
 		/**
 		 * Update post meta.
 		 *
-		 * @param  integer $post_id Post ID.
+		 * @param int $post_id Post ID.
 		 * @return void
 		 */
 		public function import_single_post( $post_id = 0 ) {
@@ -138,7 +138,10 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				return;
 			}
 
-			$is_elementor_page      = get_post_meta( $post_id, '_elementor_version', true );
+			$required_plugins = (array) astra_get_site_data( 'required-plugins' );
+			$plugins_slug     = array_column( $required_plugins, 'slug' );
+
+			$is_elementor_page      = in_array( 'elementor', $plugins_slug, true ) && get_post_meta( $post_id, '_elementor_version', true );
 			$is_beaver_builder_page = get_post_meta( $post_id, '_fl_builder_enabled', true );
 			$is_brizy_page          = get_post_meta( $post_id, 'brizy_post_uid', true );
 
@@ -151,6 +154,7 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 
 			// Post content.
 			$content = get_post_field( 'post_content', $post_id );
+
 			// Empty mapping? Then return.
 			if ( ! empty( $ids_mapping ) ) {
 				// Replace ID's.
@@ -188,6 +192,18 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 				}
 			}
 
+			// Replace SureForm ID's.
+			$content = $this->replace_sureforms_ids( $content );
+			$content = $this->replace_surecart_forms_ids( $content );
+
+			wp_update_post(
+				array(
+					'ID'           => $post_id,
+					'post_content' => $content,
+					'post_excerpt' => '',
+				)
+			);
+
 			// # Tweak
 			// Gutenberg break block markup from render. Because the '&' is updated in database with '&amp;' and it
 			// expects as 'u0026amp;'. So, Converted '&amp;' with 'u0026amp;'.
@@ -206,12 +222,57 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 		}
 
 		/**
+		 * Replace SureCart Forms IDs in content.
+		 *
+		 * @since 1.1.9
+		 *
+		 * @param string $content Post content.
+		 * @return string
+		 */
+		public function replace_surecart_forms_ids( $content ) {
+			$surecart_id_map = get_option( 'astra_sites_surecart_forms_id_map', array() );
+
+			if ( empty( $surecart_id_map ) ) {
+				return $content;
+			}
+
+			foreach ( $surecart_id_map as $old_id => $new_id ) {
+				$content = str_replace( '[sc_form id="' . $old_id . '"]', '[sc_form id="' . $new_id . '"]', $content );
+			}
+
+			return $content;
+		}
+
+		/**
+		 * Replace SureForm IDs in content.
+		 *
+		 * @since 1.1.9
+		 *
+		 * @param string $content Post content.
+		 * @return string
+		 */
+		public function replace_sureforms_ids( $content ) {
+
+			$sureform_id_map = get_option( 'astra_sites_sureforms_id_map', array() );
+
+			if ( empty( $sureform_id_map ) ) {
+				return $content;
+			}
+
+			foreach ( $sureform_id_map as $old_id => $new_id ) {
+				$content = str_replace( '[sureforms id="' . $old_id . '"]', '[sureforms id="' . $new_id . '"]', $content );
+			}
+
+			return $content;
+		}
+
+		/**
 		 * Download and Replace hotlink images
 		 *
 		 * @since 2.0.0
 		 *
 		 * @param  string $content Mixed post content.
-		 * @return array           Hotlink image array.
+		 * @return string           Hotlink image array.
 		 */
 		public function get_content( $content = '' ) {
 
@@ -231,17 +292,8 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 
 			// Extract normal and image links.
 			foreach ( $all_links as $key => $link ) {
-				if ( astra_sites_is_valid_image( $link ) ) {
-
-					// Get all image links.
-					// Avoid *-150x, *-300x and *-1024x images.
-					if (
-						false === strpos( $link, '-150x' ) &&
-						false === strpos( $link, '-300x' ) &&
-						false === strpos( $link, '-1024x' )
-					) {
-						$image_links[] = $link;
-					}
+				if ( function_exists( 'astra_sites_is_valid_image' ) && astra_sites_is_valid_image( $link ) ) {
+					$image_links[] = $link;
 				} else {
 
 					// Collect other links.
@@ -250,22 +302,25 @@ if ( ! class_exists( 'ST_Batch_Processing_Gutenberg' ) ) :
 			}
 
 			// Step 1: Download images.
-			if ( ! empty( $image_links ) ) {
+			if ( is_array( $image_links ) && ! empty( $image_links ) ) {
 				foreach ( $image_links as $key => $image_url ) {
 					// Download remote image.
-					$image            = array(
+					$image = array(
 						'url' => $image_url,
 						'id'  => 0,
 					);
-					$downloaded_image = ST_Image_Importer::get_instance()->import( $image );
 
-					// Old and New image mapping links.
-					$link_mapping[ $image_url ] = $downloaded_image['url'];
+					if ( method_exists( ST_Image_Importer::get_instance(), 'import' ) ) {
+						$downloaded_image = ST_Image_Importer::get_instance()->import( $image );
+
+						// Old and New image mapping links.
+						$link_mapping[ $image_url ] = $downloaded_image['url'];
+					}
 				}
 			}
 
 			// Step 2: Replace the demo site URL with live site URL.
-			if ( ! empty( $other_links ) ) {
+			if ( is_array( $other_links ) ) {
 				$demo_data = ST_Importer_File_System::get_instance()->get_demo_content();
 				if ( isset( $demo_data['astra-site-url'] ) ) {
 					$site_url = get_site_url();

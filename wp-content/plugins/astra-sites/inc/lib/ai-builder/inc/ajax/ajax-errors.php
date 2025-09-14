@@ -18,14 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class AjaxErrors
  */
 class AjaxErrors {
-
 	use Instance;
 
 	/**
 	 * Errors
 	 *
 	 * @access private
-	 * @var array Errors strings.
+	 * @var array<string, string> Errors strings.
 	 * @since 1.0.0
 	 */
 	private static $errors = array();
@@ -38,9 +37,9 @@ class AjaxErrors {
 	public function __construct() {
 
 		self::$errors = array(
-			'permission' => __( 'Sorry, you are not allowed to do this operation.', 'ai-builder', 'astra-sites' ),
-			'nonce'      => __( 'Nonce validation failed', 'ai-builder', 'astra-sites' ),
-			'default'    => __( 'Sorry, something went wrong.', 'ai-builder', 'astra-sites' ),
+			'permission' => __( 'Sorry, you are not allowed to do this operation.', 'astra-sites' ),
+			'nonce'      => __( 'Nonce validation failed', 'astra-sites' ),
+			'default'    => __( 'Sorry, something went wrong.', 'astra-sites' ),
 		);
 	}
 

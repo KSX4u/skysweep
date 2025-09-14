@@ -73,7 +73,7 @@ class Process {
 	 *
 	 * @var Api\ApiInterface
 	 */
-	private $api;
+	protected $api;
 
 	/**
 	 * Whether the payment has been processed.
@@ -82,7 +82,7 @@ class Process {
 	 *
 	 * @var bool
 	 */
-	private $is_payment_processed = false;
+	protected $is_payment_processed = false;
 
 	/**
 	 * Save matched subscription settings.
@@ -92,6 +92,15 @@ class Process {
 	 * @var array
 	 */
 	private $subscription_settings = [];
+
+	/**
+	 * Save the matched plan id.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @var string|null
+	 */
+	private $plan_id = null;
 
 	/**
 	 * Initialize.
@@ -119,9 +128,7 @@ class Process {
 		add_action( 'wpformsstripe_api_common_set_error_from_exception', [ $this, 'process_card_error' ] );
 		add_filter( 'wpforms_forms_submission_prepare_payment_data', [ $this, 'prepare_payment_data' ] );
 		add_filter( 'wpforms_forms_submission_prepare_payment_meta', [ $this, 'prepare_payment_meta' ], 10, 3 );
-		add_filter( 'wpforms_entry_email_process', [ $this, 'process_email' ], 70, 4 );
-		add_action( 'wpforms_process_complete', [ $this, 'process_entry_data' ], 10, 4 );
-		add_filter( 'wpforms_process_bypass_captcha', [ $this, 'bypass_captcha' ] );
+		add_action( 'wpforms_process_entry_saved', [ $this, 'process_entry_data' ], 10, 4 );
 	}
 
 	/**
@@ -176,12 +183,15 @@ class Process {
 	 * Bypass captcha if payment has been processed.
 	 *
 	 * @since 1.8.3
+	 * @deprecated 1.9.6
 	 *
 	 * @param bool $bypass_captcha Whether to bypass captcha.
 	 *
 	 * @return bool
 	 */
 	public function bypass_captcha( $bypass_captcha ) {
+
+		_deprecated_function( __METHOD__, '1.9.6 of the WPForms plugin' );
 
 		if ( $bypass_captcha ) {
 			return $bypass_captcha;
@@ -200,13 +210,13 @@ class Process {
 	protected function is_process_entry_error() {
 
 		// Check for processing errors.
-		if ( ! empty( wpforms()->get( 'process' )->errors[ $this->form_id ] ) || ! $this->is_card_field_visibility_ok() ) {
+		if ( ! empty( wpforms()->obj( 'process' )->errors[ $this->form_id ] ) || ! $this->is_card_field_visibility_ok() ) {
 			return true;
 		}
 
 		// Check rate limit.
 		if ( ! $this->is_rate_limit_ok() ) {
-			wpforms()->get( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Unable to process payment, please try again later.', 'wpforms-lite' );
+			wpforms()->obj( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Unable to process payment, please try again later.', 'wpforms-lite' );
 
 			return true;
 		}
@@ -222,8 +232,11 @@ class Process {
 	 * @param array $payment_meta Payment meta.
 	 * @param array $fields       Final/sanitized submitted field data.
 	 * @param array $form_data    Form data and settings.
+	 *
+	 * @noinspection PhpMissingParamTypeInspection
+	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public function prepare_payment_meta( $payment_meta, $fields, $form_data ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	public function prepare_payment_meta( $payment_meta, $fields, $form_data ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 		$payment = $this->api->get_payment();
 
@@ -321,6 +334,18 @@ class Process {
 		$payment->metadata['payment_id']  = $payment_id;
 		$payment->metadata['payment_url'] = esc_url_raw( $payment_url );
 
+		// Clean up spam reason in case it was set before.
+		$payment->metadata['spam_reason'] = null;
+
+		$custom_metadata = $this->get_mapped_custom_metadata( 'payment' );
+
+		array_walk(
+			$custom_metadata,
+			static function ( &$value, $key ) use ( $payment ) {
+				$payment->metadata[ $key ] = $value;
+			}
+		);
+
 		/**
 		 * Allow to add additional payment metadata to the Stripe payment.
 		 *
@@ -335,7 +360,7 @@ class Process {
 
 		array_walk(
 			$additional_meta,
-			static function( $meta, $key ) use ( &$payment ) {
+			static function ( $meta, $key ) use ( &$payment ) {
 				$payment->metadata[ $key ] = $meta;
 			}
 		);
@@ -352,7 +377,7 @@ class Process {
 			$subscription->update( $subscription->id, $subscription->serializeParameters(), Helpers::get_auth_opts() );
 		}
 
-		wpforms()->get( 'payment_meta' )->add_log(
+		wpforms()->obj( 'payment_meta' )->add_log(
 			$payment_id,
 			sprintf(
 				'Stripe charge processed. (Charge ID: %1$s)',
@@ -373,6 +398,54 @@ class Process {
 		 * @param mixed $customer     Stripe customer object.
 		 */
 		do_action( 'wpforms_stripe_process_complete', $fields, $form_data, $payment_id, $payment, $subscription, $this->api->get_customer() ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+	}
+
+	/**
+	 * Get mapped custom metadata.
+	 *
+	 * @since 1.9.6
+	 *
+	 * @param string $type Object type ( e.g 'customer', 'payment' ).
+	 *
+	 * @return array
+	 */
+	private function get_mapped_custom_metadata( string $type ): array {
+
+		$settings_key = ! is_null( $this->plan_id ) ? 'recurring_custom_metadata_' . $this->plan_id : 'custom_metadata';
+
+		if ( empty( $this->form_data['payments']['stripe'][ $settings_key ] ) ) {
+			return [];
+		}
+
+		$metadata = [];
+
+		foreach ( $this->form_data['payments']['stripe'][ $settings_key ] as $data ) {
+
+			if ( $data['object_type'] !== $type ) {
+				continue;
+			}
+
+			$field_id = $data['meta_value'];
+
+			if ( ! isset( $this->fields[ $field_id ]['value'] ) || wpforms_is_empty_string( $this->fields[ $field_id ]['value'] ) ) {
+				continue;
+			}
+
+			// Add quantity for the field value.
+			if ( wpforms_payment_has_quantity( $this->fields[ $field_id ], $this->form_data ) ) {
+				$field_value = wpforms_payment_format_quantity( $this->fields[ $field_id ] );
+			} else {
+				$field_value = $this->fields[ $field_id ]['value'];
+			}
+
+			// Key length limited to 40 characters long by Stripe API.
+			$key = wp_html_excerpt( sanitize_text_field( $data['meta_key'] ), 40 );
+
+			// Value length limited to 500 characters long by Stripe API.
+			$metadata[ $key ] = wp_html_excerpt( wpforms_decode_string( $field_value ), 500 );
+		}
+
+		return $metadata;
 	}
 
 	/**
@@ -493,6 +566,8 @@ class Process {
 	 *
 	 * @since 1.8.2
 	 *
+	 * @deprecated 1.9.5
+	 *
 	 * @param bool  $process         Whether to process or not.
 	 * @param array $fields          Form fields.
 	 * @param array $form_data       Form data.
@@ -501,6 +576,8 @@ class Process {
 	 * @return bool
 	 */
 	public function process_email( $process, $fields, $form_data, $notification_id ) {
+
+		_deprecated_function( __METHOD__, '1.9.5 of the WPForms plugin', 'WPFormsStripe\Process::process_email()' );
 
 		if ( ! $process ) {
 			return false;
@@ -543,7 +620,7 @@ class Process {
 			return;
 		}
 
-		wpforms()->get( 'entry' )->update(
+		wpforms()->obj( 'entry' )->update(
 			$entry_id,
 			[
 				'type' => 'payment',
@@ -623,14 +700,21 @@ class Process {
 
 		$args = $this->get_base_subscription_args();
 
-		$args['settings']      = $this->settings['recurring'];
-		$args['email']         = sanitize_email( $this->fields[ $args['settings']['email'] ]['value'] );
-		$args['customer_name'] = ! empty( $args['settings']['customer_name'] ) ? sanitize_text_field( $this->fields[ $args['settings']['customer_name'] ]['value'] ) : '';
+		$args['settings']       = $this->settings['recurring'];
+		$args['email']          = sanitize_email( $this->fields[ $args['settings']['email'] ]['value'] );
+		$args['customer_name']  = ! empty( $args['settings']['customer_name'] ) ? sanitize_text_field( $this->fields[ $args['settings']['customer_name'] ]['value'] ) : '';
+		$args['customer_phone'] = ! empty( $args['settings']['customer_phone'] ) ? sanitize_text_field( $this->fields[ $args['settings']['customer_phone'] ]['value'] ) : '';
 
 		// Customer address.
-		if ( isset( $args['settings']['customer_address'] ) && $args['settings']['customer_address'] !== '' ) {
+		if ( wpforms()->is_pro() && isset( $args['settings']['customer_address'] ) && $args['settings']['customer_address'] !== '' ) {
 			$args['customer_address'] = $this->map_address_field( $this->fields[ $args['settings']['customer_address'] ], $args['settings']['customer_address'] );
 		}
+
+		// Set plan id to get correct mapped meta.
+		$this->plan_id = '';
+
+		// Customer custom metadata.
+		$args['customer_metadata'] = $this->get_mapped_custom_metadata( 'customer' );
 
 		$this->process_subscription( $args );
 
@@ -645,7 +729,7 @@ class Process {
 	 */
 	public function process_payment_single() {
 
-		$amount_decimals = Helpers::get_decimals_amount();
+		$amount_decimals = wpforms_get_currency_multiplier();
 
 		// Define the basic payment details.
 		$args = [
@@ -659,6 +743,11 @@ class Process {
 
 		if ( ! Helpers::is_license_ok() && Helpers::is_application_fee_supported() ) {
 			$args['application_fee_amount'] = (int) ( round( $this->amount * 0.03, 2 ) * $amount_decimals );
+		}
+
+		// Store spam reason if exists.
+		if ( isset( $this->form_data['spam_reason'] ) ) {
+			$args['metadata']['spam_reason'] = $this->form_data['spam_reason'];
 		}
 
 		// Payment description.
@@ -681,6 +770,41 @@ class Process {
 			$args['customer_name'] = sanitize_text_field( $this->fields[ $this->settings['customer_name'] ]['value'] );
 		}
 
+		// Customer phone.
+		if ( isset( $this->settings['customer_phone'] ) && $this->settings['customer_phone'] !== '' && ! empty( $this->fields[ $this->settings['customer_phone'] ]['value'] ) ) {
+			$args['customer_phone'] = sanitize_text_field( $this->fields[ $this->settings['customer_phone'] ]['value'] );
+		}
+
+		// Customer custom metadata.
+		$args['customer_metadata'] = $this->get_mapped_custom_metadata( 'customer' );
+
+		$args = $this->payment_single_map_address( $args );
+
+		$this->api->process_single( $args );
+
+		// Set payment processing flag.
+		$this->is_payment_processed = true;
+
+		$this->update_credit_card_field_value();
+
+		$this->process_api_error( 'single' );
+	}
+
+	/**
+	 * Map address field for single payment.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param array $args Payment arguments.
+	 *
+	 * @return array
+	 */
+	private function payment_single_map_address( array $args ): array {
+
+		if ( ! wpforms()->is_pro() ) {
+			return $args;
+		}
+
 		// Customer address.
 		if ( isset( $this->settings['customer_address'] ) && $this->settings['customer_address'] !== '' ) {
 			$args['customer_address'] = $this->map_address_field( $this->fields[ $this->settings['customer_address'] ], $this->settings['customer_address'] );
@@ -692,14 +816,7 @@ class Process {
 			$args['shipping']['address'] = $this->map_address_field( $this->fields[ $this->settings['shipping_address'] ], $this->settings['shipping_address'] );
 		}
 
-		$this->api->process_single( $args );
-
-		// Set payment processing flag.
-		$this->is_payment_processed = true;
-
-		$this->update_credit_card_field_value();
-
-		$this->process_api_error( 'single' );
+		return $args;
 	}
 
 	/**
@@ -717,24 +834,35 @@ class Process {
 
 		$args = $this->get_base_subscription_args();
 
-		foreach ( $this->settings['recurring'] as $recurring ) {
+		foreach ( $this->settings['recurring'] as $key => $recurring ) {
 
 			if ( ! $this->is_subscription_plan_valid( $recurring ) ) {
 				continue;
 			}
 
-			$args['email']    = sanitize_email( $this->fields[ $recurring['email'] ]['value'] );
-			$args['settings'] = $recurring;
+			$this->plan_id = $key;
+
+			$args['email']       = sanitize_email( $this->fields[ $recurring['email'] ]['value'] );
+			$args['settings']    = $recurring;
+			$args['description'] = sanitize_text_field( $recurring['name'] );
 
 			// Customer name.
 			if ( isset( $recurring['customer_name'] ) && $recurring['customer_name'] !== '' && ! empty( $this->fields[ $recurring['customer_name'] ]['value'] ) ) {
 				$args['customer_name'] = sanitize_text_field( $this->fields[ $recurring['customer_name'] ]['value'] );
 			}
 
+			// Customer phone.
+			if ( isset( $recurring['customer_phone'] ) && $recurring['customer_phone'] !== '' && ! empty( $this->fields[ $recurring['customer_phone'] ]['value'] ) ) {
+				$args['customer_phone'] = sanitize_text_field( $this->fields[ $recurring['customer_phone'] ]['value'] );
+			}
+
 			// Customer address.
-			if ( isset( $recurring['customer_address'] ) && $recurring['customer_address'] !== '' ) {
+			if ( wpforms()->is_pro() && isset( $recurring['customer_address'] ) && $recurring['customer_address'] !== '' ) {
 				$args['customer_address'] = $this->map_address_field( $this->fields[ $recurring['customer_address'] ], $recurring['customer_address'] );
 			}
+
+			// Customer custom metadata.
+			$args['customer_metadata'] = $this->get_mapped_custom_metadata( 'customer' );
 
 			$this->process_subscription( $args );
 
@@ -801,7 +929,7 @@ class Process {
 			 * @param array  $details Card details.
 			 * @param object $payment Stripe payment objects.
 			 */
-			wpforms()->get( 'process' )->fields[ $field_id ]['value'] = apply_filters( 'wpforms_stripe_creditcard_value', $details, $this->api->get_payment() ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
+			wpforms()->obj( 'process' )->fields[ $field_id ]['value'] = apply_filters( 'wpforms_stripe_creditcard_value', $details, $this->api->get_payment() ); // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName
 		}
 	}
 
@@ -819,7 +947,7 @@ class Process {
 
 		foreach ( $this->fields as $field ) {
 
-			if ( isset( $field['type'] ) && $this->api->get_config( 'field_slug' ) !== $field['type'] ) {
+			if ( empty( $field['type'] ) || $this->api->get_config( 'field_slug' ) !== $field['type'] ) {
 				continue;
 			}
 
@@ -921,7 +1049,7 @@ class Process {
 			}
 
 			if ( ! empty( $field['required'] ) ) {
-				wpforms()->get( 'process' )->errors[ $this->form_id ]['footer'] = $error;
+				wpforms()->obj( 'process' )->errors[ $this->form_id ]['footer'] = $error;
 
 				return;
 			}
@@ -1040,6 +1168,11 @@ class Process {
 			$args['application_fee_percent'] = 3;
 		}
 
+		// Store spam reason if exists.
+		if ( isset( $this->form_data['spam_reason'] ) ) {
+			$args['metadata']['spam_reason'] = $this->form_data['spam_reason'];
+		}
+
 		$this->api->process_subscription( $args );
 
 		// Set payment processing flag.
@@ -1063,7 +1196,7 @@ class Process {
 		return [
 			'form_id'    => $this->form_id,
 			'form_title' => sanitize_text_field( $this->form_data['settings']['form_title'] ),
-			'amount'     => $this->amount * Helpers::get_decimals_amount(),
+			'amount'     => $this->amount * wpforms_get_currency_multiplier(),
 		];
 	}
 
@@ -1123,8 +1256,8 @@ class Process {
 
 		// We must prevent a processing if payment intent was identified as corrupted.
 		// Also if the transaction ID exists in DB (transaction ID is unique value).
-		if ( in_array( $entry['payment_intent_id'], $corrupted_intents, true ) || wpforms()->get( 'payment' )->get_by( 'transaction_id', $entry['payment_intent_id'] ) ) {
-			wpforms()->get( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Secondary form submission was declined.', 'wpforms-lite' );
+		if ( in_array( $entry['payment_intent_id'], $corrupted_intents, true ) || wpforms()->obj( 'payment' )->get_by( 'transaction_id', $entry['payment_intent_id'] ) ) {
+			wpforms()->obj( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Secondary form submission was declined.', 'wpforms-lite' );
 
 			return true;
 		}
@@ -1136,11 +1269,13 @@ class Process {
 			]
 		);
 
-		$submitted_amount = $this->amount * Helpers::get_decimals_amount();
+		// Round to the nearest whole number because $this->amount can contain a number close to,
+		// but slightly under it, due to how it is stored in the memory.
+		$submitted_amount = round( $this->amount * wpforms_get_currency_multiplier() );
 
 		// Prevent form submission if a mismatch of the payment amount is detected.
 		if ( ! empty( $intent ) && (int) $submitted_amount !== (int) $intent->amount ) {
-			wpforms()->get( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Irregular activity detected. Your submission has been declined and payment refunded.', 'wpforms-lite' );
+			wpforms()->obj( 'process' )->errors[ $this->form_id ]['footer'] = esc_html__( 'Irregular activity detected. Your submission has been declined and payment refunded.', 'wpforms-lite' );
 
 			$args = [
 				'reason' => 'fraudulent',

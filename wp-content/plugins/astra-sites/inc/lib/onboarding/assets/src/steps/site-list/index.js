@@ -29,13 +29,32 @@ import SiteSearch from './search-filter';
 import FavoriteSites from './favorite-sites';
 import RelatedSites from './related-sites';
 import { ChevronUpIcon } from '@heroicons/react/24/outline';
+import {
+	SyncAndGetAllCategories,
+	SyncAndGetAllCategoriesAndTags,
+	isSyncUptoDate,
+	fetchSitesPageCount,
+	fetchPagedSites,
+	fetchAllSites,
+} from './header/sync-library/utils';
 
 export const useFilteredSites = () => {
 	const [ { builder, siteType, siteOrder, allSitesData } ] = useStateValue();
-	const allSites = !! Object.keys( allSitesData ).length
-		? allSitesData
-		: getAllSites();
+	let allSites =
+		allSitesData && !! Object.keys( allSitesData ).length
+			? allSitesData
+			: getAllSites();
 	let sites = [];
+
+	// Fallback array check for Chrome browser.
+	if ( allSitesData && Array.isArray( allSites ) ) {
+		allSites = allSitesData.reduce( ( acc, site ) => {
+			if ( site.id ) {
+				acc[ `id-${ site.id }` ] = site;
+			}
+			return acc;
+		}, {} );
+	}
 
 	if ( builder ) {
 		for ( const siteId in allSites ) {
@@ -47,10 +66,22 @@ export const useFilteredSites = () => {
 
 	if ( siteType ) {
 		for ( const siteId in sites ) {
-			if ( 'free' !== sites[ siteId ][ 'astra-sites-type' ] ) {
-				sites[ siteId ] = sites[ siteId ];
-			} else {
-				delete sites[ siteId ];
+			const currentSiteType =
+				sites[ siteId ]?.[ 'astra-sites-type' ] || '';
+
+			switch ( siteType ) {
+				case 'signature':
+					if ( currentSiteType !== siteType ) {
+						delete sites[ siteId ];
+					}
+					break;
+				case 'agency-mini':
+					if ( 'agency-mini' !== currentSiteType ) {
+						delete sites[ siteId ];
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}
@@ -84,12 +115,15 @@ const SiteList = () => {
 		siteBusinessType,
 		selectedMegaMenu,
 		allSitesData,
+		bgSyncInProgress,
 	} = storedState;
 
 	useEffect( () => {
-		setTimeout( () => {
+		const loadingTimeout = setTimeout( () => {
 			setLoadingSkeleton( false );
-		}, 300 );
+		}, 800 );
+
+		return () => clearTimeout( loadingTimeout );
 	}, [] );
 
 	useEffect( () => {
@@ -114,9 +148,12 @@ const SiteList = () => {
 	const backStep = () => {
 		dispatch( {
 			type: 'set',
-			currentIndex: 0,
-			builder: 'ai-builder',
+			siteSearchTerm: '', // Reset the search term on back
+			siteBusinessType: '', // Reset the business type on back
+			currentIndex: builder === 'fse' ? 0 : 1,
 		} );
+		const urlParam = setURLParmsValue( 's' );
+		history( `?${ urlParam }` );
 	};
 
 	const handleClickBackToTop = () => {
@@ -129,6 +166,16 @@ const SiteList = () => {
 			behavior: 'smooth',
 		} );
 	};
+
+	useEffect( () => {
+		// use timeout function so the new content wrapper for the builder will be loaded
+		const scrollTopTimeout = setTimeout( () => {
+			handleClickBackToTop();
+		}, 300 );
+
+		// Cleanup function to clear the timeout if the component unmounts
+		return () => clearTimeout( scrollTopTimeout );
+	}, [ builder ] );
 
 	const handleShowBackToTop = ( event ) => {
 		const SCROLL_THRESHOLD = 250;
@@ -152,6 +199,121 @@ const SiteList = () => {
 		}
 	};
 
+	// const fetchSitesAndCategories = async () => {
+	// 	try {
+	// 		const formData = new FormData();
+	// 		formData.append( 'action', 'astra-sites-update-library' );
+	// 		formData.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
+	// 		const response = await fetch( ajaxurl, {
+	// 			method: 'post',
+	// 			body: formData,
+	// 		} );
+	// 		const jsonData = await response.json();
+	// 		if (
+	// 			jsonData.data === 'updated' &&
+	// 			Object.keys( storedState.allSitesData ).length !== 0
+	// 		) {
+	// 			dispatch( {
+	// 				type: 'set',
+	// 				bgSyncInProgress: false,
+	// 			} );
+	// 			return;
+	// 		}
+
+	// 		const sites = await SyncImportAllSites();
+	// 		const categories = await SyncAndGetAllCategories();
+	// 		const categoriesAndTags = await SyncAndGetAllCategoriesAndTags();
+	// 		console.log( typeof dispatch );
+	// 		dispatch( {
+	// 			type: 'set',
+	// 			bgSyncInProgress: false,
+	// 			allSitesData: sites,
+	// 			categories,
+	// 			categoriesAndTags,
+	// 		} );
+
+	// 		// await fetchSitesAndCategories();
+	// 	} catch ( error ) {
+	// 		console.error( error );
+	// 	}
+	// };
+
+	const syncSites = async () => {
+		// const newData = await SyncStart();
+		const { totalPages, currentPage } = await fetchSitesPageCount();
+
+		dispatch( {
+			type: 'set',
+			syncPageCount: totalPages,
+			syncPageInProgress: currentPage,
+		} );
+
+		const sites = [];
+		for ( let i = currentPage; i < totalPages; i++ ) {
+			const sitesData = await fetchPagedSites( i + 1 );
+			sitesData.forEach( ( siteItem ) => {
+				sites.push( siteItem );
+			} );
+			dispatch( {
+				type: 'set',
+				syncPageInProgress: i + 1,
+			} );
+		}
+
+		if ( currentPage <= 1 && sites.length > 0 ) {
+			return sites;
+		}
+
+		// Fetch all sites if the current page is greater than 1 (means we were in the middle of fetching all the sites).
+		return Object.values( await fetchAllSites() );
+	};
+
+	const fetchSitesAndCategories = async () => {
+		try {
+			const syncUptoDate = await isSyncUptoDate();
+
+			dispatch( {
+				type: 'set',
+				syncPageInProgress: 0,
+				syncPageCount: 0,
+			} );
+
+			if ( syncUptoDate ) {
+				dispatch( {
+					type: 'set',
+					bgSyncInProgress: false,
+				} );
+				return;
+			}
+
+			const sites = await syncSites();
+			const categories = await SyncAndGetAllCategories();
+			const categoriesAndTags = await SyncAndGetAllCategoriesAndTags();
+
+			dispatch( {
+				type: 'set',
+				bgSyncInProgress: false,
+				syncPageInProgress: 0,
+				syncPageCount: 0,
+				allSitesData: sites ?? null,
+				categories: categories ?? null,
+				categoriesAndTags: categoriesAndTags ?? null,
+			} );
+
+			astraSitesVars.bgSyncInProgress = false;
+		} catch ( error ) {
+			console.error( error );
+		}
+	};
+
+	useEffect( () => {
+		// if ( ! bgSyncInProgress ) {
+		// 	return;
+		// }
+
+		fetchSitesAndCategories();
+	}, [] );
+
 	useEffect( () => {
 		const contentWrapper = document.querySelector( '.step-content ' );
 		if ( ! contentWrapper ) {
@@ -163,6 +325,9 @@ const SiteList = () => {
 		};
 	}, [] );
 
+	const showSkeleton =
+		siteData.gridSkeleton || bgSyncInProgress || loadingSkeleton;
+
 	return (
 		<DefaultStep
 			content={
@@ -173,13 +338,15 @@ const SiteList = () => {
 						}` }
 					>
 						<SiteListSkeleton />
-						<div className="site-list-screen-wrap">
-							<h1>
-								{ __(
-									'What type of website are you building?',
-									'astra-sites'
-								) }
-							</h1>
+						<div className="site-list-screen-wrap flex flex-col gap-6 mx-auto">
+							<div>
+								<h3 className="site-list-title">
+									{ __(
+										'What type of website are you building?',
+										'astra-sites'
+									) }
+								</h3>
+							</div>
 
 							<div className="site-list-content">
 								<SiteSearch setSiteData={ setSiteData } />
@@ -253,7 +420,8 @@ const SiteList = () => {
 										<FavoriteSites />
 									) : (
 										<>
-											{ siteCount ? (
+											{ ( !! siteCount ||
+												showSkeleton ) && (
 												<>
 													<div className="st-sites-grid">
 														{ siteSearchTerm ? (
@@ -271,7 +439,7 @@ const SiteList = () => {
 															</div>
 														) : null }
 
-														{ siteData.gridSkeleton ? (
+														{ showSkeleton ? (
 															<GridSkeleton />
 														) : (
 															<SiteGrid
@@ -282,7 +450,9 @@ const SiteList = () => {
 														) }
 													</div>
 												</>
-											) : (
+											) }
+
+											{ ! siteCount && ! showSkeleton && (
 												<>
 													<NoResultFound
 														searchTerm={
@@ -318,7 +488,7 @@ const SiteList = () => {
 				</>
 			}
 			actions={
-				<>
+				<div className="step-action-wrapper">
 					<PreviousStepLink before onClick={ backStep }>
 						{ __( 'Back', 'astra-sites' ) }
 					</PreviousStepLink>
@@ -335,15 +505,15 @@ const SiteList = () => {
 								className="st-access-btn"
 								onClick={ () =>
 									window.open(
-										astraSitesVars.cta_links[ builder ]
+										astraSitesVars?.cta_links[ builder ]
 									)
 								}
 							>
-								{ __( 'Get Essential Toolkit', 'astra-sites' ) }
+								{ __( 'Get Premium Templates', 'astra-sites' ) }
 							</Button>
 						</div>
 					) }
-				</>
+				</div>
 			}
 		/>
 	);

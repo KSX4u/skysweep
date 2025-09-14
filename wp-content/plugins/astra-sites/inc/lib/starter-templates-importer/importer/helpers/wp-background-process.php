@@ -434,14 +434,14 @@ if ( ! class_exists( 'WP_Background_Process' ) ) {
 			$interval = apply_filters( $this->identifier . '_cron_interval', 5 );
 
 			if ( property_exists( $this, 'cron_interval' ) ) {
-				$interval = apply_filters( $this->identifier . '_cron_interval', $this->cron_interval_identifier );
+				$interval = apply_filters( $this->identifier . '_cron_interval', $this->cron_interval );
 			}
 
 			// Adds every 5 minutes to the existing schedules.
 			$schedules[ $this->identifier . '_cron_interval' ] = array(
 				'interval' => MINUTE_IN_SECONDS * $interval,
 				/* translators: %d are the minutes. */
-				'display'  => sprintf( __( 'Every %d Minutes', 'st-importer', 'astra-sites' ), $interval ),
+				'display'  => sprintf( __( 'Every %d Minutes', 'astra-sites' ), $interval ),
 			);
 
 			return $schedules;

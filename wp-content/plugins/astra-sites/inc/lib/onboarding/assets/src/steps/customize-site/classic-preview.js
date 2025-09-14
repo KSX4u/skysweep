@@ -20,6 +20,7 @@ const ClassicPreview = () => {
 			selectedTemplateType,
 			templateId,
 			currentIndex,
+			builder,
 		},
 		dispatch,
 	] = useStateValue();
@@ -33,7 +34,7 @@ const ClassicPreview = () => {
 			'free' !== templateResponse?.[ 'astra-site-type' ];
 
 		if ( premiumTemplate && ! licenseStatus ) {
-			if ( astraSitesVars.isPro ) {
+			if ( astraSitesVars?.isPro ) {
 				dispatch( {
 					type: 'set',
 					validateLicenseStatus: true,
@@ -82,27 +83,29 @@ const ClassicPreview = () => {
 					) }
 				</p>
 			</div>
-			<div className="st-preview-section px-6 mb-5 w-full">
+			<div className="st-preview-section px-6 mb-5 w-full space-y-5">
 				<SiteLogo />
 				{ templateResponse ? (
 					<>
 						<FontSelector />
-						<ColorPalettes />
+						{ builder !== 'beaver-builder' && <ColorPalettes /> }
 					</>
 				) : (
-					<div className="space-y-5 mt-5">
+					<div className="space-y-5">
 						<div
 							data-placeholder
 							className="relative animate-pulse overflow-hidden bg-gray-300 h-[50px] w-full rounded-md"
 						/>
-						<div
-							data-placeholder
-							className="relative animate-pulse overflow-hidden bg-gray-300 h-[50px] w-full rounded-md"
-						/>
+						{ builder !== 'beaver-builder' && (
+							<div
+								data-placeholder
+								className="relative animate-pulse overflow-hidden bg-gray-300 h-[50px] w-full rounded-md"
+							/>
+						) }
 					</div>
 				) }
 			</div>
-			<div className="w-full flex flex-col gap-4 mt-auto px-6">
+			<div className="w-full flex flex-col gap-4 mt-auto px-6 sm:pb-0 pb-14">
 				{ ! licenseStatus && 'free' !== selectedTemplateType && (
 					<LicenseValidation setErrorCB={ setErrorCallback } />
 				) }
@@ -133,7 +136,6 @@ const ClassicPreview = () => {
 					<PreviousStepLink
 						className="w-full"
 						onClick={ lastStep }
-						before
 						customizeStep={ true }
 					>
 						{ __( 'Back', 'astra-sites' ) }

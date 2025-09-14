@@ -87,6 +87,28 @@ class Widget_Counter extends Widget_Base {
 		return [ 'counter' ];
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-counter' ];
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	/**
 	 * Register counter widget controls.
 	 *
@@ -623,12 +645,12 @@ class Widget_Counter extends Widget_Base {
 		#>
 		<div {{{ view.getRenderAttributeString( 'elementor-counter' ) }}}>
 			<# if ( settings.title ) {
-				#><{{ titleTag }} {{{ view.getRenderAttributeString( 'counter-title' ) }}}>{{{ settings.title }}}</{{ titleTag }}><#
+				#><{{ titleTag }} {{{ view.getRenderAttributeString( 'counter-title' ) }}}>{{{ elementor.helpers.sanitize( settings.title, { ALLOW_DATA_ATTR: false } ) }}}</{{ titleTag }}><#
 			} #>
 			<div {{{ view.getRenderAttributeString( 'counter-number' ) }}}>
-				<span {{{ view.getRenderAttributeString( 'prefix' ) }}}>{{{ settings.prefix }}}</span>
-				<span {{{ view.getRenderAttributeString( 'counter' ) }}}>{{{ settings.starting_number }}}</span>
-				<span {{{ view.getRenderAttributeString( 'suffix' ) }}}>{{{ settings.suffix }}}</span>
+				<span {{{ view.getRenderAttributeString( 'prefix' ) }}}>{{ settings.prefix }}</span>
+				<span {{{ view.getRenderAttributeString( 'counter' ) }}}>{{ settings.starting_number }}</span>
+				<span {{{ view.getRenderAttributeString( 'suffix' ) }}}>{{ settings.suffix }}</span>
 			</div>
 		</div>
 		<?php
@@ -677,13 +699,13 @@ class Widget_Counter extends Widget_Base {
 		<div <?php $this->print_render_attribute_string( 'elementor-counter' ); ?>>
 			<?php
 			if ( $settings['title'] ) :
-				?><<?php Utils::print_validated_html_tag( $title_tag ); ?> <?php $this->print_render_attribute_string( 'counter-title' ); ?>><?php $this->print_unescaped_setting( 'title' ); ?></<?php Utils::print_validated_html_tag( $title_tag ); ?>><?php
+				?><<?php Utils::print_validated_html_tag( $title_tag ); ?> <?php $this->print_render_attribute_string( 'counter-title' ); ?>><?php echo wp_kses_post( $this->get_settings_for_display( 'title' ) ); ?></<?php Utils::print_validated_html_tag( $title_tag ); ?>><?php
 			endif;
 			?>
 			<div <?php $this->print_render_attribute_string( 'counter-number' ); ?>>
-				<span <?php $this->print_render_attribute_string( 'prefix' ); ?>><?php $this->print_unescaped_setting( 'prefix' ); ?></span>
-				<span <?php $this->print_render_attribute_string( 'counter' ); ?>><?php $this->print_unescaped_setting( 'starting_number' ); ?></span>
-				<span <?php $this->print_render_attribute_string( 'suffix' ); ?>><?php $this->print_unescaped_setting( 'suffix' ); ?></span>
+				<span <?php $this->print_render_attribute_string( 'prefix' ); ?>><?php echo wp_kses_post( $settings['prefix'] ); ?></span>
+				<span <?php $this->print_render_attribute_string( 'counter' ); ?>><?php echo wp_kses_post( $settings['starting_number'] ); ?></span>
+				<span <?php $this->print_render_attribute_string( 'suffix' ); ?>><?php echo wp_kses_post( $settings['suffix'] ); ?></span>
 			</div>
 		</div>
 		<?php

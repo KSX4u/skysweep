@@ -21,6 +21,7 @@ class Helper {
 	 * Log
 	 *
 	 * @param string $message   Log message.
+	 * @return void
 	 */
 	public function ast_block_templates_log( $message = '' ) {
 		
@@ -35,6 +36,8 @@ class Helper {
 
 	/**
 	 * Doing WP CLI
+	 *
+	 * @return bool
 	 */
 	public function ast_block_templates_doing_wp_cli() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -65,10 +68,10 @@ class Helper {
 	 * @param string $link  The Image link.
 	 *
 	 * @since 1.0.0
-	 * @return boolean
+	 * @return bool
 	 */
 	public function ast_block_templates_is_valid_image( $link = '' ) {
-		return preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?\/[\w\-]+\.(jpg|png|gif|jpeg)\/?$/i', $link );
+		return boolVal( preg_match( '/^((https?:\/\/)|(www\.))([a-z0-9-].?)+(:[0-9]+)?\/[\w\-]+\.(jpg|png|gif|jpeg)\/?$/i', $link ) );
 	}
 
 	/**
@@ -219,7 +222,7 @@ class Helper {
 		// If the endpoint is not a string, then abandon ship.
 		if ( ! is_string( $endpoint ) ) {
 			return array(
-				'error' => __( 'The Zip AI Endpoint was not declared', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Endpoint was not declared', 'astra-sites' ),
 			);
 		}
 
@@ -229,7 +232,7 @@ class Helper {
 		// If the Zip Auth Token is not set, then abandon ship.
 		if ( empty( $auth_token ) || ! is_string( $auth_token ) ) {
 			return array(
-				'error' => __( 'The Zip AI Auth Token is not set.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Auth Token is not set.', 'astra-sites' ),
 			);
 		}
 
@@ -251,7 +254,7 @@ class Helper {
 		// If the response was an error, or not a 200 status code, then abandon ship.
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			return array(
-				'error' => __( 'The Zip AI Middleware is not responding.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Middleware is not responding.', 'astra-sites' ),
 			);
 		}
 
@@ -261,7 +264,7 @@ class Helper {
 		// If the response body is not a JSON, then abandon ship.
 		if ( empty( $response_body ) || ! json_decode( $response_body ) ) {
 			return array(
-				'error' => __( 'The Zip AI Middleware encountered an error.', 'ast-block-templates' ),
+				'error' => __( 'The Zip AI Middleware encountered an error.', 'astra-sites' ),
 			);
 		}
 
@@ -293,7 +296,7 @@ class Helper {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @return array
+	 * @return array<string, string>
 	 */
 	public function get_default_ai_categories() {
 		return array(
@@ -420,7 +423,16 @@ class Helper {
 	 */
 	public function get_block_template_customiser_css() {
 		return trim( self::get_json_file_content( 'ast-block-templates-customizer-css.json', false ), '"' );
-	}   
+	}
+
+	/**
+	 * Get global styles for Spectra v3.
+	 *
+	 * @return string
+	 */
+	public function get_block_template_global_styles() {
+		return trim( self::get_json_file_content( 'ast-block-templates-global-styles.json', false ), '"' );
+	}
 
 	/**
 	 * Get last exported checksum.

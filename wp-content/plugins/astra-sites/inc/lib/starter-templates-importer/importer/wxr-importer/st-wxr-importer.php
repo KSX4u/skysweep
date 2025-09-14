@@ -28,7 +28,7 @@ class ST_WXR_Importer {
 	 * @since 1.0.0
 	 * @var object Class object.
 	 */
-	private static $instance;
+	private static $instance = null;
 
 	/**
 	 * Initiator of this class.
@@ -37,7 +37,7 @@ class ST_WXR_Importer {
 	 * @return self initialized object of this class.
 	 */
 	public static function get_instance() {
-		if ( ! isset( self::$instance ) ) {
+		if ( null === self::$instance ) {
 			self::$instance = new self();
 		}
 		return self::$instance;
@@ -49,7 +49,6 @@ class ST_WXR_Importer {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-
 		add_filter( 'upload_mimes', array( $this, 'custom_upload_mimes' ) ); //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.upload_mimes -- Added this to allow upload of SVG files.
 		add_action( 'wp_ajax_astra-wxr-import', array( $this, 'sse_import' ) );
 		add_filter( 'wxr_importer.pre_process.user', '__return_null' );
@@ -60,8 +59,46 @@ class ST_WXR_Importer {
 		} else {
 			add_filter( 'wp_check_filetype_and_ext', array( $this, 'real_mime_types' ), 10, 4 );
 		}
+		add_action( 'wp_import_insert_post', array( $this, 'after_imported_post' ), 10, 4 );
 
 	}
+
+	/**
+	 * After Post import action.
+	 *
+	 * @param int                   $post_id post id.
+	 * @param int                   $original_id post id.
+	 * @param array<string, string> $postdata post id.
+	 * @param array<string, string> $data post id.
+	 *
+	 * @return void
+	 */
+	public function after_imported_post( $post_id, $original_id, $postdata, $data ) {
+		if ( in_array( $data['post_type'], [ 'post', 'page' ], true ) && 'ai' === get_option( 'astra_sites_current_import_template_type' ) ) {
+			$imports                         = get_option(
+				'astra_sites_ai_imports',
+				array(
+					'post' => [],
+					'page' => [],
+				)
+			);
+			$imports[ $data['post_type'] ][] = $post_id;
+			update_option( 'astra_sites_ai_imports', $imports );
+		}
+
+		if ( 'sureforms_form' === get_post_type( $post_id ) ) {
+			$sureforms_id_map                 = get_option( 'astra_sites_sureforms_id_map', array() );
+			$sureforms_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_sureforms_id_map', $sureforms_id_map );
+		}
+
+		if ( 'sc_form' === get_post_type( $post_id ) ) {
+			$sureforms_id_map                 = get_option( 'astra_sites_surecart_forms_id_map', array() );
+			$sureforms_id_map[ $original_id ] = $post_id;
+			update_option( 'astra_sites_surecart_forms_id_map', $sureforms_id_map );
+		}
+	}
+
 	/**
 	 * Add .xml files as supported format in the uploader.
 	 *
@@ -104,13 +141,15 @@ class ST_WXR_Importer {
 			if ( ! current_user_can( 'manage_options' ) ) {
 				wp_send_json_error(
 					array(
-						'error' => __( 'Permission Denied!', 'st-importer', 'astra-sites' ),
+						'error' => __( 'Permission Denied!', 'astra-sites' ),
 					)
 				);
 			}
 
 			// Start the event stream.
 			header( 'Content-Type: text/event-stream, charset=UTF-8' );
+			header( 'Cache-Control: no-cache' );
+			header( 'Connection: keep-alive' );
 			// Turn off PHP output compression.
 			$previous = error_reporting( error_reporting() ^ E_WARNING ); //phpcs:ignore WordPress.PHP.DevelopmentFunctions, WordPress.PHP.DiscouragedPHPFunctions -- 3rd party library.
 			ini_set( 'output_buffering', 'off' ); //phpcs:ignore WordPress.PHP.IniSet.Risky -- 3rd party library.
@@ -292,7 +331,9 @@ class ST_WXR_Importer {
 				 * Note: We have not check the post is created with Gutenberg or not. We have imported other sites
 				 * and confirm that this works for every other page builders too.
 				 */
-				$data['post_content'] = wp_slash( $data['post_content'] );
+				if ( 'sureforms_form' !== $data['post_type'] ) {
+					$data['post_content'] = wp_slash( $data['post_content'] );
+				}
 			}
 		}
 
@@ -363,6 +404,29 @@ class ST_WXR_Importer {
 			// Update mime type and extension.
 			$defaults['type'] = 'image/svg+xml';
 			$defaults['ext']  = 'svg';
+		}
+
+		if ( 'svgz' === pathinfo( $filename, PATHINFO_EXTENSION ) ) {
+			// Perform SVG sanitization using the sanitize_svg function.
+			$svg_content     = file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$decoded_content = gzdecode( $svg_content );
+
+			if ( false !== $decoded_content ) {
+				$svg_content = $decoded_content;
+			}
+			$sanitized_svg_content = $this->sanitize_svg( $svg_content );
+
+			if ( false !== $decoded_content ) {
+				$sanitized_svg_content = gzencode( $sanitized_svg_content );
+			}
+
+			// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+			file_put_contents( $file, $sanitized_svg_content );
+			// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_read_file_put_contents
+
+			// Update mime type and extension.
+			$defaults['type'] = 'image/svg+xml';
+			$defaults['ext']  = 'svgz';
 		}
 
 		return $defaults;
@@ -723,7 +787,7 @@ class ST_WXR_Importer {
 
 			'mimes'       => array(
 				'xml'  => 'text/xml',
-				'json' => 'text/plain',
+				'json' => 'application/json',
 			),
 		);
 
@@ -776,7 +840,7 @@ class ST_WXR_Importer {
 			),
 			'url'     => $url,
 			'strings' => array(
-				'complete' => __( 'Import complete!', 'st-importer', 'astra-sites' ),
+				'complete' => __( 'Import complete!', 'astra-sites' ),
 			),
 		);
 	}

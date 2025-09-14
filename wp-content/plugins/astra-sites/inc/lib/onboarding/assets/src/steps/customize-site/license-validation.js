@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import Button from '../../components/button/button';
 import { whiteLabelEnabled } from '../../utils/functions';
 import ICONS from '../../../icons';
-import Input from '../onboarding-ai/components/input';
+import Input from '../../components/input';
 import { ArrowRightIcon } from '@heroicons/react/24/outline';
 import apiFetch from '@wordpress/api-fetch';
 const { restNonce } = starterTemplates;
@@ -43,12 +43,12 @@ const LicenseValidation = ( param ) => {
 	);
 
 	const getAccessLink = () => {
-		window.open( astraSitesVars.cta_links[ builder ] );
+		window.open( astraSitesVars?.cta_links[ builder ] );
 	};
 
 	const getwhiteLabelLink = () => {
-		if ( astraSitesVars.whiteLabelUrl !== '#' ) {
-			window.open( astraSitesVars.whiteLabelUrl );
+		if ( astraSitesVars?.whiteLabelUrl !== '#' ) {
+			window.open( astraSitesVars?.whiteLabelUrl );
 		}
 	};
 

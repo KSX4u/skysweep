@@ -122,14 +122,15 @@ class Akismet {
 	 * Get field content.
 	 *
 	 * @since 1.8.5
+	 * @since 1.8.9.3 Changed $field_id type from string to int|string.
 	 *
-	 * @param array $field    Field data.
-	 * @param array $entry    Entry data.
-	 * @param int   $field_id Field ID.
+	 * @param array      $field    Field data.
+	 * @param array      $entry    Entry data.
+	 * @param int|string $field_id Field ID.
 	 *
 	 * @return string
 	 */
-	private function get_field_content( array $field, array $entry, int $field_id ): string {
+	private function get_field_content( array $field, array $entry, $field_id ): string {
 
 		if ( ! isset( $entry['fields'][ $field_id ] ) ) {
 			return '';
@@ -156,7 +157,7 @@ class Akismet {
 	 *
 	 * @return bool
 	 */
-	private function entry_is_spam( array $form_data, array $entry ): bool { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	private function entry_is_spam( array $form_data, array $entry ): bool {
 
 		$request = $this->get_request_args( $form_data, $entry );
 
@@ -203,6 +204,30 @@ class Akismet {
 	}
 
 	/**
+	 * Mark the entry as spam in Akismet.
+	 *
+	 * @since 1.8.9
+	 *
+	 * @param array $form_data Form data for the current form.
+	 * @param array $entry     Entry data for the current entry.
+	 *
+	 * @return bool
+	 */
+	public function submit_missed_spam( array $form_data, array $entry ) {
+
+		if ( ! self::is_configured() ) {
+			return false;
+		}
+
+		$request = $this->get_request_args( $form_data, $entry );
+
+		$response = $this->http_post( $request, 'submit-spam' );
+
+		// Yes, Akismet returns "Thanks for making the web a better place." as the response.
+		return ! empty( $response ) && isset( $response[1] ) && 'Thanks for making the web a better place.' === trim( $response[1] );
+	}
+
+	/**
 	 * Get the request arguments to be sent to Akismet.
 	 *
 	 * @since 1.8.8
@@ -212,7 +237,7 @@ class Akismet {
 	 *
 	 * @return array $request_args Request arguments to be sent to Akismet.
 	 */
-	private function get_request_args( $form_data, $entry ) { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
+	private function get_request_args( $form_data, $entry ) {
 
 		$entry_data = $this->get_entry_data( $form_data['fields'], $entry );
 
@@ -221,10 +246,10 @@ class Akismet {
 		// We can't use certain real-time functions when the entry is marked as not spam.
 		// In this case, we need to use the smart tag value.
 		if ( ! empty( $entry_id ) ) {
-			$page_url    = wpforms_process_smart_tags( '{page_url}', $form_data, [], $entry_id );
-			$url_referer = wpforms_process_smart_tags( '{url_referer}', $form_data, [], $entry_id );
-			$user_id     = wpforms_process_smart_tags( '{user_id}', $form_data, [], $entry_id );
-			$user_ip     = wpforms_process_smart_tags( '{user_ip}', $form_data, [], $entry_id );
+			$page_url    = wpforms_process_smart_tags( '{page_url}', $form_data, [], $entry_id, 'akismet-request-args' );
+			$url_referer = wpforms_process_smart_tags( '{url_referer}', $form_data, [], $entry_id, 'akismet-request-args' );
+			$user_id     = wpforms_process_smart_tags( '{user_id}', $form_data, [], $entry_id, 'akismet-request-args' );
+			$user_ip     = wpforms_process_smart_tags( '{user_ip}', $form_data, [], $entry_id, 'akismet-request-args' );
 			$user_agent  = '';
 		} else {
 			$page_url    = wpforms_current_url();

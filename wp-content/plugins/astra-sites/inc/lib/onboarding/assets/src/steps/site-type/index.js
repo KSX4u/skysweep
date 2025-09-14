@@ -5,25 +5,29 @@ import {
 	RectangleStackIcon,
 } from '@heroicons/react/24/outline';
 import { __ } from '@wordpress/i18n';
-import { useDispatch } from '@wordpress/data';
 import { removeQueryArgs } from '@wordpress/url';
 import { Button, DefaultStep, PreviousStepLink } from '../../components/index';
 import { useStateValue } from '../../store/store';
-import { STORE_KEY } from '../onboarding-ai/store';
-import LimitExceedModal from '../onboarding-ai/components/limit-exceeded-modal';
+import LimitExceedModal from '../../components/limit-exceeded-modal';
 import { WandIcon } from '../ui/icons';
 import './style.scss';
-import { removeLocalStorageItem } from '../onboarding-ai/helpers';
-const { showClassicTemplates } = astraSitesVars;
+import {
+	getStepIndex,
+	removeLocalStorageItem,
+	saveGutenbergAsDefaultBuilder,
+} from '../../utils/functions';
+const { showClassicTemplates, showAiBuilder } = astraSitesVars;
+const { isBeaverBuilderDisabled, isElementorDisabled } = starterTemplates;
 
 const SiteType = () => {
-	const [ { builder, currentIndex }, dispatch ] = useStateValue();
-	const { setLimitExceedModal } = useDispatch( STORE_KEY );
+	const [
+		{ builder, currentIndex, limitExceedModal, pageBuilderCache },
+		dispatch,
+	] = useStateValue();
 
 	const zipPlans = astraSitesVars?.zip_plans;
 	const sitesRemaining = zipPlans?.plan_data?.remaining;
 	const aiSitesRemainingCount = sitesRemaining?.ai_sites_count;
-	const allSitesRemainingCount = sitesRemaining?.all_sites_count;
 
 	useEffect( () => {
 		const startTime = localStorage.getItem( 'st-import-start' );
@@ -34,6 +38,35 @@ const SiteType = () => {
 			localStorage.removeItem( 'st-import-end' );
 		}
 	} );
+
+	useEffect( () => {
+		async function setBuilder() {
+			if ( showAiBuilder || builder !== 'ai-builder' ) {
+				return;
+			}
+
+			// Check cache - if same builder was set recently (within 5 minutes), skip API call.
+			const now = Date.now();
+			const cacheExpiry = 5 * 60 * 1000; // 5 minutes.
+
+			if (
+				pageBuilderCache.timestamp &&
+				now - pageBuilderCache.timestamp > cacheExpiry
+			) {
+				await saveGutenbergAsDefaultBuilder( 'gutenberg' );
+			}
+
+			dispatch( {
+				type: 'set',
+				builder: 'gutenberg',
+				pageBuilderCache: {
+					timestamp: now,
+				},
+			} );
+		}
+
+		setBuilder();
+	}, [ showAiBuilder, isBeaverBuilderDisabled, isElementorDisabled ] );
 
 	const handleKeyPress = ( e, navigate ) => {
 		e = e || window.event;
@@ -60,13 +93,15 @@ const SiteType = () => {
 		const token = urlParams.get( 'token' );
 		if ( token ) {
 			if (
-				( typeof aiSitesRemainingCount === 'number' &&
-					aiSitesRemainingCount <= 0 ) ||
-				( typeof allSitesRemainingCount === 'number' &&
-					allSitesRemainingCount <= 0 )
+				typeof aiSitesRemainingCount === 'number' &&
+				aiSitesRemainingCount <= 0
 			) {
-				setLimitExceedModal( {
-					open: true,
+				dispatch( {
+					type: 'set',
+					limitExceedModal: {
+						...limitExceedModal,
+						open: true,
+					},
 				} );
 			} else {
 				dispatch( {
@@ -79,25 +114,21 @@ const SiteType = () => {
 
 	const handleBuildWithAIPress = () => {
 		if (
-			( typeof aiSitesRemainingCount === 'number' &&
-				aiSitesRemainingCount <= 0 ) ||
-			( typeof allSitesRemainingCount === 'number' &&
-				allSitesRemainingCount <= 0 )
+			typeof aiSitesRemainingCount === 'number' &&
+			aiSitesRemainingCount <= 0
 		) {
-			setLimitExceedModal( {
-				open: true,
+			dispatch( {
+				type: 'set',
+				limitExceedModal: {
+					...limitExceedModal,
+					open: true,
+				},
 			} );
 			return;
 		}
-
-		// dispatch( {
-		// 	type: 'set',
-		// 	currentIndex: 1,
-		// 	builder: 'ai-builder',
-		// } );
 		const content = new FormData();
 		content.append( 'action', 'astra-sites-change-page-builder' );
-		content.append( '_ajax_nonce', astraSitesVars._ajax_nonce );
+		content.append( '_ajax_nonce', astraSitesVars?._ajax_nonce );
 		content.append( 'page_builder', 'ai-builder' );
 		fetch( ajaxurl, {
 			method: 'post',
@@ -105,11 +136,15 @@ const SiteType = () => {
 		} );
 
 		window.location.href =
-			astraSitesVars.adminURL + 'themes.php?page=ai-builder';
+			astraSitesVars?.adminURL + 'themes.php?page=ai-builder';
 	};
 
 	useEffect( () => {
-		if ( currentIndex === 0 ) {
+		if (
+			currentIndex === getStepIndex( 'page-builder' ) &&
+			builder !== 'fse' &&
+			showAiBuilder
+		) {
 			dispatch( {
 				type: 'set',
 				builder: 'ai-builder',
@@ -117,12 +152,16 @@ const SiteType = () => {
 		}
 	}, [] );
 
-	const colClass = showClassicTemplates ? 'md:grid-cols-2' : 'md:grid-cols-1';
+	// Determine grid columns based on what should be shown
+	let colClass = 'md:grid-cols-1';
+	if ( showAiBuilder && showClassicTemplates ) {
+		colClass = 'md:grid-cols-2';
+	}
 
 	return (
 		<DefaultStep
 			content={
-				<div className="flex-1 flex flex-col justify-center items-center pb-10 lg:pb-0">
+				<div className="flex-1 flex flex-col justify-center items-center pb-14 sm:pb-10 lg:pb-0">
 					<div className="w-full flex justify-center">
 						<h1 className="w-[390px]">
 							{ __(
@@ -135,34 +174,48 @@ const SiteType = () => {
 					<div
 						className={ `max-w-full lg:max-w-[800px] grid grid-cols-1 ${ colClass } place-content-center gap-6 ist-fadeinUp` }
 					>
-						<div
-							className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative  rounded-xl shadow-card gradient-border-cover gradient-border-cover-button max-w-[356px]"
-							tabIndex="0"
-							onKeyDown={ ( event ) =>
-								handleKeyPress( event, handleBuildWithAIPress )
-							}
-						>
-							<WandIcon className="w-12 h-12 text-accent-st-secondary stroke-1" />
-							<div className="mt-6 text-xl font-semibold leading-7 mb-2.5 text-heading-text">
-								{ __( 'AI Website Builder', 'astra-sites' ) }
+						{ showAiBuilder && (
+							<div
+								className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative  rounded-xl shadow-card gradient-border-cover gradient-border-cover-button max-w-[356px]"
+								tabIndex="0"
+								onKeyDown={ ( event ) =>
+									handleKeyPress(
+										event,
+										handleBuildWithAIPress
+									)
+								}
+							>
+								<WandIcon className="w-12 h-12 text-accent-st-secondary stroke-1" />
+								<div className="mt-6 text-xl font-semibold leading-7 mb-2.5 text-heading-text">
+									{ __(
+										'AI Website Builder',
+										'astra-sites'
+									) }
+								</div>
+								<div className="zw-sm-normal text-body-text">
+									{ ' ' }
+									{ __(
+										'Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster.',
+										'astra-sites'
+									) }{ ' ' }
+								</div>
+								<div className="pt-10 mt-auto">
+									<Button
+										className="w-full h-10"
+										onClick={ handleBuildWithAIPress }
+									>
+										<span>
+											{ __(
+												'Build with AI',
+												'astra-sites'
+											) }
+										</span>{ ' ' }
+										<ArrowRightIcon className="w-5 h-5 ml-2" />
+									</Button>
+								</div>
 							</div>
-							<div className="zw-sm-normal text-body-text">
-								{ ' ' }
-								{ __(
-									'Experience the future of website building. We offer AI features powered by ZipWP to help you build your website 10x faster.',
-									'astra-sites'
-								) }{ ' ' }
-							</div>
-							<div className="pt-10 mt-auto">
-								<Button
-									className="w-full h-10"
-									onClick={ handleBuildWithAIPress }
-								>
-									<span>Try the New AI Builder</span>{ ' ' }
-									<ArrowRightIcon className="w-5 h-5 ml-2" />
-								</Button>
-							</div>
-						</div>
+						) }
+
 						{ showClassicTemplates && (
 							<div
 								className="flex-col flex bg-white pt-10 pb-8 px-8 text-left relative rounded-xl max-w-[356px]"
@@ -195,20 +248,32 @@ const SiteType = () => {
 										className="w-full h-10"
 										type="secondary"
 										onClick={ () => {
+											const newIndex =
+												builder === 'fse' ||
+												( isBeaverBuilderDisabled &&
+													isElementorDisabled )
+													? 2
+													: 1;
+
 											dispatch( {
 												type: 'set',
 												builder:
 													builder === 'ai-builder'
 														? 'gutenberg'
 														: builder,
-												currentIndex: 2,
+												currentIndex: newIndex,
 											} );
 											removeLocalStorageItem(
 												'st-scroll-position'
 											);
 										} }
 									>
-										<span>Build with Templates</span>{ ' ' }
+										<span>
+											{ __(
+												'Build with Templates',
+												'astra-sites'
+											) }
+										</span>{ ' ' }
 										<ArrowRightIcon className="w-5 h-5 ml-2" />
 									</Button>
 								</div>

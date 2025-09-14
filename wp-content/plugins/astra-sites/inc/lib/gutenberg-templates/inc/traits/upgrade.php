@@ -26,11 +26,13 @@ class Upgrade {
 
 	/**
 	 * Activate Plugin
+	 *
+	 * @return void
 	 */
 	public function skip_spectra_pro_onboarding() {
 
 		if ( ! current_user_can( 'manage_ast_block_templates' ) ) {
-			wp_send_json_error( __( 'You are not allowed to perform this action', 'ast-block-templates' ) );
+			wp_send_json_error( __( 'You are not allowed to perform this action', 'astra-sites' ) );
 		}
 
 		// Verify Nonce.

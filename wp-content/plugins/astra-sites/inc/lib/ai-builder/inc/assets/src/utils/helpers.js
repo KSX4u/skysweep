@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
+import apiFetch from '@wordpress/api-fetch';
 
 export const classNames = ( ...classes ) => twMerge( clsx( classes ) );
 
@@ -258,13 +259,54 @@ export const sendPostMessage = ( data, id ) => {
 	);
 };
 
+function fallbackCopy( text ) {
+	const textarea = document.createElement( 'textarea' );
+	textarea.value = text;
+	textarea.style.position = 'fixed'; // avoid scrolling to bottom
+	document.body.appendChild( textarea );
+	textarea.focus();
+	textarea.select();
+	try {
+		document.execCommand( 'copy' );
+	} catch ( e ) {}
+	document.body.removeChild( textarea );
+}
+
 export const copyToClipboard = ( text ) => {
 	// Copy the text inside the text field
-	navigator.clipboard.writeText( text );
+	if ( navigator.clipboard ) {
+		navigator.clipboard
+			.writeText( text )
+			.catch( () => fallbackCopy( text ) );
+	} else {
+		fallbackCopy( text );
+	}
 };
 
 export const handleCopyToClipboard = ( event, text ) => {
 	copyToClipboard( text );
+};
+
+export const setCookie = ( name, value, expiryInSeconds = 60 ) => {
+	const date = new Date();
+	date.setTime( date.getTime() + expiryInSeconds * 1000 ); // in milliseconds.
+	const expires = 'expires=' + date.toUTCString();
+	document.cookie = `${ name }=${ value }; ${ expires }; path=/`;
+};
+
+export const getCookie = ( name ) => {
+	const cookies = document.cookie.split( '; ' );
+	for ( const cookie of cookies ) {
+		const [ key, value ] = cookie.split( '=' );
+		if ( key === name ) {
+			return decodeURIComponent( value );
+		}
+	}
+	return null;
+};
+
+export const deleteCookie = ( name ) => {
+	document.cookie = `${ name }=; Max-Age=0; path=/`;
 };
 
 export const socialMediaParser = {
@@ -320,4 +362,66 @@ export const socialMediaParser = {
 
 		return matches;
 	},
+};
+
+export const isValidURL = ( url ) => {
+	try {
+		new URL( url );
+		return true; // If the URL constructor doesn't throw an error, the URL is valid
+	} catch ( _ ) {
+		return false; // Invalid URL
+	}
+};
+
+export const isValidImageURL = ( fileURL ) => {
+	// regex only matches letters, numbers, spaces, dots, underscores, colons, slashes, and hyphens
+	const validPattern = /^[a-zA-Z0-9_\-\. :~/]+$/;
+
+	if ( ! isValidURL( fileURL ) ) {
+		return false;
+	}
+
+	if ( ! validPattern.test( fileURL ) ) {
+		return false;
+	}
+
+	return true;
+};
+
+const { plan_data } = aiBuilderVars?.zip_plans;
+
+export const showAISitesNotice = () => {
+	// if only 1 AI Site is remaining
+	if ( plan_data?.remaining?.ai_sites_count === 1 ) {
+		return true;
+	}
+
+	const usagePercentage =
+		( plan_data?.usage?.ai_sites_count /
+			plan_data?.limit?.ai_sites_count ) *
+		100;
+
+	if ( usagePercentage >= 60 ) {
+		return true;
+	}
+
+	return false;
+};
+
+export const getPlanPromoDissmissTime = async () => {
+	const data = await apiFetch( {
+		path: 'zipwp/v1/get-plan-promo-dismiss-time',
+		method: 'GET',
+		headers: {
+			'X-WP-Nonce': aiBuilderVars.rest_api_nonce,
+			'content-type': 'application/json',
+		},
+	} );
+
+	return data;
+};
+
+export const getTimeDiff = ( timeToCompare ) => {
+	const timeDiff = Math.floor( Date.now() / 1000 ) - timeToCompare;
+	return timeDiff;
 };

@@ -10,7 +10,7 @@
 
 namespace AiBuilder\Inc\Compatibility\SureCart;
 
-if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
+if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) {
 
 	/**
 	 * SureCart Compatibility
@@ -18,7 +18,6 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 	 * @since 3.3.0
 	 */
 	class Ai_Builder_Compatibility_SureCart {
-
 		/**
 		 * Instance
 		 *
@@ -26,20 +25,7 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 		 * @var object Class object.
 		 * @since 3.3.0
 		 */
-		private static $instance;
-
-		/**
-		 * Initiator
-		 *
-		 * @since 3.3.0
-		 * @return object initialized object of class.
-		 */
-		public static function instance() {
-			if ( ! isset( self::$instance ) ) {
-				self::$instance = new self();
-			}
-			return self::$instance;
-		}
+		private static $instance = null;
 
 		/**
 		 * Constructor
@@ -53,13 +39,29 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 		}
 
 		/**
+		 * Initiator
+		 *
+		 * @since 3.3.0
+		 * @return object initialized object of class.
+		 */
+		public static function instance() {
+			if ( null === self::$instance ) {
+				self::$instance = new self();
+			}
+			return self::$instance;
+		}
+
+		/**
 		 * Set the source to 'starter-templates' on activation.
 		 *
 		 * @since 1.0.15
+		 * @param string $plugin_init The path to the plugin file that was just activated.
 		 * @return void
 		 */
-		public function activation() {
-			update_option( 'surecart_source', 'starter_templates', false );
+		public function activation( $plugin_init ) {
+			if ( 'surecart/surecart.php' === $plugin_init ) {
+				update_option( 'surecart_source', 'starter_templates', false );
+			}
 		}
 
 		/**
@@ -74,11 +76,14 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 			}
 			// Retrieve all pages.
 			$pages = get_pages();
-			foreach ( $pages as $page ) {
-				// Get the page ID.
-				$page_id      = $page->ID;
-				$page_content = $page->post_content;
-				$this->check_page_types_and_update_options( $page_id, $page_content );
+
+			if ( is_array( $pages ) ) {
+				foreach ( $pages as $page ) {
+					// Get the page ID.
+					$page_id      = (string) $page->ID;
+					$page_content = $page->post_content;
+					$this->check_page_types_and_update_options( $page_id, $page_content );
+				}
 			}
 		}
 
@@ -130,4 +135,4 @@ if ( ! class_exists( 'Ai_Builder_Compatibility_SureCart' ) ) :
 	 */
 	Ai_Builder_Compatibility_SureCart::instance();
 
-endif;
+}

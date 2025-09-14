@@ -57,13 +57,20 @@ class Sidebar_Configurations {
 	 * @return void
 	 */
 	public function __construct() {
+		if ( ! current_user_can( 'manage_zip_ai_assistant' ) ) {
+			return;
+		}
+		global $wp_version;
+		// Set the priority for loading ZIP AI Adminbar trigger.
+		$admin_trigger_priority = version_compare( $wp_version, '6.6', '<' ) ? 999 : 6;
 		// Setup the Sidebar Rest Routes.
 		add_action( 'rest_api_init', array( $this, 'register_route' ) );
-
+		add_action( 'admin_bar_menu', array( $this, 'add_admin_trigger' ), $admin_trigger_priority );
 		// Setup the Sidebar Auth Ajax.
 		add_action( 'wp_ajax_verify_zip_ai_authenticity', array( $this, 'verify_authenticity' ) );
-
-		add_action( 'admin_bar_menu', array( $this, 'add_admin_trigger' ), 999 );
+		// Setup the Sidebar Credit Details Ajax.
+		add_action( 'wp_ajax_get_latest_credit_details', array( $this, 'get_latest_credit_details' ) );
+		add_action( 'wp_ajax_get_fresh_credit_details', array( $this, 'get_fresh_credit_details' ) );
 
 		// Render the Sidebar React App in the Footer in the Gutenberg Editor, Admin, and the Front-end.
 		add_action( 'admin_footer', array( $this, 'render_sidebar_markup' ) );
@@ -90,7 +97,7 @@ class Sidebar_Configurations {
 					'methods'             => \WP_REST_Server::CREATABLE,
 					'callback'            => array( $this, 'generate_ai_content' ),
 					'permission_callback' => function () {
-						return current_user_can( 'edit_posts' );
+						return current_user_can( 'manage_zip_ai_assistant' );
 					},
 					'args'                => array(
 						'use_system_message' => array(
@@ -151,7 +158,7 @@ class Sidebar_Configurations {
 		if ( ! empty( $last_message_tone ) ) {
 			$current_options['last_used']['changeTone'] = [
 				'value' => $last_message_tone,
-				'label' => __( ucfirst( $last_message_tone ), 'zip-ai' ), //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
+				'label' => __( ucfirst( $last_message_tone ), 'astra-sites' ), //phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText
 			];
 		}
 
@@ -178,23 +185,25 @@ class Sidebar_Configurations {
 
 		// If the nessage array doesn't exist, abandon ship.
 		if ( empty( $params['message_array'] ) || ! is_array( $params['message_array'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'The message array was not supplied', 'zip-ai' ) ) );
+			wp_send_json_error( array( 'message' => __( 'The message array was not supplied', 'astra-sites' ) ) );
 		}
 
-		// Set the token count to 0, and create messages array.
-		$token_count = 0;
-		$messages    = array();
+		// Set the character count to 0, and create messages array.
+		$character_count = 0;
+		$messages        = array();
 
-		// Start with the last message - going upwards until the token count hits 2000.
+		// Start with the last message - going upwards until the character count hits 2500.
 		foreach ( array_reverse( $params['message_array'] ) as $current_message ) {
 			// If the message content doesn't exist, skip it.
 			if ( empty( $current_message['content'] ) ) {
 				continue;
 			}
 
-			// Get the token count, and if it's greater than 2000, break out of the loop.
-			$token_count += Helper::get_token_count( $current_message['content'] );
-			if ( $token_count >= 2000 ) {
+			$message_length = strlen( $current_message['content'] );
+
+			// If adding this message exceeds 2500 characters, break the loop.
+			$character_count += $message_length;
+			if ( $character_count > 2500 ) {
 				break;
 			}
 
@@ -204,13 +213,16 @@ class Sidebar_Configurations {
 
 		// Finally add the system message to the start of the array.
 		if ( ! empty( $params['use_system_message'] ) ) {
-			array_unshift(
-				$messages,
-				array(
-					'role'    => 'system',
-					'content' => 'You are my AI Assistant. You are a content writer that writes content for my website.\n\n\nYou will only generate content for what you are asked.',
-				)
-			);
+
+			// Get the AI training message according to the location of the current page.
+			$initial_messages = self::assign_ai_assistant_purpose( $params );
+
+			foreach ( array_reverse( $initial_messages ) as $initial_message ) {
+				array_unshift(
+					$messages,
+					$initial_message
+				);
+			}
 		}
 
 		// Set the required values to send to the middleware server.
@@ -220,7 +232,6 @@ class Sidebar_Configurations {
 			'top_p'             => 1,
 			'frequency_penalty' => 0.8,
 			'presence_penalty'  => 1,
-			'model'             => 'gpt-3.5-turbo',
 			'messages'          => $messages,
 		);
 
@@ -238,13 +249,28 @@ class Sidebar_Configurations {
 				}
 				$message = ! empty( $message ) ? $message : $response['error'];
 			}
-			wp_send_json_error( array( 'message' => $message ) );
+			wp_send_json_error(
+				array(
+					'message' => $message,
+					'code'    => $response['code'],
+				)
+			);
 		} elseif ( is_array( $response['choices'] ) && ! empty( $response['choices'][0]['message']['content'] ) ) {
 			// If the message was sent successfully, send it successfully.
-			wp_send_json_success( array( 'message' => $response['choices'][0]['message']['content'] ) );
+			wp_send_json_success(
+				array(
+					'message' => $response['choices'][0]['message']['content'],
+					'code'    => $response['code'],
+				)
+			);
 		} else {
 			// If you've reached here, then something has definitely gone amuck. Abandon ship.
-			wp_send_json_error( array( 'message' => __( 'Something went wrong', 'zip-ai' ) ) );
+			wp_send_json_error(
+				array(
+					'message' => __( 'Something went wrong', 'astra-sites' ),
+					'code'    => $response['code'],
+				)
+			);
 		}//end if
 	}
 
@@ -258,10 +284,17 @@ class Sidebar_Configurations {
 	 */
 	private function custom_message( $code ) {
 		$message_array = array(
-			'no_auth'              => __( 'Invalid auth token.', 'zip-ai' ),
-			'insufficient_credits' => __( 'You have no credits left.', 'zip-ai' ),
+			'no_auth'              => __( 'Authentication failed. Invalid or missing bearer token.', 'astra-sites' ),
+			'insufficient_credits' => array(
+				'title'          => __( 'You\'ve run out of credits.', 'astra-sites' ),
+				'type'           => 'assemble-error',
+				'content'        => __( 'To continue using the assistant and access its full features, please purchase more credits.', 'astra-sites' ),
+				'button_content' => array(
+					'text' => __( 'Buy more credits', 'astra-sites' ),
+					'url'  => 'https://app.zipwp.com/credits-pricing?source=spectra',
+				),
+			),
 		);
-
 		return isset( $message_array[ $code ] ) ? $message_array[ $code ] : '';
 	}
 
@@ -276,8 +309,30 @@ class Sidebar_Configurations {
 		// Check the nonce.
 		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
 
+		// Set an array of data to be sent.
+		$required_details = [
+			'is_authorized' => Helper::is_authorized(),
+		];
+
+		// If the user is authorized, get the credit details.
+		if ( $required_details['is_authorized'] ) {
+			$required_details['credit_details'] = Helper::get_credit_details();
+		}
+
+		// Get the current plan details that need to be localized.
+		$response_zipwp_plan = Helper::get_current_plan_details();
+
+		// If the response is not an error, then proceed to localize the required details.
+		if ( is_array( $response_zipwp_plan ) && 'error' !== $response_zipwp_plan['status'] ) {
+
+			// Add the team name if it exists.
+			if ( ! empty( $response_zipwp_plan['team']['name'] ) ) {
+				$required_details['team_name'] = $response_zipwp_plan['team']['name'];
+			}
+		}
+
 		// Send a boolean based on whether the auth token has been added.
-		wp_send_json_success( array( 'is_authorized' => Helper::is_authorized() ) );
+		wp_send_json_success( $required_details );
 	}
 
 	/**
@@ -287,7 +342,13 @@ class Sidebar_Configurations {
 	 * @since 1.0.0
 	 */
 	public function load_sidebar_assets() {
-		// If the adminbar is not visible on this screen, abandon ship.
+
+		if ( class_exists( '\UAGB_Admin_Helper' ) && method_exists( '\UAGB_Admin_Helper', 'should_exclude_assets_for_cpt' ) ) {
+			if ( \UAGB_Admin_Helper::should_exclude_assets_for_cpt() ) {
+				return; // Early return to prevent loading assets.
+			}
+		}
+		// If the admin bar is not visible, we don't want to load the sidebar assets.
 		if ( ! is_admin_bar_showing() ) {
 			return;
 		}
@@ -315,6 +376,14 @@ class Sidebar_Configurations {
 			]
 		) : $script_info['dependencies'];
 
+		// Resolving conflict with wigdget page query monitor warning.
+		global $pagenow;
+		if ( 'widgets.php' === $pagenow ) {
+			$script_dep = array_diff( $script_info['dependencies'], [ 'wp-edit-post' ] );
+		}
+		// Note that the current screen function is loaded after admin_init, so if it doesn't exist set screen to null.
+		$screen = ( is_admin() && function_exists( 'get_current_screen' ) ) ? get_current_screen() : null;
+
 		// Register the sidebar scripts.
 		wp_register_script(
 			$handle,
@@ -335,12 +404,13 @@ class Sidebar_Configurations {
 		// Enqueue the sidebar scripts.
 		wp_enqueue_script( $handle );
 		// Set the script translations.
-		wp_set_script_translations( $handle, 'zip-ai' );
+		wp_set_script_translations( $handle, apply_filters( 'zip_ai_library_textdomain', 'zip-ai' ) );
 		// Enqueue the sidebar styles.
 		wp_enqueue_style( $handle );
 
-		// Create the middleware parameters array.
+		// Create the middleware parameters array and the credit topup URL.
 		$middleware_params = [];
+		$credit_topup_url  = esc_url( ZIP_AI_CREDIT_TOPUP_URL );
 
 		// Get the collab product details, and extract the slug from there if it exists.
 		$collab_product_details = apply_filters( 'zip_ai_collab_product_details', null );
@@ -351,8 +421,65 @@ class Sidebar_Configurations {
 			&& is_string( $collab_product_details['product_slug'] )
 		) {
 			$middleware_params['plugin'] = sanitize_text_field( $collab_product_details['product_slug'] );
+
+			// Also update the plugin as the source param for the Get Credits URL.
+			$credit_topup_url = esc_url( add_query_arg( 'source', $collab_product_details['product_slug'], ZIP_AI_CREDIT_TOPUP_URL ) );
 		}
 
+		// Get the current plan details that need to be localized.
+		$response_zipwp_plan = Helper::get_current_plan_details();
+		$current_zipwp_plan  = array();
+
+		// If the response is not an error, then proceed to localize the required details.
+		if ( is_array( $response_zipwp_plan ) && 'error' !== $response_zipwp_plan['status'] ) {
+
+			// Add the team name if it exists.
+			if ( ! empty( $response_zipwp_plan['team']['name'] ) ) {
+				$current_zipwp_plan['team_name'] = $response_zipwp_plan['team']['name'];
+			}
+		}
+
+		// Get the ID based on the current URL - this will avoid incorrectly getting popups as the page.
+		$current_url = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$post_id     = url_to_postid( set_url_scheme( $current_url ) );
+		// If this is an editor page, this won't work - so if it doesn't, try getting the ID.
+		if ( empty( $post_id ) ) {
+			$post_id = get_the_ID();
+		}
+
+		// Identify the special page if required.
+		$special_page;
+		switch ( true ) {
+			case ( function_exists( 'is_shop' ) && is_shop() ):
+				$special_page = 'shop';
+				break;
+			case ( function_exists( 'is_cart' ) && is_cart() ):
+				$special_page = 'cart';
+				break;
+			case ( function_exists( 'is_checkout' ) && is_checkout() ):
+				$special_page = 'checkout';
+				break;
+			default:
+				$special_page = null;
+		}
+
+		// Set the current view - this will determine what the initial prompts should be.
+		$current_view = 'default';
+
+		// If you can get the current screen ( alluding to the fact that you're in the admin pages ), then proceed.
+		if ( function_exists( 'get_current_screen' ) ) {
+			$current_screen = get_current_screen();
+
+			// Check if this a WooCommerce product edit page.
+			if (
+				isset( $current_screen->base )
+				&& isset( $current_screen->id )
+				&& 'post' === $current_screen->base
+				&& 'product' === $current_screen->id
+			) {
+				$current_view = 'editing_product';
+			}
+		}
 		// Localize the script required for the Zip AI Sidebar.
 		wp_localize_script(
 			$handle,
@@ -361,14 +488,30 @@ class Sidebar_Configurations {
 				'ajax_url'                 => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce'               => wp_create_nonce( 'zip_ai_ajax_nonce' ),
 				'admin_nonce'              => wp_create_nonce( 'zip_ai_admin_nonce' ),
-				'current_post_id'          => get_the_ID(),
+				'site_url'                 => get_site_url(),
+				'current_post_id'          => $post_id,
+				'special_page'             => $special_page,
+				'is_admin'                 => is_admin(),
 				'auth_middleware'          => Helper::get_auth_middleware_url( $middleware_params ),
 				'is_authorized'            => Helper::is_authorized(),
 				'is_ai_assistant_enabled'  => Module::is_enabled( 'ai_assistant' ),
 				'is_customize_preview'     => is_customize_preview(),
 				'collab_product_details'   => $collab_product_details,
 				'zip_ai_assistant_options' => get_option( 'zip_ai_assistant_option' ),
+				'is_widgets_page'          => $screen->id ?? null,
+				'current_status'           => Helper::get_setting( 'status' ),
+				'current_plan_details'     => $current_zipwp_plan,
+				'current_view'             => $current_view,
+				'credit_details'           => Helper::get_credit_details(),
+				'credit_topup_url'         => $credit_topup_url,
 			)
+		);
+
+		wp_enqueue_style(
+			'zip-ai-sidebar-fonts',
+			'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Courier+Prime:wght@400&display=swap',
+			array(),
+			ZIP_AI_VERSION
 		);
 	}
 
@@ -380,6 +523,12 @@ class Sidebar_Configurations {
 	 * @return void
 	 */
 	public function add_admin_trigger( $admin_bar ) {
+		if ( class_exists( '\UAGB_Admin_Helper' ) && method_exists( '\UAGB_Admin_Helper', 'should_exclude_assets_for_cpt' ) ) {
+			if ( \UAGB_Admin_Helper::should_exclude_assets_for_cpt() ) {
+				return; // Early return to prevent loading assets.
+			}
+		}
+
 		$args = array(
 			'id'     => 'zip-ai-assistant',
 			'title'  => '<span class="ab-icon" aria-hidden="true" style="margin: 0">
@@ -398,10 +547,13 @@ class Sidebar_Configurations {
 	 * @return void
 	 */
 	public static function render_sidebar_markup() {
-		// If the current user does not have the required capability, then don't render the empty div.
-		if ( ! current_user_can( 'edit_posts' ) ) {
-			return;
+
+		if ( class_exists( '\UAGB_Admin_Helper' ) && method_exists( '\UAGB_Admin_Helper', 'should_exclude_assets_for_cpt' ) ) {
+			if ( \UAGB_Admin_Helper::should_exclude_assets_for_cpt() ) {
+				return; // Early return to prevent loading assets.
+			}
 		}
+
 		// If the adminbar is visible on this screen, render the admin trigger.
 		if ( is_admin_bar_showing() ) {
 			?>
@@ -412,5 +564,247 @@ class Sidebar_Configurations {
 		?>
 			<div id="zip-ai-sidebar"></div>
 		<?php
+	}
+
+	/**
+	 * Assign the purpose of the AI Assistant given the current page.
+	 *
+	 * @param array<mixed> $params An array of all the parameters.
+	 * @since 2.0.0
+	 * @return array<array<string,string>> An array all the required system messages.
+	 */
+	public static function assign_ai_assistant_purpose( $params ) {
+		// Get the site details.
+		$site_details = [];
+
+		if ( ! empty( trim( get_bloginfo( 'name' ) ) ) ) {
+			$site_details['name'] = esc_html( get_bloginfo( 'name' ) );
+		}
+		if ( ! empty( trim( get_bloginfo( 'description' ) ) ) ) {
+			$site_details['description'] = esc_html( get_bloginfo( 'description' ) );
+		}
+
+		// If there are ZipWP details, overwrite the default details with the improved ones.
+		$zipwp_details = get_option( 'zipwp_user_business_details', '' );
+		if ( is_array( $zipwp_details ) ) {
+			if ( ! empty( $zipwp_details['business_name'] ) && is_string( $zipwp_details['business_name'] ) && ! empty( trim( $zipwp_details['business_name'] ) ) ) {
+				$site_details['name'] = esc_html( $zipwp_details['business_name'] );
+			}
+			if ( ! empty( $zipwp_details['business_description'] ) && is_string( $zipwp_details['business_description'] ) && ! empty( trim( $zipwp_details['business_description'] ) ) ) {
+				$site_details['description'] = esc_html( $zipwp_details['business_description'] );
+			}
+		}
+
+		// Create the site detail message based on whether the name, description, both, or none are set.
+		$site_detail_message = '';
+		if ( ! empty( $site_details['name'] ) && ! empty( $site_details['description'] ) ) {
+			$site_detail_message = 'The name of my site is "' . $site_details['name'] . '" and the tagline/description of my site is "' . $site_details['description'] . '".';
+		} elseif ( ! empty( $site_details['name'] ) ) {
+			$site_detail_message = 'The name of my site is "' . $site_details['name'] . '".';
+		} elseif ( ! empty( $site_details['description'] ) ) {
+			$site_detail_message = 'The tagline/description of my site is "' . $site_details['description'] . '".';
+		}
+
+		// Create the default website-containing message so that links can be created.
+		$website_detail_message = 'When helping me with something that needs me to log in to my WordPress dashboard, generate the exact URL of the page I need to go to at the end of the message. My website is \'example.com\'. Make sure all URLs contain the link text in square brackets, and the URL in round brackets.';
+
+		// Set the common content that will be used for all cases.
+		$appended_common_rule = '\n\n\nYou can help me with everything I need even if it is not related to my site. You will only generate content for what you are asked.';
+
+		// All the role setting messages.
+		$role_settings_content = [
+			'default'             => 'You are my AI Assistant. You are a content writer that writes content for my website.' . $appended_common_rule,
+			'wordpress_assistant' => 'You are my WordPress Assistant. You know everything about improving and optimizing my WordPress website for my visitors.' . $appended_common_rule,
+			'e_commerce_expert'   => 'You are my WordPress E-commerce Expert. You know everything about improving and optimizing my E-Commerce website for my customers.' . $appended_common_rule,
+		];
+
+		// Create an array for all the system messages.
+		$page_based_system_messages = [];
+
+		// First determine if you're on any post.
+		if ( ! empty( $params['current_post_id'] ) && is_numeric( $params['current_post_id'] ) ) {
+			// Get the required details based on the ID.
+			$page_details   = self::get_page_details( $params['current_post_id'] );
+			$page_post_type = get_post_type( $params['current_post_id'] );
+
+			// Check if the current page is a WooCommerce product.
+			$this_is_a_product_page = 'product' === $page_post_type;
+
+			// Set the role based on the page type.
+			if ( $this_is_a_product_page ) {
+				// Set the role of an E-commerce expert.
+				array_push( $page_based_system_messages, self::get_formatted_system_role( $role_settings_content['e_commerce_expert'] ) );
+				if ( ! empty( $site_detail_message ) ) {
+					array_push( $page_based_system_messages, self::get_formatted_system_role( $site_detail_message ) );
+				}
+				array_push( $page_based_system_messages, self::get_formatted_system_role( 'This is a product page.' ) );
+			} else {
+				// Set the role of a WordPress expert.
+				array_push( $page_based_system_messages, self::get_formatted_system_role( $role_settings_content['wordpress_assistant'] ) );
+				if ( ! empty( $site_detail_message ) ) {
+					array_push( $page_based_system_messages, self::get_formatted_system_role( $site_detail_message ) );
+				}
+			}
+
+			// Add the page details.
+			$page_detail_message = 'These are the details of the current page that you and I are on, in case you are asked something about it\n\n\nPage ID: `' . $params['current_post_id'] . '`\nTitle: `' . $page_details['title'] . '`\nContent:`' . $page_details['content'] . '`';
+			array_push( $page_based_system_messages, self::get_formatted_system_role( $page_detail_message ) );
+
+			// Add the website based message.
+			array_push( $page_based_system_messages, self::get_formatted_system_role( $website_detail_message ) );
+
+			return $page_based_system_messages;
+		} elseif ( ! empty( $params['special_page'] ) && is_string( $params['special_page'] ) ) {
+			// Set the role of an E-commerce expert.
+			array_push( $page_based_system_messages, self::get_formatted_system_role( $role_settings_content['e_commerce_expert'] ) );
+			if ( ! empty( $site_detail_message ) ) {
+				array_push( $page_based_system_messages, self::get_formatted_system_role( $site_detail_message ) );
+			}
+
+			$special_page_id;
+			switch ( $params['special_page'] ) {
+				case 'shop':
+					array_push( $page_based_system_messages, self::get_formatted_system_role( 'This is my shop page.' ) );
+					$special_page_id = get_option( 'woocommerce_shop_page_id' );
+					break;
+				case 'cart':
+					array_push( $page_based_system_messages, self::get_formatted_system_role( 'This is the cart page.' ) );
+					$special_page_id = get_option( 'woocommerce_cart_page_id' );
+					break;
+				case 'checkout':
+					array_push( $page_based_system_messages, self::get_formatted_system_role( 'This is the checkout page.' ) );
+					$special_page_id = get_option( 'woocommerce_checkout_page_id' );
+					break;
+			}
+
+			if ( ! empty( $special_page_id ) && is_numeric( $special_page_id ) ) {
+				$page_details        = self::get_page_details( $special_page_id );
+				$page_detail_message = 'These are the details of the current page that you and I are on, in case you are asked something about it\n\n\nPage ID: `' . $special_page_id . '`\nTitle: `' . $page_details['title'] . '`\nContent:`' . $page_details['content'] . '`';
+
+				array_push( $page_based_system_messages, self::get_formatted_system_role( $page_detail_message ) );
+			}
+
+			// Add the website based message.
+			array_push( $page_based_system_messages, self::get_formatted_system_role( $website_detail_message ) );
+
+			return $page_based_system_messages;
+
+		}
+
+		// If you're not on a post, then the assistant is a WordPress based expert.
+		array_push( $page_based_system_messages, self::get_formatted_system_role( $role_settings_content['wordpress_assistant'] ) );
+		// Add the site details message if required.
+		if ( ! empty( $site_detail_message ) ) {
+			array_push( $page_based_system_messages, self::get_formatted_system_role( $site_detail_message ) );
+		}
+		// Add the website based message.
+		array_push( $page_based_system_messages, self::get_formatted_system_role( $website_detail_message ) );
+
+		return $page_based_system_messages;
+	}
+
+	/**
+	 * Get the required page details for AI from the given post ID.
+	 *
+	 * @param int $current_post_id The current post ID.
+	 * @since 2.0.0
+	 * @return array<string,mixed> An array of all the required Post details.
+	 */
+	public static function get_page_details( $current_post_id ) {
+		// Regular expression to match opening or closing tags.
+		$tag_regex = '/(<\/?[a-zA-Z]+[^>]*>|<\/?[a-zA-Z]+[^>]*>)/';
+
+		// Get all the required details of the current post.
+		$page_title   = get_post_field( 'post_title', $current_post_id );
+		$page_content = get_post_field( 'post_content', $current_post_id );
+		$page_url     = get_permalink( $current_post_id );
+
+		// Replace the Page URL with the dummy.
+		$page_url = str_replace( preg_replace( '#^https?://#', '', get_site_url() ), 'example.com', $page_url );
+
+		// Split the post content based to put all tags and content on new lines.
+		$content_parts = preg_split( $tag_regex, $page_content, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE );
+
+		// If any part is a tag, delete it.
+		$content_parts = array_filter(
+			$content_parts,
+			function ( $content_part ) {
+				// Only return true for elements that are not tags, or elements that aren't just neewline characters.
+				return (
+				( false === str_starts_with( $content_part, '<' ) )
+				&& ( false === str_starts_with( $content_part, "\n" ) )
+				);
+			}
+		);
+
+		// Combine all the parts into a single string with line breaks.
+		$page_content = implode( "\n", $content_parts );
+		$page_content = preg_replace( '/\n{2,}/', "\n", $page_content );
+
+		// Return the required details.
+		return [
+			'title'   => $page_title,
+			'content' => $page_content,
+			'url'     => $page_url,
+		];
+	}
+
+	/**
+	 * A small private function to take in any given content, and return a formatted array for OpenAI as a system message.
+	 *
+	 * @param string $content The content to be put as the message.
+	 * @param string $role    The role of the message, as per OpenAI standards.
+	 * @since 2.0.0
+	 * @return array<string,mixed> An array containing the role and content of the message.
+	 */
+	private static function get_formatted_system_role( $content, $role = 'system' ) {
+		return [
+			'role'    => $role,
+			'content' => $content,
+		];
+	}
+
+	/**
+	 * Ajax handeler to get the latest Zip AI credit details.
+	 *
+	 * @since 2.0.0
+	 * @return void
+	 */
+	public function get_latest_credit_details() {
+		// Check the nonce.
+		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
+
+		// Set an array of data to be sent.
+		$latest_credit_details = Helper::get_credit_details();
+
+		// If an error was encountered, send the error details.
+		if ( isset( $latest_credit_details['status'] ) && 'error' === $latest_credit_details['status'] ) {
+			wp_send_json_error( $latest_credit_details );
+		}
+
+		// Send the latest credit details.
+		wp_send_json_success( $latest_credit_details );
+	}
+
+	/**
+	 * Ajax handeler to get fresh Zip AI credit details.
+	 *
+	 * @since 2.0.5
+	 * @return void
+	 */
+	public function get_fresh_credit_details() {
+		// Check the nonce.
+		check_ajax_referer( 'zip_ai_ajax_nonce', 'nonce' );
+
+		// Set an array of data to be sent.
+		$latest_credit_details = Helper::get_fresh_credit_details();
+
+		// If an error was encountered, send the error details.
+		if ( isset( $latest_credit_details['status'] ) && 'error' === $latest_credit_details['status'] ) {
+			wp_send_json_error( $latest_credit_details );
+		}
+
+		// Send the latest credit details.
+		wp_send_json_success( $latest_credit_details );
 	}
 }

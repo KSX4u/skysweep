@@ -70,6 +70,28 @@ class Widget_Social_Icons extends Widget_Base {
 		return [ 'social', 'icon', 'link' ];
 	}
 
+	protected function is_dynamic_content(): bool {
+		return false;
+	}
+
+	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-social-icons', 'e-apple-webkit' ];
+	}
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	/**
 	 * Register social icons widget controls.
 	 *
@@ -259,8 +281,8 @@ class Widget_Social_Icons extends Widget_Base {
 				'type' => Controls_Manager::SELECT,
 				'default' => 'rounded',
 				'options' => [
-					'rounded' => esc_html__( 'Rounded', 'elementor' ),
 					'square' => esc_html__( 'Square', 'elementor' ),
+					'rounded' => esc_html__( 'Rounded', 'elementor' ),
 					'circle' => esc_html__( 'Circle', 'elementor' ),
 				],
 				'prefix_class' => 'elementor-shape-',
@@ -292,6 +314,10 @@ class Widget_Social_Icons extends Widget_Base {
 		$start = is_rtl() ? 'end' : 'start';
 		$end = is_rtl() ? 'start' : 'end';
 
+		$align_selector = Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' ) && ! $this->has_widget_inner_wrapper()
+			? '{{WRAPPER}}'
+			: '{{WRAPPER}} .elementor-widget-container';
+
 		$this->add_responsive_control(
 			'align',
 			[
@@ -314,7 +340,7 @@ class Widget_Social_Icons extends Widget_Base {
 				'prefix_class' => 'e-grid-align%s-',
 				'default' => 'center',
 				'selectors' => [
-					'{{WRAPPER}} .elementor-widget-container' => 'text-align: {{VALUE}}',
+					$align_selector => 'text-align: {{VALUE}}',
 				],
 			]
 		);
@@ -554,7 +580,6 @@ class Widget_Social_Icons extends Widget_Base {
 		);
 
 		$this->end_controls_section();
-
 	}
 
 	/**
@@ -567,6 +592,15 @@ class Widget_Social_Icons extends Widget_Base {
 	 */
 	protected function render() {
 		$settings = $this->get_settings_for_display();
+
+		$this->add_render_attribute( 'wrapper', 'class', [ 'elementor-social-icons-wrapper', 'elementor-grid' ] );
+		$this->add_render_attribute( 'item_wrapper', 'class', 'elementor-grid-item' );
+
+		if ( count( $settings['social_icon_list'] ) > 1 ) {
+			$this->add_render_attribute( 'wrapper', 'role', 'list' );
+			$this->add_render_attribute( 'item_wrapper', 'role', 'listitem' );
+		}
+
 		$fallback_defaults = [
 			'fa fa-facebook',
 			'fa fa-twitter',
@@ -582,7 +616,7 @@ class Widget_Social_Icons extends Widget_Base {
 		$migration_allowed = Icons_Manager::is_migration_allowed();
 
 		?>
-		<div class="elementor-social-icons-wrapper elementor-grid">
+		<div <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
 			<?php
 			foreach ( $settings['social_icon_list'] as $index => $item ) {
 				$migrated = isset( $item['__fa4_migrated']['social_icon'] );
@@ -622,7 +656,7 @@ class Widget_Social_Icons extends Widget_Base {
 				$this->add_link_attributes( $link_key, $item['link'] );
 
 				?>
-				<span class="elementor-grid-item">
+				<span <?php $this->print_render_attribute_string( 'item_wrapper' ); ?>>
 					<a <?php $this->print_render_attribute_string( $link_key ); ?>>
 						<span class="elementor-screen-only"><?php echo esc_html( ucwords( $social ) ); ?></span>
 						<?php
@@ -648,15 +682,25 @@ class Widget_Social_Icons extends Widget_Base {
 	 */
 	protected function content_template() {
 		?>
-		<# var iconsHTML = {}; #>
-		<div class="elementor-social-icons-wrapper elementor-grid">
+		<#
+		view.addRenderAttribute( 'wrapper', 'class', [ 'elementor-social-icons-wrapper', 'elementor-grid' ] );
+		view.addRenderAttribute( 'item_wrapper', 'class', 'elementor-grid-item' );
+
+		if ( settings.social_icon_list.length > 1 ) {
+			view.addRenderAttribute( 'wrapper', 'role', 'list' );
+			view.addRenderAttribute( 'item_wrapper', 'role', 'listitem' );
+		}
+
+		var iconsHTML = {};
+		#>
+		<div {{{ view.getRenderAttributeString( 'wrapper' ) }}}>
 			<# _.each( settings.social_icon_list, function( item, index ) {
 				var link = item.link ? item.link.url : '',
 					migrated = elementor.helpers.isIconMigrated( item, 'social_icon' );
 					social = elementor.helpers.getSocialNetworkNameFromIcon( item.social_icon, item.social, false, migrated );
 				#>
-				<span class="elementor-grid-item">
-					<a class="elementor-icon elementor-social-icon elementor-social-icon-{{ social }} elementor-animation-{{ settings.hover_animation }} elementor-repeater-item-{{item._id}}" href="{{ link }}">
+				<span {{{ view.getRenderAttributeString( 'item_wrapper' ) }}}>
+					<a class="elementor-icon elementor-social-icon elementor-social-icon-{{ social }} elementor-animation-{{ settings.hover_animation }} elementor-repeater-item-{{item._id}}" href="{{ elementor.helpers.sanitizeUrl( link ) }}">
 						<span class="elementor-screen-only">{{{ social }}}</span>
 						<#
 							iconsHTML[ index ] = elementor.helpers.renderIcon( view, item.social_icon, {}, 'i', 'object' );

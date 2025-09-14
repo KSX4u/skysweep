@@ -97,6 +97,41 @@ if ( ! class_exists( 'Astra_Sites_Update' ) ) :
 				delete_site_transient( 'astra-sites-import-check' );
 			}
 
+			if ( version_compare( $saved_version, '4.3.1', '<' ) ) {
+				if ( defined( 'DISABLE_WP_CRON' ) && DISABLE_WP_CRON ) {
+					delete_site_option( 'astra-sites-fresh-site' );
+					delete_site_option( 'astra-sites-batch-status' );
+					delete_site_transient( 'astra-sites-import-check' );            
+				}
+			}
+
+			if ( version_compare( $saved_version, '4.4.2', '<' ) ) {
+
+				$transient_name = 'nps-survay-form-dismissed';
+				$expiration_time = get_option( '_transient_timeout_' . $transient_name );
+				$nps_transient = get_transient( $transient_name );
+
+
+				if ( $nps_transient && $expiration_time ) {
+					$transient_duration = 2 * WEEK_IN_SECONDS;
+					$creation_time = $expiration_time - $transient_duration;
+
+					$status = get_option( 'nps-survay-form-dismiss-status', array() );
+					$status['dismiss_time'] = $creation_time;
+					update_option( 'nps-survay-form-dismiss-status', $status );
+				}
+			}
+
+			if ( version_compare( $saved_version, '4.4.6', '<' ) ) {
+
+				$old_dismiss_varible = get_option( 'nps-survay-form-dismiss-status' );
+
+				if ( ! empty( $old_dismiss_varible ) ) {
+					update_option( 'nps-survey-astra-sites', $old_dismiss_varible );
+					delete_option( 'nps-survay-form-dismiss-status' );
+				}           
+			}
+
 			// Auto update product latest version.
 			update_option( 'astra-sites-auto-version', ASTRA_SITES_VER, 'no' );
 

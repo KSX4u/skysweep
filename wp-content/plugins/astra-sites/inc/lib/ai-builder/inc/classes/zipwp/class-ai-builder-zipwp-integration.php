@@ -9,13 +9,11 @@
 namespace AiBuilder\Inc\Classes\Zipwp;
 
 use AiBuilder\Inc\Traits\Instance;
-use AiBuilder\Inc\Classes\Ai_Builder_Importer_Log;
 
 /**
  * ZipWP Integration
  */
 class Ai_Builder_ZipWP_Integration {
-
 	use Instance;
 
 	/**
@@ -38,9 +36,7 @@ class Ai_Builder_ZipWP_Integration {
 
 		global $pagenow;
 
-		//phpcs:disable WordPress.Security.NonceVerification.Recommended
-
-		if ( ! is_admin() || ! isset( $_GET['page'] ) ) { //phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! is_admin() || ! isset( $_GET['page'] ) ) {
 			return;
 		}
 
@@ -49,9 +45,24 @@ class Ai_Builder_ZipWP_Integration {
 			return;
 		}
 
+		if ( ! isset( $_GET['security'] ) ) {
+			return;
+		}
+
+		$security = sanitize_text_field( $_GET['security'] );
+
+		// Verify the nonce.
+		if ( ! wp_verify_nonce( $security, 'zipwp-auth-nonce' ) ) {
+			return;
+		}
+
 		if ( isset( $_GET['token'] ) && isset( $_GET['email'] ) && isset( $_GET['credit_token'] ) ) {
 
 			$spec_ai_settings = $this->get_setting();
+
+			if ( ! is_array( $spec_ai_settings ) ) {
+				$spec_ai_settings = array();
+			}
 
 			// Update the auth token if needed.
 			if ( isset( $_GET['credit_token'] ) && is_string( $_GET['credit_token'] ) ) {
@@ -78,7 +89,7 @@ class Ai_Builder_ZipWP_Integration {
 	 * Get Saved settings.
 	 *
 	 * @since 4.0.0
-	 * @return string
+	 * @return array<string, string>|mixed
 	 */
 	public static function get_setting() {
 		return get_option(
@@ -106,8 +117,7 @@ class Ai_Builder_ZipWP_Integration {
 
 		// Encrypt the input and return it.
 		$base_64 = base64_encode( $input ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
-		$encode  = rtrim( $base_64, '=' );
-		return $encode;
+		return rtrim( $base_64, '=' );
 	}
 
 	/**
@@ -115,38 +125,44 @@ class Ai_Builder_ZipWP_Integration {
 	 *
 	 * @since 4.0.0
 	 * @param string $key options name.
-	 * @return array<string,string,string,string,string,string,string,int> | string Array for business details or single detail in a string.
+	 * @return array<string, mixed>|array<int, string>|string|array<string>|array<string,string>
 	 */
 	public static function get_business_details( $key = '' ) {
 		$details = get_option(
 			'zipwp_user_business_details',
 			array(
-				'business_name'        => '',
-				'business_address'     => '',
-				'business_phone'       => '',
-				'business_email'       => '',
-				'business_category'    => '',
-				'business_description' => '',
-				'templates'            => array(),
-				'language'             => 'en',
-				'images'               => array(),
-				'image_keyword'        => array(),
-				'social_profiles'      => array(),
+				'business_name'          => '',
+				'business_address'       => '',
+				'business_phone'         => '',
+				'business_email'         => '',
+				'business_category'      => '',
+				'business_category_name' => '',
+				'business_description'   => '',
+				'templates'              => array(),
+				'language'               => '',
+				'images'                 => array(),
+				'image_keyword'          => array(),
+				'social_profiles'        => array(),
 			)
 		);
 
+		if ( ! is_array( $details ) ) {
+			$details = array();
+		}
+
 		$details = array(
-			'business_name'        => ( ! empty( $details['business_name'] ) ) ? $details['business_name'] : '',
-			'business_address'     => ( ! empty( $details['business_address'] ) ) ? $details['business_address'] : '',
-			'business_phone'       => ( ! empty( $details['business_phone'] ) ) ? $details['business_phone'] : '',
-			'business_email'       => ( ! empty( $details['business_email'] ) ) ? $details['business_email'] : '',
-			'business_category'    => ( ! empty( $details['business_category'] ) ) ? $details['business_category'] : '',
-			'business_description' => ( ! empty( $details['business_description'] ) ) ? $details['business_description'] : '',
-			'templates'            => ( ! empty( $details['templates'] ) ) ? $details['templates'] : array(),
-			'language'             => ( ! empty( $details['language'] ) ) ? $details['language'] : 'en',
-			'images'               => ( ! empty( $details['images'] ) ) ? $details['images'] : array(),
-			'social_profiles'      => ( ! empty( $details['social_profiles'] ) ) ? $details['social_profiles'] : array(),
-			'image_keyword'        => ( ! empty( $details['image_keyword'] ) ) ? $details['image_keyword'] : array(),
+			'business_name'          => ! empty( $details['business_name'] ) ? $details['business_name'] : '',
+			'business_address'       => ! empty( $details['business_address'] ) ? $details['business_address'] : '',
+			'business_phone'         => ! empty( $details['business_phone'] ) ? $details['business_phone'] : '',
+			'business_email'         => ! empty( $details['business_email'] ) ? $details['business_email'] : '',
+			'business_category'      => ! empty( $details['business_category'] ) ? $details['business_category'] : '',
+			'business_category_name' => ! empty( $details['business_category_name'] ) ? $details['business_category_name'] : '',
+			'business_description'   => ! empty( $details['business_description'] ) ? $details['business_description'] : '',
+			'templates'              => ! empty( $details['templates'] ) ? $details['templates'] : array(),
+			'language'               => ! empty( $details['language'] ) ? $details['language'] : '',
+			'images'                 => ! empty( $details['images'] ) ? $details['images'] : array(),
+			'social_profiles'        => ! empty( $details['social_profiles'] ) ? $details['social_profiles'] : array(),
+			'image_keyword'          => ! empty( $details['image_keyword'] ) ? $details['image_keyword'] : array(),
 		);
 
 		if ( ! empty( $key ) ) {
@@ -171,7 +187,7 @@ class Ai_Builder_ZipWP_Integration {
 				'email'      => '',
 			)
 		);
-		return isset( $token_details['zip_token'] ) ? self::decrypt( $token_details['zip_token'] ) : '';
+		return is_array( $token_details ) && isset( $token_details['zip_token'] ) ? self::decrypt( $token_details['zip_token'] ) : '';
 	}
 
 	/**
@@ -189,7 +205,7 @@ class Ai_Builder_ZipWP_Integration {
 				'email'      => '',
 			)
 		);
-		return isset( $token_details['auth_token'] ) ? self::decrypt( $token_details['auth_token'] ) : '';
+		return is_array( $token_details ) && isset( $token_details['auth_token'] ) ? self::decrypt( $token_details['auth_token'] ) : '';
 	}
 
 	/**
@@ -207,7 +223,7 @@ class Ai_Builder_ZipWP_Integration {
 				'email'      => '',
 			)
 		);
-		return isset( $token_details['email'] ) ? $token_details['email'] : '';
+		return is_array( $token_details ) && isset( $token_details['email'] ) ? $token_details['email'] : '';
 	}
 
 	/**
@@ -225,8 +241,7 @@ class Ai_Builder_ZipWP_Integration {
 
 		// Decrypt the input and return it.
 		$base_64 = $input . str_repeat( '=', strlen( $input ) % 4 );
-		$decode  = base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
-		return $decode;
+		return base64_decode( $base_64 ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
 	}
 
 }
