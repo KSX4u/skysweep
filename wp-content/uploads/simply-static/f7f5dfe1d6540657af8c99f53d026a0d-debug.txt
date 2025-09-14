@@ -69077,3 +69077,4 @@ sweep/wp-content/uploads\simply-static\temp-files/simply-static-1-1757847304/wp-
 [2025-09-14 10:57:40] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
 [2025-09-14 10:57:41] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
 [2025-09-14 10:57:41] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
+[2025-09-14 10:58:03] [class-elementor-integration.php:510] Crawlers option empty or not an array; not modifying. Elementor will be active by default logic.
